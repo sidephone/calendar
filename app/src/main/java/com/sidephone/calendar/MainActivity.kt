@@ -34,9 +34,9 @@ class MainActivity : ComponentActivity() {
 			AppTheme {
 				Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 					val txt = stringResource(R.string.app_name) +
-						"\nlast action: ${calendar.output.collectAsState().value}" +
 						"\nactive layout: ${calendar.layout.collectAsState().value}" +
-						"\noverride layout: ${calendar.layoutOverride.collectAsState().value}"
+						"\noverride layout: ${calendar.layoutOverride.collectAsState().value}" +
+						"\nstate: ${calendar.output.collectAsState().value}"
 
 					Column(modifier = Modifier.padding(innerPadding).fillMaxSize()) {
 						ChangeLayoutButton(Modifier, calendar.layoutOverride.collectAsState().value) { calendar.nextLayout() }
