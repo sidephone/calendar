@@ -1,0 +1,26 @@
+package com.sidephone.calendar
+
+import android.content.Context
+import androidx.core.content.edit
+import com.sidephone.calendar.input.Keypad
+
+class Settings(context: Context) {
+	companion object {
+		private const val PREFS_NAME = "SidephoneCalendarSettings"
+		private const val SCREEN_LAYOUT_KEY = "screen_layout"
+	}
+
+	private val sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+
+
+	fun getScreenLayout(): Keypad.Layout {
+		return sharedPreferences.getInt(SCREEN_LAYOUT_KEY, Keypad.Layout.UNKNOWN.ordinal).let { ordinal ->
+			Keypad.Layout.entries.getOrElse(ordinal) { Keypad.Layout.UNKNOWN }
+		}
+	}
+
+
+	fun setScreenLayout(layout: Keypad.Layout) {
+		sharedPreferences.edit { putInt(SCREEN_LAYOUT_KEY, layout.ordinal) }
+	}
+}

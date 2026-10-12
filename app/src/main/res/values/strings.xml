@@ -1,3 +1,9 @@
 <resources>
 	<string name="app_name">Sidephone Calendar</string>
+
+	<string name="layout_change_accessibility">Change keypad layout. Current: %1$s</string>
+	<string name="layout_auto">Auto</string>
+	<string name="layout_none">Touchscreen</string>
+	<string name="layout_default">Default</string>
+	<string name="layout_sundial">Sundial</string>
 </resources>
