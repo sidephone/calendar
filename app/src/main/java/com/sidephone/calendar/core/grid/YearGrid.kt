@@ -3,6 +3,10 @@ package com.sidephone.calendar.core.grid
 import java.util.Calendar
 
 class YearGrid(today: Calendar) : Grid(today) {
+	/**
+	 * Generates a 3x4 grid representing the months of the year.
+	 * Each cell contains the month number (1-12).
+	 */
 	override fun generateGrid(today: Calendar): List<List<Int>> {
 		return listOf(
 			listOf(1, 2, 3, 4),
