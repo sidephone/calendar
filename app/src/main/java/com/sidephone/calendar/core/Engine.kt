@@ -15,7 +15,6 @@ class Engine {
 	private var year: Int = date.get(Jalendar.YEAR)
 	private var month: Int = date.get(Jalendar.MONTH) + 1 // Calendar.MONTH is zero-based
 	private var day: Int = date.get(Jalendar.DAY_OF_MONTH)
-	private val currentDay: Int = day
 
 	private val _output = MutableStateFlow("")
 	val output: StateFlow<String> = _output
@@ -52,7 +51,6 @@ class Engine {
 
 
 	private fun changePage(increment: Int) {
-		normalizeDay()
 		date.set(year, month - 1, day)
 
 		when (grid) {
@@ -77,11 +75,6 @@ class Engine {
 	}
 
 
-	private fun normalizeDay() {
-		day = if (day < 0) currentDay else day
-	}
-
-
 	private fun syncDate() {
 		when (grid) {
 			is YearGrid -> month = grid.current()
@@ -94,7 +87,6 @@ class Engine {
 	private fun zoomIn() {
 		syncDate()
 
-		normalizeDay()
 		date.set(year, month - 1, day)
 
 		grid = when (grid) {
@@ -106,7 +98,6 @@ class Engine {
 
 
 	private fun zoomOut() {
-		normalizeDay()
 		date.set(year, month - 1, day)
 
 		grid = when (grid) {

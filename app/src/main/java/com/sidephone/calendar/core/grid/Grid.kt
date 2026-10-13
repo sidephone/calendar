@@ -21,30 +21,30 @@ abstract class Grid(today: Calendar) {
 
 
 	fun up() {
-		if (--currentY < 0) {
-			currentY = grid.size - 1
-		}
+		if (grid.isEmpty()) return
+		do { if (--currentY < 0) currentY = grid.size - 1 }
+		while (current() < 0)
 	}
 
 
 	fun down() {
-		if (++currentY >= grid.size) {
-			currentY = 0
-		}
+		if (grid.isEmpty()) return
+		do { if (++currentY >= grid.size) currentY = 0 }
+		while (current() < 0)
 	}
 
 
 	fun left() {
-		if (grid.isNotEmpty() && --currentX < 0) {
-			currentX = grid[currentY].size - 1
-		}
+		if (grid.isEmpty()) return
+		do { if (--currentX < 0) currentX = grid[currentY].size - 1 }
+		while (current() < 0)
 	}
 
 
 	fun right() {
-		if (grid.isNotEmpty() && ++currentX >= grid[currentY].size) {
-			currentX = 0
-		}
+		if (grid.isEmpty()) return
+		do { if (++currentX >= grid[currentY].size) currentX = 0 }
+		while (current() < 0)
 	}
 
 
