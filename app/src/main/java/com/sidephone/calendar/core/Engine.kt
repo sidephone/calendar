@@ -27,8 +27,8 @@ class Engine {
 			Action.DOWN -> down()
 			Action.LEFT -> left()
 			Action.RIGHT -> right()
-			Action.NEXT_PAGE -> nextPage()
-			Action.PREVIOUS_PAGE -> previousPage()
+			Action.NEXT_PAGE -> changePage(1)
+			Action.PREVIOUS_PAGE -> changePage(-1)
 			Action.ZOOM_IN -> zoomIn()
 			Action.ZOOM_OUT -> zoomOut()
 			Action.OK -> {
@@ -51,68 +51,34 @@ class Engine {
 	private fun right() { grid.right(); syncDate() }
 
 
+	private fun changePage(increment: Int) {
+		normalizeDay()
+		date.set(year, month - 1, day)
+
+		when (grid) {
+			is YearGrid -> {
+				date.add(Jalendar.YEAR, increment)
+				grid = YearGrid(date)
+			}
+			is MonthGrid -> {
+				date.add(Jalendar.MONTH, increment)
+				grid = MonthGrid(date)
+			}
+			is DayGrid -> {
+				date.add(Jalendar.DAY_OF_MONTH, increment)
+				grid = DayGrid(date)
+			}
+			else -> {}
+		}
+
+		year = date.get(Jalendar.YEAR)
+		month = date.get(Jalendar.MONTH) + 1
+		day = date.get(Jalendar.DAY_OF_MONTH)
+	}
+
+
 	private fun normalizeDay() {
 		day = if (day < 0) currentDay else day
-	}
-
-
-	private fun nextPage() {
-		normalizeDay()
-
-		when (grid) {
-			is YearGrid -> {
-				year++
-				date.set(Jalendar.YEAR, year)
-				grid = YearGrid(date)
-			}
-			is MonthGrid -> {
-				if (++month > 12) {
-					month = 1
-					year++
-				}
-				date.set(year, month - 1, day)
-				grid = MonthGrid(date)
-			}
-			is DayGrid -> {
-				date.set(year, month - 1, day)
-				date.add(Jalendar.DAY_OF_MONTH, 1)
-				year = date.get(Jalendar.YEAR)
-				month = date.get(Jalendar.MONTH) + 1
-				day = date.get(Jalendar.DAY_OF_MONTH)
-				grid = DayGrid(date)
-			}
-			else -> {}
-		}
-	}
-
-
-	private fun previousPage() {
-		normalizeDay()
-
-		when (grid) {
-			is YearGrid -> {
-				year--
-				date.set(Jalendar.YEAR, year)
-				grid = YearGrid(date)
-			}
-			is MonthGrid -> {
-				if (--month < 1) {
-					month = 12
-					year--
-				}
-				date.set(year, month - 1, day)
-				grid = MonthGrid(date)
-			}
-			is DayGrid -> {
-				date.set(year, month - 1, day)
-				date.add(Jalendar.DAY_OF_MONTH, -1)
-				year = date.get(Jalendar.YEAR)
-				month = date.get(Jalendar.MONTH) + 1
-				day = date.get(Jalendar.DAY_OF_MONTH)
-				grid = DayGrid(date)
-			}
-			else -> {}
-		}
 	}
 
 
