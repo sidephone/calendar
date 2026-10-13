@@ -38,7 +38,7 @@ class ActionPad(inputManager: InputManager) : Keypad(inputManager) {
 
 
 	fun onKeyDown(keyCode: Int): Boolean {
-		keyActions.getOrDefault(keyCode, null)?.let { action ->
+		keyActions[keyCode]?.let { action ->
 			onAction(action)
 			return true
 		}
