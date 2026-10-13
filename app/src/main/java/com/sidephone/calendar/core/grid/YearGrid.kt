@@ -2,7 +2,7 @@ package com.sidephone.calendar.core.grid
 
 import java.util.Calendar
 
-class YearGrid : Grid() {
+class YearGrid(today: Calendar) : Grid(today) {
 	override fun generateGrid(today: Calendar): List<List<Int>> {
 		return listOf(
 			listOf(1, 2, 3, 4),

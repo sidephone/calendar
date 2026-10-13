@@ -2,8 +2,7 @@ package com.sidephone.calendar.core.grid
 
 import java.util.Calendar
 
-class MonthGrid : Grid() {
-
+class MonthGrid(today: Calendar) : Grid(today) {
 	/**
 	 * Returns a 7x6 grid representing the days of the month, where each cell contains the day number
 	 * (1-31) or negative numbers for the days of the previous or next month that fill the grid. The

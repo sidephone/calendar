@@ -2,8 +2,7 @@ package com.sidephone.calendar.core.grid
 
 import java.util.Calendar
 
-abstract class Grid {
-	private var today: Calendar = Calendar.getInstance()
+abstract class Grid(today: Calendar) {
 	protected val grid: List<List<Int>> = generateGrid(today)
 	protected var currentX = initialX(today)
 	protected var currentY = initialY(today)
@@ -16,6 +15,9 @@ abstract class Grid {
 			grid[currentY][currentX]
 		}
 	}
+
+
+	fun position() = Pair(currentX, currentY)
 
 
 	fun up() {
@@ -43,11 +45,6 @@ abstract class Grid {
 		if (grid.isNotEmpty() && ++currentX >= grid[currentY].size) {
 			currentX = 0
 		}
-	}
-
-
-	override fun toString(): String {
-		return "Grid: ${this::class.simpleName}, Position: ($currentX, $currentY) -> Current Value: ${current()}"
 	}
 
 
