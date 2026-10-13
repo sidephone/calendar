@@ -6,7 +6,7 @@ class MonthGrid(today: Calendar) : Grid(today) {
 	/**
 	 * Returns a 7x6 grid representing the days of the month, where each cell contains the day number
 	 * (1-31) or negative numbers for the days of the previous or next month that fill the grid. The
-	 * days are aligned based on the firstDayOfWeek parameter.
+	 * days are aligned according to the first day of the week, based on the current locale.
 	 */
 	override fun generateGrid(today: Calendar): List<List<Int>> {
 		val calendar = today.clone() as Calendar

@@ -1,33 +1,24 @@
 package com.sidephone.calendar.core
 
-import android.util.Log
 import com.sidephone.calendar.core.grid.DayGrid
 import com.sidephone.calendar.core.grid.Grid
 import com.sidephone.calendar.core.grid.MonthGrid
 import com.sidephone.calendar.core.grid.YearGrid
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import java.util.Calendar as jCalendar
+import java.util.Calendar as Jalendar
 
 class Engine {
-	private var grid: Grid
-	private var year: Int
-	private var month: Int
-	private var day: Int
-	private val currentDay: Int
+	private val date = Jalendar.getInstance()
+
+	private var grid: Grid = MonthGrid(date)
+	private var year: Int = date.get(Jalendar.YEAR)
+	private var month: Int = date.get(Jalendar.MONTH) + 1 // Calendar.MONTH is zero-based
+	private var day: Int = date.get(Jalendar.DAY_OF_MONTH)
+	private val currentDay: Int = day
 
 	private val _output = MutableStateFlow("")
 	val output: StateFlow<String> = _output
-
-
-	init {
-		val today = jCalendar.getInstance()
-		grid = MonthGrid(today)
-		year = today.get(jCalendar.YEAR)
-		month = today.get(jCalendar.MONTH) + 1 // Calendar.MONTH is zero-based
-		day = today.get(jCalendar.DAY_OF_MONTH)
-		currentDay = day
-	}
 
 
 	fun onAction(action: Action) {
@@ -36,9 +27,18 @@ class Engine {
 			Action.DOWN -> down()
 			Action.LEFT -> left()
 			Action.RIGHT -> right()
+			Action.NEXT_PAGE -> nextPage()
+			Action.PREVIOUS_PAGE -> previousPage()
 			Action.ZOOM_IN -> zoomIn()
 			Action.ZOOM_OUT -> zoomOut()
-			else -> { Log.d("Engine", "Action $action not implemented yet") }
+			Action.OK -> {
+				if (grid is DayGrid) {
+					_output.value = "OK action on date: $year-$month-$day"
+					return
+				} else {
+					zoomIn()
+				}
+			}
 		}
 
 		_output.value = "Grid: ${grid::class.simpleName}, position: ${grid.position()}, $year-$month-$day"
@@ -51,31 +51,67 @@ class Engine {
 	private fun right() { grid.right(); syncDate() }
 
 
+	private fun normalizeDay() {
+		day = if (day < 0) currentDay else day
+	}
 
-	private fun zoomIn() {
-		syncDate()
 
-		if (day < 0) day = currentDay
-		val jCalendar = jCalendar.getInstance()
-		jCalendar.set(year, month - 1, day)
+	private fun nextPage() {
+		normalizeDay()
 
-		grid = when (grid) {
-			is YearGrid -> MonthGrid(jCalendar)
-			is MonthGrid -> DayGrid(jCalendar)
-			else -> grid
+		when (grid) {
+			is YearGrid -> {
+				year++
+				date.set(Jalendar.YEAR, year)
+				grid = YearGrid(date)
+			}
+			is MonthGrid -> {
+				if (++month > 12) {
+					month = 1
+					year++
+				}
+				date.set(year, month - 1, day)
+				grid = MonthGrid(date)
+			}
+			is DayGrid -> {
+				date.set(year, month - 1, day)
+				date.add(Jalendar.DAY_OF_MONTH, 1)
+				year = date.get(Jalendar.YEAR)
+				month = date.get(Jalendar.MONTH) + 1
+				day = date.get(Jalendar.DAY_OF_MONTH)
+				grid = DayGrid(date)
+			}
+			else -> {}
 		}
 	}
 
 
-	private fun zoomOut() {
-		if (day < 0) day = currentDay
-		val jCalendar = jCalendar.getInstance()
-		jCalendar.set(year, month - 1, day)
+	private fun previousPage() {
+		normalizeDay()
 
-		grid = when (grid) {
-			is DayGrid -> MonthGrid(jCalendar)
-			is MonthGrid -> YearGrid(jCalendar)
-			else -> grid
+		when (grid) {
+			is YearGrid -> {
+				year--
+				date.set(Jalendar.YEAR, year)
+				grid = YearGrid(date)
+			}
+			is MonthGrid -> {
+				if (--month < 1) {
+					month = 12
+					year--
+				}
+				date.set(year, month - 1, day)
+				grid = MonthGrid(date)
+			}
+			is DayGrid -> {
+				date.set(year, month - 1, day)
+				date.add(Jalendar.DAY_OF_MONTH, -1)
+				year = date.get(Jalendar.YEAR)
+				month = date.get(Jalendar.MONTH) + 1
+				day = date.get(Jalendar.DAY_OF_MONTH)
+				grid = DayGrid(date)
+			}
+			else -> {}
 		}
 	}
 
@@ -85,6 +121,32 @@ class Engine {
 			is YearGrid -> month = grid.current()
 			is MonthGrid -> day = grid.current()
 			else -> {}
+		}
+	}
+
+
+	private fun zoomIn() {
+		syncDate()
+
+		normalizeDay()
+		date.set(year, month - 1, day)
+
+		grid = when (grid) {
+			is YearGrid -> MonthGrid(date)
+			is MonthGrid -> DayGrid(date)
+			else -> grid
+		}
+	}
+
+
+	private fun zoomOut() {
+		normalizeDay()
+		date.set(year, month - 1, day)
+
+		grid = when (grid) {
+			is DayGrid -> MonthGrid(date)
+			is MonthGrid -> YearGrid(date)
+			else -> grid
 		}
 	}
 }

@@ -56,6 +56,7 @@ class ActionPad(inputManager: InputManager) : Keypad(inputManager) {
 		keyActions.clear()
 
 		// Compact QWERTY
+		keyActions[KeyEvent.KEYCODE_ENTER] = Action.OK
 		keyActions[KeyEvent.KEYCODE_E] = Action.ZOOM_OUT
 		keyActions[KeyEvent.KEYCODE_U] = Action.ZOOM_IN
 		keyActions[KeyEvent.KEYCODE_ALT_LEFT] = Action.PREVIOUS_PAGE
@@ -73,10 +74,14 @@ class ActionPad(inputManager: InputManager) : Keypad(inputManager) {
 		keyActions[KeyEvent.KEYCODE_POUND] = Action.NEXT_PAGE
 
 		// T9 no DPAD
+		keyActions[KeyEvent.KEYCODE_5] = Action.OK
 		keyActions[KeyEvent.KEYCODE_2] = Action.UP
 		keyActions[KeyEvent.KEYCODE_8] = Action.DOWN
 		keyActions[KeyEvent.KEYCODE_4] = Action.LEFT
 		keyActions[KeyEvent.KEYCODE_6] = Action.RIGHT
+
+		// T9 DPAD
+		keyActions[KeyEvent.KEYCODE_DPAD_CENTER] = Action.OK
 
 		// T9 DPAD, Gamepad
 		keyActions[KeyEvent.KEYCODE_DPAD_UP] = Action.UP
@@ -85,6 +90,7 @@ class ActionPad(inputManager: InputManager) : Keypad(inputManager) {
 		keyActions[KeyEvent.KEYCODE_DPAD_RIGHT] = Action.RIGHT
 
 		// Gamepad
+		keyActions[KeyEvent.KEYCODE_BUTTON_START] = Action.OK
 		keyActions[KeyEvent.KEYCODE_BUTTON_X] = Action.ZOOM_OUT
 		keyActions[KeyEvent.KEYCODE_BUTTON_Y] = Action.ZOOM_IN
 		keyActions[KeyEvent.KEYCODE_BUTTON_A] = Action.PREVIOUS_PAGE
@@ -95,6 +101,7 @@ class ActionPad(inputManager: InputManager) : Keypad(inputManager) {
 	private fun setSundialLayout() {
 		keyActions.clear()
 
+		keyActions[KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE] = Action.OK
 		keyActions[KeyEvent.KEYCODE_DPAD_LEFT] = Action.ZOOM_OUT
 		keyActions[KeyEvent.KEYCODE_DPAD_RIGHT] = Action.ZOOM_IN
 		keyActions[KeyEvent.KEYCODE_TAB] = Action.PREVIOUS_PAGE
