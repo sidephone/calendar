@@ -14,6 +14,9 @@ class MonthGrid(today: Calendar) : Grid(today) {
 		val firstDayOfMonth = calendar.get(Calendar.DAY_OF_WEEK)
 		val firstDayOfWeek = calendar.firstDayOfWeek
 		val daysInMonth = calendar.getActualMaximum(Calendar.DAY_OF_MONTH)
+		val previousMonth = (calendar.clone() as Calendar).apply { add(Calendar.MONTH, -1) }
+		val previousMonthDays = previousMonth.getActualMaximum(Calendar.DAY_OF_MONTH)
+		val leadingDays = (firstDayOfMonth - firstDayOfWeek + 7) % 7
 
 		val grid = mutableListOf<MutableList<Int>>()
 		var dayCounter = 1
@@ -21,9 +24,9 @@ class MonthGrid(today: Calendar) : Grid(today) {
 		for (week in 0 until 6) {
 			val weekRow = mutableListOf<Int>()
 			for (day in 0 until 7) {
-				if (week == 0 && day < (firstDayOfMonth - firstDayOfWeek + 7) % 7) {
+				if (week == 0 && day < leadingDays) {
 					// Fill with previous month's days
-					weekRow.add(-1 * (calendar.getActualMaximum(Calendar.DAY_OF_MONTH) - ((firstDayOfMonth - firstDayOfWeek + 7) % 7 - day)))
+					weekRow.add(-(previousMonthDays - leadingDays + day + 1))
 				} else if (dayCounter <= daysInMonth) {
 					// Fill with current month's days
 					weekRow.add(dayCounter++)
