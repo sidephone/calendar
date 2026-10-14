@@ -1,16 +1,22 @@
 package com.sidephone.calendar.core
 
+import android.app.Application
 import com.sidephone.calendar.core.grid.DayGrid
 import com.sidephone.calendar.core.grid.Grid
 import com.sidephone.calendar.core.grid.MonthGrid
 import com.sidephone.calendar.core.grid.YearGrid
+import com.sidephone.calendar.db.CalendarEventsModel
+import com.sidephone.calendar.db.Selection
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import java.time.LocalDate
+import java.time.YearMonth
 import java.util.Calendar as Jalendar
 
-class Engine {
-	private val date = Jalendar.getInstance()
+class Engine(private val app: Application) {
+	private var db = CalendarEventsModel(app)
 
+	private val date = Jalendar.getInstance()
 	private var grid: Grid = MonthGrid(date)
 	private var year: Int = date.get(Jalendar.YEAR)
 	private var month: Int = date.get(Jalendar.MONTH) + 1 // Calendar.MONTH is zero-based
@@ -18,6 +24,14 @@ class Engine {
 
 	private val _output = MutableStateFlow("")
 	val output: StateFlow<String> = _output
+
+	val events = db.events
+
+
+	init {
+		db.select(Selection.Month(month = YearMonth.of(year, month)))
+		_output.value = "Grid: ${grid::class.simpleName}, position: ${grid.position()}, $year-$month-$day"
+	}
 
 
 	fun onAction(action: Action) {
@@ -44,10 +58,32 @@ class Engine {
 	}
 
 
-	private fun up() { grid.up(); syncDate() }
-	private fun down() { grid.down(); syncDate() }
-	private fun left() { grid.left(); syncDate() }
-	private fun right() { grid.right(); syncDate() }
+	private fun up() {
+		grid.up()
+		syncDate()
+		loadEvents()
+	}
+
+
+	private fun down() {
+		grid.down()
+		syncDate()
+		loadEvents()
+	}
+
+
+	private fun left() {
+		grid.left()
+		syncDate()
+		loadEvents()
+	}
+
+
+	private fun right() {
+		grid.right()
+		syncDate()
+		loadEvents()
+	}
 
 
 	private fun changePage(increment: Int) {
@@ -72,6 +108,17 @@ class Engine {
 		year = date.get(Jalendar.YEAR)
 		month = date.get(Jalendar.MONTH) + 1
 		day = date.get(Jalendar.DAY_OF_MONTH)
+
+		loadEvents()
+	}
+
+
+	private fun loadEvents() {
+		when (grid) {
+			is MonthGrid -> db.select(Selection.Month(month = YearMonth.of(year, month)))
+			is DayGrid -> db.select(Selection.Day(date = LocalDate.of(year, month, day)))
+			else -> db.select(Selection.Year(year))
+		}
 	}
 
 
@@ -94,6 +141,8 @@ class Engine {
 			is MonthGrid -> DayGrid(date)
 			else -> grid
 		}
+
+		loadEvents()
 	}
 
 
@@ -105,5 +154,7 @@ class Engine {
 			is MonthGrid -> YearGrid(date)
 			else -> grid
 		}
+
+		loadEvents()
 	}
 }

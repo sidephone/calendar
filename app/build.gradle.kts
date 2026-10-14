@@ -1,6 +1,8 @@
 plugins {
 	alias(libs.plugins.android.application)
+	alias(libs.plugins.androidx.room3)
 	alias(libs.plugins.kotlin.compose)
+	alias(libs.plugins.ksp)
 }
 
 android {
@@ -40,6 +42,10 @@ android {
 		.configureEach { dependsOn("testDebugUnitTest") }
 }
 
+room3 {
+	schemaDirectory("$projectDir/schemas")
+}
+
 dependencies {
 	implementation(platform(libs.androidx.compose.bom))
 	implementation(libs.androidx.activity.compose)
@@ -49,6 +55,9 @@ dependencies {
 	implementation(libs.androidx.compose.ui.tooling.preview)
 	implementation(libs.androidx.core.ktx)
 	implementation(libs.androidx.lifecycle.runtime.ktx)
+	implementation(libs.androidx.room3.runtime)
+	implementation(libs.androidx.sqlite.bundled)
+	ksp(libs.androidx.room3.compiler)
 	testImplementation(kotlin("test"))
 	testImplementation(kotlin("test-junit"))
 	debugImplementation(libs.androidx.compose.ui.test.manifest)

@@ -26,6 +26,7 @@ class MainActivity : ComponentActivity() {
 
 		calendar = Calendar(
 			Settings(this),
+			application,
 			getSystemService(INPUT_SERVICE) as InputManager
 		)
 
@@ -36,7 +37,8 @@ class MainActivity : ComponentActivity() {
 					val txt = stringResource(R.string.app_name) +
 						"\nactive tile: ${calendar.tile.collectAsState().value}" +
 						"\noverride tile: ${calendar.tileOverride.collectAsState().value}" +
-						"\nstate: ${calendar.output.collectAsState().value}"
+						"\nstate: ${calendar.output.collectAsState().value}" +
+						"\nevents: ${calendar.events.collectAsState().value}"
 
 					Column(modifier = Modifier.padding(innerPadding).fillMaxSize()) {
 						ChangeTileButton(Modifier, calendar.tileOverride.collectAsState().value) { calendar.nextTile() }

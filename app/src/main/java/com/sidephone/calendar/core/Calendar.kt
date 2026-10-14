@@ -1,5 +1,6 @@
 package com.sidephone.calendar.core
 
+import android.app.Application
 import android.hardware.input.InputManager
 import com.sidephone.calendar.Settings
 import com.sidephone.calendar.input.ActionPad
@@ -15,12 +16,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 
-class Calendar(private val settings: Settings, inputManager: InputManager) {
+class Calendar(private val settings: Settings, app: Application, inputManager: InputManager) {
 	private val keypad = ActionPad(inputManager)
-	private val engine = Engine()
+	private val engine = Engine(app)
 	private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
 	val output = engine.output
+	val events = engine.events
 
 	private val _tileOverride = MutableStateFlow(settings.getTile())
 	val tileOverride: StateFlow<Keypad.Layout> = _tileOverride.asStateFlow()
