@@ -15,7 +15,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.sidephone.calendar.core.Calendar
-import com.sidephone.calendar.ui.components.ChangeLayoutButton
+import com.sidephone.calendar.ui.components.ChangeTileButton
 import com.sidephone.calendar.ui.theme.AppTheme
 
 class MainActivity : ComponentActivity() {
@@ -34,12 +34,12 @@ class MainActivity : ComponentActivity() {
 			AppTheme {
 				Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
 					val txt = stringResource(R.string.app_name) +
-						"\nactive layout: ${calendar.layout.collectAsState().value}" +
-						"\noverride layout: ${calendar.layoutOverride.collectAsState().value}" +
+						"\nactive tile: ${calendar.tile.collectAsState().value}" +
+						"\noverride tile: ${calendar.tileOverride.collectAsState().value}" +
 						"\nstate: ${calendar.output.collectAsState().value}"
 
 					Column(modifier = Modifier.padding(innerPadding).fillMaxSize()) {
-						ChangeLayoutButton(Modifier, calendar.layoutOverride.collectAsState().value) { calendar.nextLayout() }
+						ChangeTileButton(Modifier, calendar.tileOverride.collectAsState().value) { calendar.nextTile() }
 						Text(text = txt)
 					}
 				}

@@ -22,21 +22,21 @@ class Calendar(private val settings: Settings, inputManager: InputManager) {
 
 	val output = engine.output
 
-	private val _layoutOverride = MutableStateFlow(settings.getScreenLayout())
-	val layoutOverride: StateFlow<Keypad.Layout> = _layoutOverride.asStateFlow()
+	private val _tileOverride = MutableStateFlow(settings.getTile())
+	val tileOverride: StateFlow<Keypad.Layout> = _tileOverride.asStateFlow()
 
-	val layout: StateFlow<Keypad.Layout> = combine(keypad.layout, _layoutOverride) { detected, override ->
+	val tile: StateFlow<Keypad.Layout> = combine(keypad.layout, _tileOverride) { detected, override ->
 		if (override != Keypad.Layout.UNKNOWN) override else detected
 	}.stateIn(
 		scope,
 		SharingStarted.Eagerly,
-		if (_layoutOverride.value != Keypad.Layout.UNKNOWN) _layoutOverride.value else keypad.layout.value
+		if (_tileOverride.value != Keypad.Layout.UNKNOWN) _tileOverride.value else keypad.layout.value
 	)
 
 
 	init {
 		keypad.onAction = { action -> engine.onAction(action) }
-		keypad.changeLayout(settings.getScreenLayout())
+		keypad.changeTile(settings.getTile())
 	}
 
 	fun destroy() { scope.cancel() }
@@ -51,8 +51,8 @@ class Calendar(private val settings: Settings, inputManager: InputManager) {
 	 * Allow the user to switch between the possible app input methods (layouts) in a cycle. Useful for
 	 * when keypad detection blips and forces the wrong tile.
 	 */
-	fun nextLayout() {
-		val preferred = when (_layoutOverride.value) {
+	fun nextTile() {
+		val preferred = when (_tileOverride.value) {
 			// in this app the options are "none" (touchscreen), "sundial", or "any other tile"
 			Keypad.Layout.UNKNOWN -> Keypad.Layout.T9
 			Keypad.Layout.T9, Keypad.Layout.T9_NO_DPAD, Keypad.Layout.COMPACT_QWERTY, Keypad.Layout.GAMEPAD -> Keypad.Layout.SUNDIAL
@@ -60,8 +60,8 @@ class Calendar(private val settings: Settings, inputManager: InputManager) {
 			else -> Keypad.Layout.UNKNOWN
 		}
 
-		_layoutOverride.value = preferred
-		keypad.changeLayout(preferred)
-		settings.setScreenLayout(preferred)
+		_tileOverride.value = preferred
+		keypad.changeTile(preferred)
+		settings.setTile(preferred)
 	}
 }

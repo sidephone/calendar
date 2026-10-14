@@ -20,7 +20,7 @@ class ActionPad(inputManager: InputManager) : Keypad(inputManager) {
 	}
 
 
-	internal fun changeLayout(layout: Layout) {
+	internal fun changeTile(layout: Layout) {
 		layoutOverride = layout
 		onChange()
 	}

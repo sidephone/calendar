@@ -4,11 +4,17 @@ import java.util.Calendar
 
 class DayGrid(today: Calendar) : Grid(today) {
 	/**
-	 * TODO:
-	 * Generates a column of the events for the current day in chronological order. Each cell contains
-	 * the event ID. The last cell contains "0" to indicate the "Add Event" option.
+	 * The day grid contains the events for the selected day. Since they are loaded dynamically, here
+	 * we just return an event with ID=0 which is a placeholder for the "Add new" button.
+	 *
+	 * Event:
+	 * id, title, startTime (unixtime), endTime, all-day, description, address, Repeat, listOf(Reminder)
+	 *
+	 * Reminder:
+	 * id, time
+	 *
 	 */
-	override fun generateGrid(today: Calendar): List<List<Int>> = emptyList()
+	override fun generateGrid(today: Calendar): List<List<Int>> = listOf(listOf(0))
 	override fun initialX(today: Calendar) = 0
 	override fun initialY(today: Calendar) = 0
 }
