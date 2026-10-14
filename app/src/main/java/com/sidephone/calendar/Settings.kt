@@ -13,14 +13,14 @@ class Settings(context: Context) {
 	private val sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
 
-	fun getScreenLayout(): Keypad.Layout {
+	fun getTile(): Keypad.Layout {
 		return sharedPreferences.getInt(SCREEN_LAYOUT_KEY, Keypad.Layout.UNKNOWN.ordinal).let { ordinal ->
 			Keypad.Layout.entries.getOrElse(ordinal) { Keypad.Layout.UNKNOWN }
 		}
 	}
 
 
-	fun setScreenLayout(layout: Keypad.Layout) {
+	fun setTile(layout: Keypad.Layout) {
 		sharedPreferences.edit { putInt(SCREEN_LAYOUT_KEY, layout.ordinal) }
 	}
 }

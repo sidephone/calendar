@@ -17,7 +17,7 @@ import com.sidephone.calendar.R
 import com.sidephone.calendar.input.Keypad
 
 @Composable
-fun ChangeLayoutButton(modifier: Modifier = Modifier, layoutOverride: Keypad.Layout, onChange: () -> Unit) {
+fun ChangeTileButton(modifier: Modifier = Modifier, layoutOverride: Keypad.Layout, onChange: () -> Unit) {
 	val title = when (layoutOverride) {
 		Keypad.Layout.SUNDIAL -> stringResource(id = R.string.layout_sundial)
 		Keypad.Layout.COMPACT_QWERTY,
