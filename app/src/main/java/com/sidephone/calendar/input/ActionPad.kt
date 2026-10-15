@@ -2,32 +2,77 @@ package com.sidephone.calendar.input
 
 import android.hardware.input.InputManager
 import android.view.KeyEvent
+import com.sidephone.calendar.Settings
 import com.sidephone.calendar.core.Action
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 
 
 /**
- * Maps physical key codes to specific app actions, allowing for key presses or releases to trigger
+ * 1. Maps physical key codes to specific app actions, allowing for key presses or releases to trigger
  * corresponding actions within the app.
+ * 2. Allows overriding the automatic tile detection with a user-specified layout for the cases
+ * where the automatic detection is incorrect or the user prefers a different layout (for example,
+ * they want to enforce touchscreen even when a tile is connected).
  */
-class ActionPad(inputManager: InputManager) : Keypad(inputManager) {
+class ActionPad(private val settings: Settings, inputManager: InputManager) : Keypad(inputManager) {
 	private val keyActions = mutableMapOf<Int, Action>() // empty = use touchscreen
 	internal var onAction: (Action) -> Unit = { action -> onAction(action) }
-	private var layoutOverride: Layout = Layout.UNKNOWN
+
+	private val tileOverride = MutableStateFlow(settings.getTile())
+	val layoutOverride: StateFlow<Layout> = tileOverride.asStateFlow()
+
+	private val tileWatcher = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+	val tile: StateFlow<Layout> = combine(layout, tileOverride) { detected, override ->
+		if (override != Layout.UNKNOWN) override else detected
+	}.stateIn(
+		tileWatcher,
+		SharingStarted.Eagerly,
+		if (tileOverride.value != Layout.UNKNOWN) tileOverride.value else layout.value
+	)
 
 
 	init {
 		detect()
+		tileOverride.value = settings.getTile()
+		onChange()
 	}
 
 
-	internal fun changeTile(layout: Layout) {
-		layoutOverride = layout
+	fun destroy() {
+		tileWatcher.cancel()
+	}
+
+
+	/**
+	 * Allow the user to switch between the possible app input methods (layouts) in a cycle. Useful for
+	 * when keypad detection blips and forces the wrong tile.
+	 */
+	fun nextTile() {
+		val override = when (tileOverride.value) {
+			// in this app the options are "none" (touchscreen), "sundial", or "any other tile"
+			Layout.UNKNOWN -> Layout.T9
+			Layout.T9, Layout.T9_NO_DPAD, Layout.COMPACT_QWERTY, Layout.GAMEPAD -> Layout.SUNDIAL
+			Layout.SUNDIAL -> Layout.NONE
+			else -> Layout.UNKNOWN
+		}
+
+		tileOverride.value = override
+		settings.setTile(override)
 		onChange()
 	}
 
 
 	override fun onChange() {
-		val layout = if (layoutOverride != Layout.UNKNOWN) layoutOverride else layoutState.value
+		val layout = if (tileOverride.value != Layout.UNKNOWN) tileOverride.value else layout.value
 
 		when (layout) {
 			Layout.NONE -> keyActions.clear()
