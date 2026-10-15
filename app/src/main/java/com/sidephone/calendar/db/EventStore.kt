@@ -16,20 +16,20 @@ class EventStore(private val dao: EventDao) {
 	}
 
 
-	 // Live list of per-day occurrences overlapping [from, to]. Re-emits on any DB change.
+	// Live list of per-day occurrences overlapping [from, to]. Re-emits on any DB change.
 	fun occurrences(from: LocalDate, to: LocalDate): Flow<List<EventOccurrence>> =
 		combine(dao.events(from, to), dao.overrides(from, to)) { events, overrides ->
 			EventRecurrence.expand(events, overrides, from, to)
 		}
 
-	 // Delete this occurrence only
+	// Delete this occurrence only
 	suspend fun deleteOccurrence(o: EventOccurrence) = dao.saveOverride(
 		EventOverride(eventId = o.eventId, originalDate = o.originalDate, cancelled = true)
 	)
 
-	 // Drops all customisation of one occurrence (also un-cancels it).
+	// Drops all customisation of one occurrence (also un-cancels it).
 	suspend fun resetOccurrence(eventId: Long, originalDate: LocalDate) = dao.deleteOverride(eventId, originalDate)
 
-	 // Edit this occurrence only. Build the override from the edited values.
+	// Edit this occurrence only. Build the override from the edited values.
 	suspend fun saveOverride(override: EventOverride) = dao.saveOverride(override)
 }
