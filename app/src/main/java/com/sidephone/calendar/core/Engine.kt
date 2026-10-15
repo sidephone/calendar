@@ -100,7 +100,7 @@ class Engine(app: Application) {
 			}
 			is DayGrid -> {
 				date.add(Jalendar.DAY_OF_MONTH, increment)
-				grid = DayGrid(date)
+				grid = DayGrid(date, events.count)
 			}
 			else -> {}
 		}
@@ -138,7 +138,7 @@ class Engine(app: Application) {
 
 		grid = when (grid) {
 			is YearGrid -> MonthGrid(date)
-			is MonthGrid -> DayGrid(date)
+			is MonthGrid -> DayGrid(date, events.count)
 			else -> grid
 		}
 

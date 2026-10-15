@@ -22,11 +22,23 @@ class CalendarEvents(app: Application) : ViewModel() {
 	private val db: EventStore = EventStore(AppDatabase.get(app).eventDao())
 	private val timeframe = MutableStateFlow<EventTimeframe>(EventTimeframe.Day(LocalDate.now()))
 
+	val count = countForTimeframe()
+	val list = getListForTimeframe()
+
 
 	/*** Get ***/
 
+	private fun countForTimeframe(): StateFlow<Int> = list.map { state ->
+		when (state) {
+			is EventState.Day -> state.items.size
+			is EventState.Month -> state.countsByDay.values.sum()
+			else -> 0
+		}
+	}.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), 0)
+
+
 	@OptIn(ExperimentalCoroutinesApi::class)
-	val list: StateFlow<EventState> = timeframe
+	private fun getListForTimeframe(): StateFlow<EventState> = timeframe
 		.flatMapLatest { timeframe ->
 			when (timeframe) {
 				is EventTimeframe.Day -> db.occurrences(timeframe.date, timeframe.date).map {
@@ -43,8 +55,10 @@ class CalendarEvents(app: Application) : ViewModel() {
 		}
 		.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), EventState.Loading)
 
+
 	/**
-	 * Gets all events for the given timeframe. The result is a live list found in this.list.
+	 * Change the current timeframe for which events are being displayed. This will trigger a reload,
+	 * and update `list` and `count` accordingly.
 	 */
 	fun setTimeframe(t: EventTimeframe) { timeframe.value = t }
 

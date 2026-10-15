@@ -2,12 +2,12 @@ package com.sidephone.calendar.core.grid
 
 import java.util.Calendar
 
+/**
+ * A 7x6 grid representing the days of the month, where each cell contains the day number (1-31) or
+ * negative numbers for the days of the previous or next month that fill the grid. The days are
+ * aligned according to the first day of the week, based on the current locale.
+ */
 class MonthGrid(today: Calendar) : Grid(today) {
-	/**
-	 * Returns a 7x6 grid representing the days of the month, where each cell contains the day number
-	 * (1-31) or negative numbers for the days of the previous or next month that fill the grid. The
-	 * days are aligned according to the first day of the week, based on the current locale.
-	 */
 	override fun generateGrid(today: Calendar): List<List<Int>> {
 		val calendar = today.clone() as Calendar
 		calendar.set(Calendar.DAY_OF_MONTH, 1)
@@ -40,6 +40,7 @@ class MonthGrid(today: Calendar) : Grid(today) {
 		return grid
 	}
 
+
 	override fun initialX(today: Calendar): Int {
 		for (week in grid.indices) {
 			for (day in grid[week].indices) {
@@ -50,6 +51,7 @@ class MonthGrid(today: Calendar) : Grid(today) {
 		}
 		return 0
 	}
+
 
 	override fun initialY(today: Calendar): Int {
 		for (week in grid.indices) {
