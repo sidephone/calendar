@@ -72,9 +72,9 @@ class ActionPad(private val settings: Settings, inputManager: InputManager) : Ke
 
 
 	override fun onChange() {
-		val layout = if (tileOverride.value != Layout.UNKNOWN) tileOverride.value else layout.value
+		val selectedLayout = if (tileOverride.value != Layout.UNKNOWN) tileOverride.value else this.layout.value
 
-		when (layout) {
+		when (selectedLayout) {
 			Layout.NONE -> keyActions.clear()
 			Layout.SUNDIAL -> setSundialLayout()
 			else -> setDefaultLayout()
