@@ -1,12 +1,13 @@
 package com.sidephone.calendar.core
 
 import android.app.Application
+import com.sidephone.calendar.core.events.CalendarEvents
+import com.sidephone.calendar.core.events.EventTimeframe
 import com.sidephone.calendar.core.grid.DayGrid
 import com.sidephone.calendar.core.grid.Grid
 import com.sidephone.calendar.core.grid.MonthGrid
 import com.sidephone.calendar.core.grid.YearGrid
-import com.sidephone.calendar.core.events.CalendarEvents
-import com.sidephone.calendar.core.events.EventTimeframe
+import com.sidephone.calendar.db.Event
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDate
@@ -30,7 +31,7 @@ class Engine(app: Application) {
 
 	init {
 		events.setTimeframe(EventTimeframe.Month(month = YearMonth.of(year, month)))
-		_output.value = "Grid: ${grid::class.simpleName}, position: ${grid.position()}, $year-$month-$day"
+		_output.value = "Grid: ${grid::class.simpleName}, date: $year-$month-$day position: ${grid.position()} = ${grid.current()}"
 	}
 
 
@@ -46,7 +47,11 @@ class Engine(app: Application) {
 			Action.ZOOM_OUT -> zoomOut()
 			Action.OK -> {
 				if (grid is DayGrid) {
-					_output.value = "OK action on date: $year-$month-$day"
+					if (grid.current() == 0) {
+						addEvent()
+					} else {
+						_output.value = "View event on date: $year-$month-$day, index: ${grid.current()}"
+					}
 					return
 				} else {
 					zoomIn()
@@ -54,7 +59,7 @@ class Engine(app: Application) {
 			}
 		}
 
-		_output.value = "Grid: ${grid::class.simpleName}, position: ${grid.position()}, $year-$month-$day"
+		_output.value = "Grid: ${grid::class.simpleName}, date: $year-$month-$day position: ${grid.position()} = ${grid.current()}"
 	}
 
 
@@ -100,7 +105,7 @@ class Engine(app: Application) {
 			}
 			is DayGrid -> {
 				date.add(Jalendar.DAY_OF_MONTH, increment)
-				grid = DayGrid(date, events.count)
+				grid = DayGrid(date, events.list)
 			}
 			else -> {}
 		}
@@ -110,6 +115,14 @@ class Engine(app: Application) {
 		day = date.get(Jalendar.DAY_OF_MONTH)
 
 		loadEvents()
+	}
+
+
+	private fun addEvent() {
+		events.saveEvent(Event(
+			title = "Stub Event #" + (Math.random() * 1_000_000).toInt(),
+			startDate = LocalDate.of(year, month, day)
+		))
 	}
 
 
@@ -138,7 +151,7 @@ class Engine(app: Application) {
 
 		grid = when (grid) {
 			is YearGrid -> MonthGrid(date)
-			is MonthGrid -> DayGrid(date, events.count)
+			is MonthGrid -> DayGrid(date, events.list)
 			else -> grid
 		}
 

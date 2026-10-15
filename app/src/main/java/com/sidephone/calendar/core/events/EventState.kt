@@ -10,4 +10,11 @@ sealed interface EventState {
 
 	// Number of entries per day; a multi-day event counts on every day it covers
 	data class Month(val month: YearMonth, val countsByDay: Map<LocalDate, Int>) : EventState
+
+	val count: Int
+		get() = when (this) {
+			is Day -> items.size
+			is Month -> countsByDay.values.sum()
+			else -> 0
+		}
 }
