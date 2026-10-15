@@ -28,11 +28,12 @@ private fun Grid.cells(): List<List<Int>> {
 class YearGridTest {
 
 	@Test
-	fun `grid is 3 rows by 4 columns of months 1 to 12`() {
+	fun `grid is 4 rows by 3 columns of months 1 to 12`() {
 		val expected = listOf(
-			listOf(1, 2, 3, 4),
-			listOf(5, 6, 7, 8),
-			listOf(9, 10, 11, 12)
+			listOf(1, 2, 3),
+			listOf(4, 5, 6),
+			listOf(7, 8, 9),
+			listOf(10, 11, 12)
 		)
 		assertEquals(expected, YearGrid(date(2026, 10, 13)).cells())
 	}
@@ -42,14 +43,14 @@ class YearGridTest {
 		for (month in 1..12) {
 			val grid = YearGrid(date(2026, month, 1))
 			assertEquals(month, grid.current(), "month $month")
-			assertEquals(Pair((month - 1) % 4, (month - 1) / 4), grid.position(), "month $month")
+			assertEquals(Pair((month - 1) % 3, (month - 1) / 3), grid.position(), "month $month")
 		}
 	}
 
 	@Test
 	fun `initial position for october`() {
 		val grid = YearGrid(date(2026, 10, 13))
-		assertEquals(Pair(1, 2), grid.position())
+		assertEquals(Pair(0, 3), grid.position())
 		assertEquals(10, grid.current())
 	}
 
@@ -58,7 +59,7 @@ class YearGridTest {
 		val grid = YearGrid(date(2026, 1, 1))
 		grid.right()
 		assertEquals(2, grid.current())
-		repeat(3) { grid.right() }
+		repeat(2) { grid.right() }
 		assertEquals(1, grid.current())
 	}
 
@@ -66,35 +67,50 @@ class YearGridTest {
 	fun `left moves backward and wraps within the row`() {
 		val grid = YearGrid(date(2026, 1, 1))
 		grid.left()
-		assertEquals(4, grid.current())
-		assertEquals(Pair(3, 0), grid.position())
+		assertEquals(3, grid.current())
+		assertEquals(Pair(2, 0), grid.position())
 	}
 
 	@Test
 	fun `down moves forward and wraps to the top`() {
 		val grid = YearGrid(date(2026, 2, 1))
 		grid.down()
-		assertEquals(6, grid.current())
+		assertEquals(5, grid.current())
+		assertEquals(Pair(1, 1), grid.position())
 		grid.down()
-		assertEquals(10, grid.current())
+		assertEquals(8, grid.current())
+		assertEquals(Pair(1, 2), grid.position())
+		grid.down()
+		assertEquals(11, grid.current())
+		assertEquals(Pair(1, 3), grid.position())
 		grid.down()
 		assertEquals(2, grid.current())
+		assertEquals(Pair(1, 0), grid.position())
 	}
 
 	@Test
 	fun `up moves backward and wraps to the bottom`() {
-		val grid = YearGrid(date(2026, 2, 1))
+		val grid = YearGrid(date(2026, 3, 1))
 		grid.up()
-		assertEquals(10, grid.current())
-		assertEquals(Pair(1, 2), grid.position())
+		assertEquals(12, grid.current())
+		assertEquals(Pair(2, 3), grid.position())
+		grid.up()
+		assertEquals(9, grid.current())
+		assertEquals(Pair(2, 2), grid.position())
+		grid.up()
+		assertEquals(6, grid.current())
+		assertEquals(Pair(2, 1), grid.position())
+		grid.up()
+		assertEquals(3, grid.current())
+		assertEquals(Pair(2, 0), grid.position())
 	}
 
 	@Test
 	fun `every cell is reachable and consistent with position`() {
 		val grid = YearGrid(date(2026, 1, 1))
 		val seen = mutableSetOf<Int>()
-		repeat(3) {
-			repeat(4) {
+		repeat(4) {
+			repeat(3) {
 				seen.add(grid.current())
 				grid.right()
 			}
