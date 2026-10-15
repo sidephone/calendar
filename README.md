@@ -13,6 +13,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) 
 
 
 ## TODO
-- Extract the data classes, the converters and other helpers to separate files
 - Get rid of the "require" in Database.kt
 - either inject or use the daily events to implement up and down scrolling on the day view

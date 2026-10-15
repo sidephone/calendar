@@ -5,16 +5,16 @@ import com.sidephone.calendar.core.grid.DayGrid
 import com.sidephone.calendar.core.grid.Grid
 import com.sidephone.calendar.core.grid.MonthGrid
 import com.sidephone.calendar.core.grid.YearGrid
-import com.sidephone.calendar.db.CalendarEventsModel
-import com.sidephone.calendar.db.Selection
+import com.sidephone.calendar.core.events.CalendarEvents
+import com.sidephone.calendar.core.events.EventTimeframe
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDate
 import java.time.YearMonth
 import java.util.Calendar as Jalendar
 
-class Engine(private val app: Application) {
-	private var db = CalendarEventsModel(app)
+class Engine(app: Application) {
+	private var events = CalendarEvents(app)
 
 	private val date = Jalendar.getInstance()
 	private var grid: Grid = MonthGrid(date)
@@ -23,13 +23,13 @@ class Engine(private val app: Application) {
 	private var day: Int = date.get(Jalendar.DAY_OF_MONTH)
 
 	private val _output = MutableStateFlow("")
-	val output: StateFlow<String> = _output
+	val outputGrid: StateFlow<String> = _output
 
-	val events = db.events
+	val outputEvents = events.list
 
 
 	init {
-		db.select(Selection.Month(month = YearMonth.of(year, month)))
+		events.setTimeframe(EventTimeframe.Month(month = YearMonth.of(year, month)))
 		_output.value = "Grid: ${grid::class.simpleName}, position: ${grid.position()}, $year-$month-$day"
 	}
 
@@ -115,9 +115,9 @@ class Engine(private val app: Application) {
 
 	private fun loadEvents() {
 		when (grid) {
-			is MonthGrid -> db.select(Selection.Month(month = YearMonth.of(year, month)))
-			is DayGrid -> db.select(Selection.Day(date = LocalDate.of(year, month, day)))
-			else -> db.select(Selection.Year(year))
+			is MonthGrid -> events.setTimeframe(EventTimeframe.Month(month = YearMonth.of(year, month)))
+			is DayGrid -> events.setTimeframe(EventTimeframe.Day(date = LocalDate.of(year, month, day)))
+			else -> events.setTimeframe(EventTimeframe.Year(year))
 		}
 	}
 

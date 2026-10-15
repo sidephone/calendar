@@ -21,8 +21,8 @@ class Calendar(private val settings: Settings, app: Application, inputManager: I
 	private val engine = Engine(app)
 	private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
-	val output = engine.output
-	val events = engine.events
+	val grid = engine.outputGrid
+	val events = engine.outputEvents
 
 	private val _tileOverride = MutableStateFlow(settings.getTile())
 	val tileOverride: StateFlow<Keypad.Layout> = _tileOverride.asStateFlow()

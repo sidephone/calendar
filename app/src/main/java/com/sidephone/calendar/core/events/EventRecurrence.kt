@@ -1,38 +1,15 @@
-package com.sidephone.calendar.db
+package com.sidephone.calendar.core.events
 
+import com.sidephone.calendar.db.Event
+import com.sidephone.calendar.db.EventOverride
 import java.time.DayOfWeek
 import java.time.LocalDate
-import java.time.LocalTime
 import java.time.MonthDay
 import java.time.YearMonth
 import java.time.temporal.ChronoUnit
 
-/**
- * What the UI sees: one entry per event per DAY it covers.
- * A 3-day conference yields three Occurrences (dayIndex 0, 1, 2) with the same eventId/originalDate.
- */
-data class Occurrence(
-	val eventId: Long,
-	val originalDate: LocalDate,   // normal START date of this occurrence; with eventId identifies it
-	val date: LocalDate,           // the day this entry is shown on
-	val startDate: LocalDate,      // actual start of the whole occurrence (after overrides)
-	val endDate: LocalDate,        // actual end of the whole occurrence (inclusive)
-	val dayIndex: Int,             // 0-based position of [date] within the occurrence
-	val dayCount: Int,             // total days covered
-	val title: String,
-	val description: String,
-	val address: String?,
-	val startTime: LocalTime?,     // time of the whole occurrence's start; null = all-day
-	val endTime: LocalTime?,       // time of the whole occurrence's end on endDate
-	val recurring: Boolean,
-) {
-	val allDay: Boolean get() = startTime == null
-	val isMultiDay: Boolean get() = dayCount > 1
-	val isFirstDay: Boolean get() = dayIndex == 0
-	val isLastDay: Boolean get() = dayIndex == dayCount - 1
-}
-
-object Recurrence {
+object EventRecurrence {
+	enum class Freq { NONE, DAILY, WEEKLY, MONTHLY, YEARLY }
 
 	/** Lazy, ascending sequence of the START dates of all occurrences of [e], honoring until/count. */
 	fun dates(e: Event): Sequence<LocalDate> {
@@ -81,10 +58,10 @@ object Recurrence {
 		overrides: List<EventOverride>,
 		from: LocalDate,
 		to: LocalDate,
-	): List<Occurrence> {
+	): List<EventOccurrence> {
 		val byKey = overrides.associateBy { it.eventId to it.originalDate }
 		val eventsById = events.associateBy { it.id }
-		val out = ArrayList<Occurrence>()
+		val out = ArrayList<EventOccurrence>()
 
 		// 1. Generated occurrences that overlap the range (they may START before it)
 		for (e in events) {
@@ -109,7 +86,7 @@ object Recurrence {
 		}
 
 		return out.sortedWith(
-			compareBy<Occurrence>(
+			compareBy(
 				{ it.date },
 				{ !(it.allDay || it.dayIndex > 0) },   // all-day and continuing events first
 				{ it.startTime },
@@ -120,7 +97,7 @@ object Recurrence {
 
 	/** Adds one Occurrence per day of [start, end] that lies inside [from, to]. */
 	private fun emit(
-		out: MutableList<Occurrence>,
+		out: MutableList<EventOccurrence>,
 		e: Event,
 		o: EventOverride?,
 		start: LocalDate,
@@ -137,7 +114,7 @@ object Recurrence {
 		var d = if (start.isAfter(from)) start else from
 		val last = if (end.isBefore(to)) end else to
 		while (!d.isAfter(last)) {
-			out += Occurrence(
+			out += EventOccurrence(
 				eventId = e.id,
 				originalDate = originalDate,
 				date = d,
