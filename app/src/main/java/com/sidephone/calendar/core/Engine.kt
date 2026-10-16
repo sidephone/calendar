@@ -27,7 +27,7 @@ class Engine(app: Application) {
 
 	// output
 	val gridFlow: StateFlow<Grid> = _grid
-	val dateFlow: StateFlow<Triple<Int, Int, Int>> = MutableStateFlow(Triple(_year.value, _month.value, _day.value))
+	val dateFlow: Triple<StateFlow<Int>, StateFlow<Int>, StateFlow<Int>> = Triple(_year, _month, _day)
 	val eventsFlow = events.list
 
 	// debug

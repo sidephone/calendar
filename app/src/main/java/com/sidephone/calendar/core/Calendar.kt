@@ -5,12 +5,13 @@ import android.hardware.input.InputManager
 import com.sidephone.calendar.Settings
 import com.sidephone.calendar.input.ActionPad
 import com.sidephone.calendar.input.Keypad
+import kotlinx.coroutines.flow.StateFlow
 
 class Calendar(settings: Settings, app: Application, inputManager: InputManager) {
 	private val keypad = ActionPad(settings, inputManager)
 	private val engine = Engine(app)
 
-	val date = engine.dateFlow
+	val date: Triple<StateFlow<Int>, StateFlow<Int>, StateFlow<Int>> = engine.dateFlow
 	val debugText = engine.debugText
 	val events = engine.eventsFlow
 	val grid = engine.gridFlow
