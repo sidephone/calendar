@@ -11,6 +11,6 @@ fun ButtonHelp(onClick: () -> Unit) {
 		modifier = Modifier,
 		onClick = onClick,
 		imageIconResId = R.drawable.ic_help,
-		accessibilityTitle = "Help"
+		accessibilityTitle = androidx.compose.ui.res.stringResource(R.string.action_show_help)
 	)
 }
