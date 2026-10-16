@@ -10,3 +10,25 @@ Tested with Android Studio Rabbit 1 | 2026.2.1
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) file for details.
+
+## TODO
+- Get rid of the "require" in Database.kt
+- UI
+  - Year view
+  - Month view
+  - Day view (with events)
+  - Add event view
+    - All day events
+    - Recurring events
+  - Delete operations
+  - Controls screen (based on the current tile)
+  - Options rail
+    - tile override
+    - zoom in
+    - zoom out
+- Touchscreen UI
+    - do it
+    - make it optional
+    - add a toggle in the settings rail; reset it when the tile changes
+- Notifications
+- Add license file

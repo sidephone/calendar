@@ -5,7 +5,6 @@ import android.os.Handler
 import android.os.Looper
 import android.view.InputDevice
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 
 abstract class Keypad(private val inputManager: InputManager) {
 	enum class Layout { COMPACT_QWERTY, GAMEPAD, NONE, SUNDIAL, T9, T9_NO_DPAD, UNKNOWN }
@@ -19,15 +18,13 @@ abstract class Keypad(private val inputManager: InputManager) {
 	)
 
 	private var changeListener: InputManager.InputDeviceListener? = null
-	protected val layoutState = MutableStateFlow(Layout.NONE)
-	val layout: StateFlow<Layout> = layoutState
-
+	val layout = MutableStateFlow(Layout.NONE)
 
 	abstract fun onChange()
 
 
 	init {
-		layoutState.value = Layout.UNKNOWN
+		layout.value = Layout.UNKNOWN
 	}
 
 
@@ -40,11 +37,11 @@ abstract class Keypad(private val inputManager: InputManager) {
 
 
 	protected open fun detect(device: InputDevice?) {
-		val oldLayout = layoutState.value
+		val oldLayout = layout.value
 
-		layoutState.value = Layout.NONE
+		layout.value = Layout.NONE
 
-		layoutState.value = if (
+		layout.value = if (
 			device != null
 			&& !device.isVirtual
 			&& device.supportsSource(InputDevice.SOURCE_KEYBOARD)
@@ -54,7 +51,7 @@ abstract class Keypad(private val inputManager: InputManager) {
 			Layout.NONE
 		}
 
-		if (oldLayout != layoutState.value) {
+		if (oldLayout != layout.value) {
 			onChange()
 		}
 	}
@@ -66,7 +63,7 @@ abstract class Keypad(private val inputManager: InputManager) {
 		if (changeListener == null) {
 			changeListener = object : InputManager.InputDeviceListener {
 				override fun onInputDeviceAdded(deviceId: Int) { detect(InputDevice.getDevice(deviceId)) }
-				override fun onInputDeviceRemoved(deviceId: Int) { layoutState.value = Layout.NONE; onChange() }
+				override fun onInputDeviceRemoved(deviceId: Int) { layout.value = Layout.NONE; onChange() }
 				override fun onInputDeviceChanged(deviceId: Int) { detect(InputDevice.getDevice(deviceId)) }
 			}
 		}
