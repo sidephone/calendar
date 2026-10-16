@@ -1,9 +1,38 @@
 <resources>
 	<string name="app_name">Sidephone Calendar</string>
 
-	<string name="layout_change_accessibility">Change keypad layout. Current: %1$s</string>
+	<string name="action_show_help">Show help</string>
+	<string name="action_zoom_in">Zoom in</string>
+	<string name="action_zoom_out">Zoom out</string>
+	<string name="action_toggle_sidebar">Toggle sidebar</string>
+
+	<string name="cfg_touch_on">Use touchscreen</string>
+	<string name="cfg_touch_off">Do not use touchscreen</string>
+
 	<string name="layout_auto">Auto</string>
 	<string name="layout_none">Touchscreen</string>
 	<string name="layout_default">Default</string>
 	<string name="layout_sundial">Sundial</string>
+
+	<string name="month_1">January</string>
+	<string name="month_2">February</string>
+	<string name="month_3">March</string>
+	<string name="month_4">April</string>
+	<string name="month_5">May</string>
+	<string name="month_6">June</string>
+	<string name="month_7">July</string>
+	<string name="month_8">August</string>
+	<string name="month_9">September</string>
+	<string name="month_10">October</string>
+	<string name="month_11">November</string>
+	<string name="month_12">December</string>
+
+	<string name="help_title_compact_qwerty">Compact-QWERTY Shortcuts</string>
+	<string name="help_title_gamepad">Gamepad Shortcuts</string>
+	<string name="help_title_sundial">Sundial Shortcuts</string>
+	<string name="help_title_t9">T9 Keypad Shortcuts</string>
+	<string name="help_content_compact_qwerty">TODO QWERTY</string>
+	<string name="help_content_gamepad">TODO GAMEPAD</string>
+	<string name="help_content_sundial">TODO SUNDIAL</string>
+	<string name="help_content_t9">TODO T9</string>
 </resources>
