@@ -39,6 +39,7 @@ data class Event(
 	init {
 		require(!endDate.isBefore(startDate)) { "endDate must not be before startDate" }
 		require(interval >= 1) { "interval must be >= 1" }
+		require(maxOccurrences == null || maxOccurrences >= 1) { "maxOccurrences must be >= 1" }
 		if (freq == EventRecurrence.Freq.WEEKLY) {
 			require(weekdays in 0..0b1111111) { "weekdays must use bits 0..6" }
 		}

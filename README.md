@@ -11,7 +11,6 @@ Tested with Android Studio Rabbit 1 | 2026.2.1
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) file for details.
 
-
 ## TODO
 - Get rid of the "require" in Database.kt
 - UI
