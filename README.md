@@ -26,9 +26,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) 
     - tile override
     - zoom in
     - zoom out
-- Touchscreen UI
-    - do it
-    - make it optional
-    - add a toggle in the settings rail; reset it when the tile changes
 - Notifications
 - Add license file

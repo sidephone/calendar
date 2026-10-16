@@ -12,14 +12,13 @@ import com.sidephone.calendar.core.Calendar
 import com.sidephone.calendar.core.grid.DayGrid
 import com.sidephone.calendar.core.grid.MonthGrid
 import com.sidephone.calendar.core.grid.YearGrid
-import com.sidephone.calendar.input.Keypad
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
 
 @Composable
-fun Topbar(calendar: Calendar, keypadTile: Keypad.Layout, onHelp: () -> Unit, onToggleSidebar: () -> Unit) {
+fun Topbar(calendar: Calendar, noTouch: Boolean, onHelp: () -> Unit, onToggleSidebar: () -> Unit) {
 	val months: List<Int> = listOf(
 		R.string.month_1,
 		R.string.month_2,
@@ -50,7 +49,7 @@ fun Topbar(calendar: Calendar, keypadTile: Keypad.Layout, onHelp: () -> Unit, on
 	Row(verticalAlignment = Alignment.CenterVertically) {
 		ButtonToggleSidebar(onToggleSidebar = onToggleSidebar)
 		Text(modifier = Modifier.weight(1f), text = title)
-		if (keypadTile != Keypad.Layout.NONE && keypadTile != Keypad.Layout.UNKNOWN) {
+		if (noTouch) {
 			ButtonHelp(onClick = onHelp)
 		}
 	}

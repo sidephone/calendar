@@ -9,10 +9,10 @@
 	<string name="cfg_touch_on">Use touchscreen</string>
 	<string name="cfg_touch_off">Do not use touchscreen</string>
 
-	<string name="layout_auto">Auto</string>
-	<string name="layout_none">Touchscreen</string>
-	<string name="layout_default">Default</string>
-	<string name="layout_sundial">Sundial</string>
+	<string name="layout_auto">Auto keypad detection selected.</string>
+	<string name="layout_none">Keypad disabled. Touchscreen input selected.</string>
+	<string name="layout_default">Default keypad mode selected.</string>
+	<string name="layout_sundial">Sundial mode selected.</string>
 
 	<string name="month_1">January</string>
 	<string name="month_2">February</string>

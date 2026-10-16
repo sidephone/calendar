@@ -9,13 +9,18 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import com.sidephone.calendar.core.Calendar
+import com.sidephone.calendar.input.Keypad
 import com.sidephone.calendar.ui.screens.ScreenHelp
 import com.sidephone.calendar.ui.screens.ScreenMain
 import com.sidephone.calendar.ui.theme.AppTheme
@@ -32,18 +37,37 @@ class MainActivity : ComponentActivity() {
 			getSystemService(INPUT_SERVICE) as InputManager
 		)
 
+
 		enableEdgeToEdge()
 		setContent {
 			AppTheme {
-				Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+				val snackbarHostState = remember { SnackbarHostState() }
+				val scope = rememberCoroutineScope()
+				val context = LocalContext.current
+
+				Scaffold(
+					modifier = Modifier.fillMaxSize(),
+					snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
+				) { innerPadding ->
+					val keypadTile = calendar.tile.collectAsState().value
+					val keypadOverride = calendar.tileOverride.collectAsState().value
+
+					var isTouchOn by remember { mutableStateOf(false) }
 					var isHelpScreenOn by remember { mutableStateOf(false) }
 
-					val keypadTile = calendar.tile.collectAsState().value
+					isTouchOn = keypadTile == Keypad.Layout.NONE || keypadTile == Keypad.Layout.UNKNOWN
 
 					if (isHelpScreenOn) {
 						ScreenHelp(modifier = Modifier.padding(innerPadding), keypadTile = keypadTile, onBack = { isHelpScreenOn = false })
 					} else {
-						ScreenMain(modifier = Modifier.padding(innerPadding), calendar = calendar, keypadTile = keypadTile, onHelp = { isHelpScreenOn = true })
+						ScreenMain(
+							modifier = Modifier.padding(innerPadding),
+							snackbarProps = Triple(snackbarHostState, scope, context),
+							calendar = calendar,
+							isTouchOn = isTouchOn,
+							keypadOverride = keypadOverride,
+							onHelp = { isHelpScreenOn = true }
+						)
 					}
 				}
 			}
