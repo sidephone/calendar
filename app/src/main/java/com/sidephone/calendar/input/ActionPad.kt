@@ -56,7 +56,7 @@ class ActionPad(private val settings: Settings, inputManager: InputManager) : Ke
 	 * Allow the user to switch between the possible app input methods (layouts) in a cycle. Useful for
 	 * when keypad detection blips and forces the wrong tile.
 	 */
-	fun nextTile() {
+	fun nextTile(): Layout {
 		val override = when (tileOverride.value) {
 			// in this app the options are "none" (touchscreen), "sundial", or "any other tile"
 			Layout.UNKNOWN -> Layout.T9
@@ -68,6 +68,8 @@ class ActionPad(private val settings: Settings, inputManager: InputManager) : Ke
 		tileOverride.value = override
 		settings.setTile(override)
 		onChange()
+
+		return override
 	}
 
 

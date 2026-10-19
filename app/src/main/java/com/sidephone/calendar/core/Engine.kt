@@ -15,23 +15,26 @@ import java.time.YearMonth
 import java.util.Calendar as Jalendar
 
 class Engine(app: Application) {
+	// events
 	private var events = CalendarEvents(app)
 
+	// date
 	private val date = Jalendar.getInstance()
 	private var grid: Grid = MonthGrid(date)
 	private var year: Int = date.get(Jalendar.YEAR)
 	private var month: Int = date.get(Jalendar.MONTH) + 1 // Calendar.MONTH is zero-based
 	private var day: Int = date.get(Jalendar.DAY_OF_MONTH)
 
-	private val _output = MutableStateFlow("")
-	val outputGrid: StateFlow<String> = _output
-
-	val outputEvents = events.list
+	// output
+	private val _dateFlow: MutableStateFlow<Triple<Int, Int, Int>> = MutableStateFlow(Triple(year, month, day))
+	val dateFlow: StateFlow<Triple<Int, Int, Int>> = _dateFlow
+	val eventsFlow = events.list
+	private val _gridFlow: MutableStateFlow<Grid> = MutableStateFlow(grid)
+	val gridFlow: StateFlow<Grid> = _gridFlow
 
 
 	init {
 		events.setTimeframe(EventTimeframe.Month(month = YearMonth.of(year, month)))
-		_output.value = "Grid: ${grid::class.simpleName}, date: $year-$month-$day position: ${grid.position()} = ${grid.current()}"
 	}
 
 
@@ -46,20 +49,16 @@ class Engine(app: Application) {
 			Action.ZOOM_IN -> zoomIn()
 			Action.ZOOM_OUT -> zoomOut()
 			Action.OK -> {
-				if (grid is DayGrid) {
-					if (grid.current() == 0) {
-						addEvent()
-					} else {
-						_output.value = "View event on date: $year-$month-$day, index: ${grid.current()}"
-					}
-					return
+				if (grid is DayGrid && grid.current() == 0) {
+					addEvent()
 				} else {
 					zoomIn()
 				}
 			}
 		}
 
-		_output.value = "Grid: ${grid::class.simpleName}, date: $year-$month-$day position: ${grid.position()} = ${grid.current()}"
+		_dateFlow.value = Triple(year, month, day)
+		_gridFlow.value = grid.copy()
 	}
 
 
@@ -78,16 +77,24 @@ class Engine(app: Application) {
 
 
 	private fun left() {
-		grid.left()
-		syncDate()
-		loadEvents()
+		if (grid is DayGrid) {
+			changePage(-1)
+		} else {
+			grid.left()
+			syncDate()
+			loadEvents()
+		}
 	}
 
 
 	private fun right() {
-		grid.right()
-		syncDate()
-		loadEvents()
+		if (grid is DayGrid) {
+			changePage(1)
+		} else {
+			grid.right()
+			syncDate()
+			loadEvents()
+		}
 	}
 
 
@@ -147,6 +154,9 @@ class Engine(app: Application) {
 	private fun zoomIn() {
 		syncDate()
 
+		if (day > YearMonth.of(year, month).lengthOfMonth()) {
+			day = YearMonth.of(year, month).lengthOfMonth()
+		}
 		date.set(year, month - 1, day)
 
 		grid = when (grid) {
