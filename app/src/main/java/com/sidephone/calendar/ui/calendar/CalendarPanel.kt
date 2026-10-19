@@ -12,10 +12,13 @@ import com.sidephone.calendar.core.Calendar
 
 @Composable
 fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar) {
+	val grid = calendar.grid.collectAsState().value
+
 	val txt = stringResource(R.string.app_name) +
 		"\nactive tile: ${calendar.tile.collectAsState().value}" +
 		"\noverride tile: ${calendar.tileOverride.collectAsState().value}" +
-		"\nstate: ${calendar.debugText.collectAsState().value}" +
+		"\ngrid: $grid" +
+		"\nposition: ${grid.position()} = ${grid.current()}" +
 		"\nevents: ${calendar.events.collectAsState().value}"
 
 	Column(modifier = modifier.fillMaxSize()) {

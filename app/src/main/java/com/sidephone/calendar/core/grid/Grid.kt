@@ -2,10 +2,15 @@ package com.sidephone.calendar.core.grid
 
 import java.util.Calendar
 
-abstract class Grid(today: Calendar) {
+abstract class Grid(today: Calendar) : Cloneable {
 	protected val grid: List<List<Int>> = generateGrid(today)
 	protected var currentX = initialX(today)
 	protected var currentY = initialY(today)
+
+
+	fun copy(): Grid {
+		return super.clone() as Grid
+	}
 
 
 	open fun current(): Int {

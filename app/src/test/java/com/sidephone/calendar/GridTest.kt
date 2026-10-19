@@ -26,6 +26,14 @@ class GridTest {
 	}
 
 	@Test
+	fun `cloning is possible`() {
+		val grid = FakeGrid(cells = listOf(listOf(1, 2), listOf(3, 4)), startX = 1, startY = 0)
+		val clone = grid.copy()
+		assertEquals(grid.position(), clone.position())
+		assertEquals(grid.current(), clone.current())
+	}
+
+	@Test
 	fun `current returns minus one when out of bounds`() {
 		assertEquals(-1, FakeGrid(cells = listOf(listOf(1, 2)), startX = 5).current())
 		assertEquals(-1, FakeGrid(cells = listOf(listOf(1, 2)), startY = 3).current())
