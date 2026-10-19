@@ -3,7 +3,7 @@ package com.sidephone.calendar.core.grid
 import java.util.Calendar
 
 abstract class Grid(today: Calendar) : Cloneable {
-	protected val grid: List<List<Int>> = generateGrid(today)
+	val grid: List<List<Int>> = generateGrid(today)
 	protected var currentX = initialX(today)
 	protected var currentY = initialY(today)
 
