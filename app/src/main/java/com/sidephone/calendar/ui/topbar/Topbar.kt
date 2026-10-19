@@ -35,9 +35,7 @@ fun Topbar(calendar: Calendar, noTouch: Boolean, onHelp: () -> Unit, onToggleSid
 	)
 
 	val grid = calendar.grid.collectAsState().value
-	val year = calendar.date.first.collectAsState().value
-	val month = calendar.date.second.collectAsState().value
-	val day = calendar.date.third.collectAsState().value
+	val (year, month, day) = calendar.date.collectAsState().value
 
 	val title = when (grid) {
 		is YearGrid -> year.toString()

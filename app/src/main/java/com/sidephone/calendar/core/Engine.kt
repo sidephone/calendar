@@ -21,14 +21,15 @@ class Engine(app: Application) {
 	// date
 	private val date = Jalendar.getInstance()
 	private val _grid: MutableStateFlow<Grid> = MutableStateFlow(MonthGrid(date))
-	private var _year: MutableStateFlow<Int> = MutableStateFlow(date.get(Jalendar.YEAR))
-	private var _month: MutableStateFlow<Int> = MutableStateFlow(date.get(Jalendar.MONTH) + 1) // Calendar.MONTH is zero-based
-	private var _day: MutableStateFlow<Int> = MutableStateFlow(date.get(Jalendar.DAY_OF_MONTH))
+	private var year: Int = date.get(Jalendar.YEAR)
+	private var month: Int = date.get(Jalendar.MONTH) + 1 // Calendar.MONTH is zero-based
+	private var day: Int = date.get(Jalendar.DAY_OF_MONTH)
 
 	// output
-	val gridFlow: StateFlow<Grid> = _grid
-	val dateFlow: Triple<StateFlow<Int>, StateFlow<Int>, StateFlow<Int>> = Triple(_year, _month, _day)
+	private val _dateFlow: MutableStateFlow<Triple<Int, Int, Int>> = MutableStateFlow(Triple(year, month, day))
+	val dateFlow: StateFlow<Triple<Int, Int, Int>> = _dateFlow
 	val eventsFlow = events.list
+	val gridFlow: StateFlow<Grid> = _grid
 
 	// debug
 	private val _debugText = MutableStateFlow("")
@@ -36,8 +37,8 @@ class Engine(app: Application) {
 
 
 	init {
-		events.setTimeframe(EventTimeframe.Month(month = YearMonth.of(_year.value, _month.value)))
-		_debugText.value = "Grid: ${_grid.value::class.simpleName}, date: ${_year.value}-${_month.value}-${_day.value} position: ${_grid.value.position()} = ${_grid.value.current()}"
+		events.setTimeframe(EventTimeframe.Month(month = YearMonth.of(year, month)))
+		_debugText.value = "Grid: ${_grid.value::class.simpleName}, date: ${year}-${month}-${day} position: ${_grid.value.position()} = ${_grid.value.current()}"
 	}
 
 
@@ -56,7 +57,7 @@ class Engine(app: Application) {
 					if (_grid.value.current() == 0) {
 						addEvent()
 					} else {
-						_debugText.value = "View event on date: ${_year.value}-${_month.value}-${_day.value}, index: ${_grid.value.current()}"
+						_debugText.value = "View event on date: ${year}-${month}-${day}, index: ${_grid.value.current()}"
 					}
 					return
 				} else {
@@ -65,7 +66,7 @@ class Engine(app: Application) {
 			}
 		}
 
-		_debugText.value = "Grid: ${_grid.value::class.simpleName}, date: ${_year.value}-${_month.value}-${_day.value} position: ${_grid.value.position()} = ${_grid.value.current()}"
+		_debugText.value = "Grid: ${_grid.value::class.simpleName}, date: ${year}-${month}-${day} position: ${_grid.value.position()} = ${_grid.value.current()}"
 	}
 
 
@@ -98,7 +99,7 @@ class Engine(app: Application) {
 
 
 	private fun changePage(increment: Int) {
-		date.set(_year.value, _month.value - 1, _day.value)
+		date.set(year, month - 1, day)
 
 		when (_grid.value) {
 			is YearGrid -> {
@@ -116,9 +117,10 @@ class Engine(app: Application) {
 			else -> {}
 		}
 
-		_year.value = date.get(Jalendar.YEAR)
-		_month.value = date.get(Jalendar.MONTH) + 1
-		_day.value = date.get(Jalendar.DAY_OF_MONTH)
+		year = date.get(Jalendar.YEAR)
+		month = date.get(Jalendar.MONTH) + 1
+		day = date.get(Jalendar.DAY_OF_MONTH)
+		_dateFlow.value = Triple(year, month, day)
 
 		loadEvents()
 	}
@@ -127,33 +129,35 @@ class Engine(app: Application) {
 	private fun addEvent() {
 		events.saveEvent(Event(
 			title = "Stub Event #" + (Math.random() * 1_000_000).toInt(),
-			startDate = LocalDate.of(_year.value, _month.value, _day.value)
+			startDate = LocalDate.of(year, month, day)
 		))
 	}
 
 
 	private fun loadEvents() {
 		when (_grid.value) {
-			is MonthGrid -> events.setTimeframe(EventTimeframe.Month(month = YearMonth.of(_year.value, _month.value)))
-			is DayGrid -> events.setTimeframe(EventTimeframe.Day(date = LocalDate.of(_year.value, _month.value, _day.value)))
-			else -> events.setTimeframe(EventTimeframe.Year(_year.value))
+			is MonthGrid -> events.setTimeframe(EventTimeframe.Month(month = YearMonth.of(year, month)))
+			is DayGrid -> events.setTimeframe(EventTimeframe.Day(date = LocalDate.of(year, month, day)))
+			else -> events.setTimeframe(EventTimeframe.Year(year))
 		}
 	}
 
 
 	private fun syncDate() {
 		when (_grid.value) {
-			is YearGrid -> _month.value = _grid.value.current()
-			is MonthGrid -> _day.value = _grid.value.current()
+			is YearGrid -> month = _grid.value.current()
+			is MonthGrid -> day = _grid.value.current()
 			else -> {}
 		}
+
+		_dateFlow.value = Triple(year, month, day)
 	}
 
 
 	private fun zoomIn() {
 		syncDate()
 
-		date.set(_year.value, _month.value - 1, _day.value)
+		date.set(year, month - 1, day)
 
 		_grid.value = when (_grid.value) {
 			is YearGrid -> MonthGrid(date)
@@ -166,7 +170,7 @@ class Engine(app: Application) {
 
 
 	private fun zoomOut() {
-		date.set(_year.value, _month.value - 1, _day.value)
+		date.set(year, month - 1, day)
 
 		_grid.value = when (_grid.value) {
 			is DayGrid -> MonthGrid(date)

@@ -11,7 +11,7 @@ class Calendar(settings: Settings, app: Application, inputManager: InputManager)
 	private val keypad = ActionPad(settings, inputManager)
 	private val engine = Engine(app)
 
-	val date: Triple<StateFlow<Int>, StateFlow<Int>, StateFlow<Int>> = engine.dateFlow
+	val date: StateFlow<Triple<Int, Int, Int>> = engine.dateFlow
 	val debugText = engine.debugText
 	val events = engine.eventsFlow
 	val grid = engine.gridFlow
