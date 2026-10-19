@@ -2,6 +2,7 @@ package com.sidephone.calendar.ui.screens
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -44,8 +45,9 @@ fun ScreenHelp(modifier: Modifier, keypadTile: Keypad.Layout, onBack: () -> Unit
 	}
 
 
-	Column(modifier = modifier) {
+	Column(modifier = modifier.fillMaxWidth()) {
 		Text(
+			modifier = Modifier.fillMaxWidth(),
 			text = title,
 			style = MaterialTheme.typography.headlineLarge,
 			fontWeight = FontWeight.Bold,
