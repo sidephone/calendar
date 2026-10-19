@@ -154,6 +154,9 @@ class Engine(app: Application) {
 	private fun zoomIn() {
 		syncDate()
 
+		if (day > YearMonth.of(year, month).lengthOfMonth()) {
+			day = YearMonth.of(year, month).lengthOfMonth()
+		}
 		date.set(year, month - 1, day)
 
 		grid = when (grid) {
