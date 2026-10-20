@@ -47,7 +47,7 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar) {
 
 		for (column in grid.grid) {
 			Row(Modifier.weight(1f)) {
-				for (cell in column) {
+				for (cell in column)
 					when (grid) {
 						is YearGrid -> CellYear(
 							modifier = boxMod.then(Modifier.weight(1f)),
@@ -64,12 +64,11 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar) {
 							highlightTextColor = highlightTextColor,
 							inactiveTextColor = inactiveCellTextColor,
 							isHighlighted = cell == current,
-							isToday = cell == calendar.today,
+							isToday = calendar.isToday(year, month, cell),
 							day = cell
 						)
 						else -> {}
 					}
-				}
 			}
 		}
 	}

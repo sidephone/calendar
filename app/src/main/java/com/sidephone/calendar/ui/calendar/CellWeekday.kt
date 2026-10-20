@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.Locale
 
 @Composable
 fun CellWeekday(
@@ -29,6 +30,7 @@ fun CellWeekday(
 				.of(ny, nm, nd)
 				.format(DateTimeFormatter.ofPattern("eee"))
 				.substring(0, 1)
+				.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
 		)
 	}
 }
