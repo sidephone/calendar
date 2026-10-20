@@ -13,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.sidephone.calendar.core.Calendar
+import com.sidephone.calendar.core.events.EventState
 import com.sidephone.calendar.core.grid.MonthGrid
 import com.sidephone.calendar.core.grid.YearGrid
 import com.sidephone.calendar.util.Weekdays
@@ -21,6 +22,7 @@ import java.time.LocalDate
 @Composable
 fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar) {
 	val grid = calendar.grid.collectAsState().value
+	val events: EventState = calendar.events.collectAsState().value
 	val (year, month, _) = calendar.date.collectAsState().value
 	val current = grid.current()
 
@@ -28,6 +30,8 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar) {
 	val highlightBackground = MaterialTheme.colorScheme.primary
 	val highlightTextColor = MaterialTheme.colorScheme.onPrimary
 	val inactiveCellTextColor = MaterialTheme.colorScheme.onSurfaceVariant
+
+
 
 	val weekdays = remember {
 		grid.grid[0].map { Weekdays.getFirstLetter(year, month, it) }
@@ -74,7 +78,8 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar) {
 							inactiveTextColor = inactiveCellTextColor,
 							isHighlighted = cell == current,
 							isToday = cell == todayCell,
-							day = cell
+							day = cell,
+							eventCount = if (cell > 0 && events is EventState.Month) events.countsByDay[LocalDate.of(year, month, cell)] ?: 0 else 0
 						)
 
 						else -> {}
