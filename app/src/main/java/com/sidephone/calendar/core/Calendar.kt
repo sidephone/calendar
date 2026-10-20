@@ -6,7 +6,6 @@ import com.sidephone.calendar.Settings
 import com.sidephone.calendar.input.ActionPad
 import com.sidephone.calendar.input.Keypad
 import kotlinx.coroutines.flow.StateFlow
-import java.util.Calendar as Jalendar
 
 class Calendar(settings: Settings, app: Application, inputManager: InputManager) {
 	private val keypad = ActionPad(settings, inputManager)
@@ -21,7 +20,6 @@ class Calendar(settings: Settings, app: Application, inputManager: InputManager)
 	init { keypad.onAction = { action -> engine.onAction(action) } }
 
 	fun destroy() { keypad.destroy() }
-	fun isToday(year: Int, month: Int, day: Int) = Jalendar.getInstance().let { it.get(Jalendar.YEAR) == year && it.get(Jalendar.MONTH) + 1 == month && it.get(Jalendar.DAY_OF_MONTH) == day }
 	fun listenForKeypadChange() = keypad.listenForChanges()
 	fun nextTile(): Keypad.Layout = keypad.nextTile()
 	fun onAction(action: Action) = engine.onAction(action) // handle actions from touchscreen
