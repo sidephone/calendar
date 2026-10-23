@@ -86,7 +86,6 @@ class ActionPad(private val settings: Settings, inputManager: InputManager) : Ke
 
 
 	fun onKeyDown(keyCode: Int): Boolean {
-		keyHandled[keyCode] = false
 		keyActions[keyCode]?.let { action ->
 			keyHandled[keyCode] = onAction(action)
 		}
@@ -96,7 +95,9 @@ class ActionPad(private val settings: Settings, inputManager: InputManager) : Ke
 
 
 	fun onKeyUp(keyCode: Int): Boolean {
-		return keyHandled[keyCode] ?: false
+		val result = keyHandled[keyCode] ?: false
+		keyHandled[keyCode] = false
+		return result
 	}
 
 
