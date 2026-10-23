@@ -76,7 +76,7 @@ fun ColumnDay(
 			CellEvent(
 				modifier = Modifier
 					.focusProperties { canFocus = false }
-					.clickable { calendar.clickCell(0, 0) }
+					.clickable { calendar.clickCell(0, i + 1) }
 					.background(if (selected == i + 1) eventHighlightBackground else eventBackground)
 					.fillMaxWidth(),
 				event = event,
