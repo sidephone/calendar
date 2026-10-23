@@ -1,19 +1,23 @@
 package com.sidephone.calendar.ui.calendar
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.sidephone.calendar.R
+import com.sidephone.calendar.core.Calendar
 import com.sidephone.calendar.core.events.EventOccurrence
 
 @Composable
 fun ColumnDay(
 	modifier: Modifier,
+	calendar: Calendar,
 	selected: Int,
 	events: List<EventOccurrence>,
 	addNewText: Color,
@@ -30,6 +34,8 @@ fun ColumnDay(
 			text = stringResource(id = R.string.event_add),
 			color = if (selected == 0) highlightText else addNewText,
 			modifier = Modifier
+				.focusProperties { canFocus = false }
+				.clickable { calendar.clickCell(0, 0) }
 				.background(if (selected == 0) highlightBackground else addNewBackground)
 				.fillMaxWidth(),
 		)
@@ -37,6 +43,8 @@ fun ColumnDay(
 		for ((i, event) in events.withIndex()) {
 			CellEvent(
 				modifier = Modifier
+					.focusProperties { canFocus = false }
+					.clickable { calendar.clickCell(0, i + 1) }
 					.background(if (selected == i + 1) eventHighlightBackground else eventBackground)
 					.fillMaxWidth(),
 				event = event,

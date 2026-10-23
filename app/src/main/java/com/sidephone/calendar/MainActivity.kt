@@ -56,6 +56,7 @@ class MainActivity : ComponentActivity() {
 					var isHelpScreenOn by remember { mutableStateOf(false) }
 
 					isTouchOn = keypadTile == Keypad.Layout.NONE || keypadTile == Keypad.Layout.UNKNOWN
+					calendar.useTouch = isTouchOn
 
 					if (isHelpScreenOn) {
 						ScreenHelp(modifier = Modifier.padding(innerPadding), keypadTile = keypadTile, onBack = { isHelpScreenOn = false })

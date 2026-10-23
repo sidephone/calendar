@@ -53,7 +53,8 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar) {
 
 	if (grid is DayGrid) {
 		ColumnDay(
-modifier = modifier.fillMaxSize(),
+			modifier = modifier.fillMaxSize(),
+			calendar = calendar,
 			selected = selected.second,
 			events = if (events is EventState.Day) events.items else emptyList(),
 			addNewText = textColor,
@@ -89,6 +90,7 @@ modifier = modifier.fillMaxSize(),
 					when (grid) {
 						is YearGrid -> CellYear(
 							modifier = boxMod.then(Modifier.weight(1f)),
+							onClick = { calendar.clickCell(x, y) },
 							textColor = textColor,
 							highlightBackground = highlightBackground,
 							highlightTextColor = highlightTextColor,
@@ -98,6 +100,7 @@ modifier = modifier.fillMaxSize(),
 
 						is MonthGrid -> CellMonth(
 							modifier = boxMod.then(Modifier.weight(1f)),
+							onClick = { calendar.clickCell(x, y) },
 							textColor = textColor,
 							highlightBackground = highlightBackground,
 							highlightTextColor = highlightTextColor,
