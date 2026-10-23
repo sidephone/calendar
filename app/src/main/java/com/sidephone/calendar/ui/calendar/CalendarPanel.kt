@@ -1,27 +1,91 @@
 package com.sidephone.calendar.ui.calendar
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.height
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import com.sidephone.calendar.R
+import androidx.compose.ui.unit.dp
 import com.sidephone.calendar.core.Calendar
+import com.sidephone.calendar.core.events.EventState
+import com.sidephone.calendar.core.grid.MonthGrid
+import com.sidephone.calendar.core.grid.YearGrid
+import com.sidephone.calendar.util.Weekdays
+import java.time.LocalDate
 
 @Composable
 fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar) {
 	val grid = calendar.grid.collectAsState().value
+	val events: EventState = calendar.events.collectAsState().value
+	val (year, month, _) = calendar.date.collectAsState().value
+	val current = grid.current()
 
-	val txt = stringResource(R.string.app_name) +
-		"\nactive tile: ${calendar.tile.collectAsState().value}" +
-		"\noverride tile: ${calendar.tileOverride.collectAsState().value}" +
-		"\ngrid: $grid" +
-		"\nposition: ${grid.position()} = ${grid.current()}" +
-		"\nevents: ${calendar.events.collectAsState().value}"
+	val textColor = MaterialTheme.colorScheme.onBackground
+	val highlightBackground = MaterialTheme.colorScheme.primary
+	val highlightTextColor = MaterialTheme.colorScheme.onPrimary
+	val inactiveCellTextColor = MaterialTheme.colorScheme.onSurfaceVariant
+
+
+	val weekdays = remember(year, month, grid is MonthGrid) {
+		if (grid is MonthGrid) grid.grid[0].map { Weekdays.getFirstLetter(year, month, it) }
+		else emptyList()
+	}
+
+	val today = LocalDate.now()
+	val todayCell: Int? = today.takeIf { it.year == year && it.monthValue == month }?.dayOfMonth
+
+	val boxMod = Modifier
+		.border(width = 1.dp, color = MaterialTheme.colorScheme.secondary)
+		.fillMaxHeight()
 
 	Column(modifier = modifier.fillMaxSize()) {
-		Text(text = txt)
+		if (grid is MonthGrid) {
+			Row(Modifier.height(42.dp)) {
+				for (letter in weekdays) {
+					CellWeekday(
+						modifier = boxMod.then(Modifier.weight(1f)),
+						textColor = textColor,
+						letter = letter
+					)
+				}
+			}
+		}
+
+		for (column in grid.grid) {
+			Row(Modifier.weight(1f)) {
+				for (cell in column) {
+					when (grid) {
+						is YearGrid -> CellYear(
+							modifier = boxMod.then(Modifier.weight(1f)),
+							textColor = textColor,
+							highlightBackground = highlightBackground,
+							highlightTextColor = highlightTextColor,
+							isHighlighted = cell == current,
+							month = cell
+						)
+
+						is MonthGrid -> CellMonth(
+							modifier = boxMod.then(Modifier.weight(1f)),
+							textColor = textColor,
+							highlightBackground = highlightBackground,
+							highlightTextColor = highlightTextColor,
+							inactiveTextColor = inactiveCellTextColor,
+							isHighlighted = cell == current,
+							isToday = cell == todayCell,
+							day = cell,
+							eventCount = if (cell > 0 && events is EventState.Month) events.countsByDay[LocalDate.of(year, month, cell)] ?: 0 else 0
+						)
+
+						else -> {}
+					}
+				}
+			}
+		}
 	}
 }
