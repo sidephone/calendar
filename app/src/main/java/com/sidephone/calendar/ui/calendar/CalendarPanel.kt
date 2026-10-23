@@ -38,7 +38,7 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar) {
 	}
 
 	val today = LocalDate.now()
-	val todayCell = if (today.year == year && today.monthValue == month) today.dayOfMonth else -1
+val todayCell: Int? = today.takeIf { it.year == year && it.monthValue == month }?.dayOfMonth
 
 	val boxMod = Modifier
 		.border(width = 1.dp, color = MaterialTheme.colorScheme.secondary)
