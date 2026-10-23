@@ -53,7 +53,7 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar) {
 
 	if (grid is DayGrid) {
 		ColumnDay(
-			modifier = Modifier,
+modifier = modifier.fillMaxSize(),
 			selected = selected.second,
 			events = if (events is EventState.Day) events.items else emptyList(),
 			addNewText = textColor,
