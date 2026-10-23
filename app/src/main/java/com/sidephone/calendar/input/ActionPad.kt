@@ -25,7 +25,8 @@ import kotlinx.coroutines.flow.stateIn
  */
 class ActionPad(private val settings: Settings, inputManager: InputManager) : Keypad(inputManager) {
 	private val keyActions = mutableMapOf<Int, Action>() // empty = use touchscreen
-	internal var onAction: (Action) -> Unit = { action -> onAction(action) }
+	private val keyHandled = mutableMapOf<Int, Boolean>()
+	internal var onAction: (Action) -> Boolean = { false }
 
 	private val tileOverride = MutableStateFlow(settings.getTile())
 	val layoutOverride: StateFlow<Layout> = tileOverride.asStateFlow()
@@ -85,17 +86,17 @@ class ActionPad(private val settings: Settings, inputManager: InputManager) : Ke
 
 
 	fun onKeyDown(keyCode: Int): Boolean {
+		keyHandled[keyCode] = false
 		keyActions[keyCode]?.let { action ->
-			onAction(action)
-			return true
+			keyHandled[keyCode] = onAction(action)
 		}
 
-		return false
+		return keyHandled[keyCode] ?: false
 	}
 
 
 	fun onKeyUp(keyCode: Int): Boolean {
-		return keyActions.containsKey(keyCode)
+		return keyHandled[keyCode] ?: false
 	}
 
 
@@ -103,6 +104,7 @@ class ActionPad(private val settings: Settings, inputManager: InputManager) : Ke
 		keyActions.clear()
 
 		// Compact QWERTY
+		keyActions[KeyEvent.KEYCODE_BACK] = Action.BACK
 		keyActions[KeyEvent.KEYCODE_ENTER] = Action.OK
 		keyActions[KeyEvent.KEYCODE_E] = Action.ZOOM_OUT
 		keyActions[KeyEvent.KEYCODE_U] = Action.ZOOM_IN

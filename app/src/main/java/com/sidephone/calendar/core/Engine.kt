@@ -38,7 +38,7 @@ class Engine(app: Application) {
 	}
 
 
-	fun onAction(action: Action) {
+	fun onAction(action: Action): Boolean {
 		when (action) {
 			Action.UP -> up()
 			Action.DOWN -> down()
@@ -48,6 +48,11 @@ class Engine(app: Application) {
 			Action.PREVIOUS_PAGE -> changePage(-1)
 			Action.ZOOM_IN -> zoomIn()
 			Action.ZOOM_OUT -> zoomOut()
+			Action.BACK -> when (grid) {
+				is DayGrid -> zoomOut()
+				is YearGrid -> zoomIn()
+				else -> return false
+			}
 			Action.OK -> {
 				if (grid is DayGrid && grid.current() == 0) {
 					addEvent()
@@ -59,6 +64,8 @@ class Engine(app: Application) {
 
 		_dateFlow.value = Triple(year, month, day)
 		_gridFlow.value = grid.copy()
+
+		return true
 	}
 
 
