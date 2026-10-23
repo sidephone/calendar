@@ -32,14 +32,13 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar) {
 	val inactiveCellTextColor = MaterialTheme.colorScheme.onSurfaceVariant
 
 
-
-val weekdays = remember(year, month, grid is MonthGrid) {
+	val weekdays = remember(year, month, grid is MonthGrid) {
 		if (grid is MonthGrid) grid.grid[0].map { Weekdays.getFirstLetter(year, month, it) }
 		else emptyList()
-}
+	}
 
 	val today = LocalDate.now()
-val todayCell: Int? = today.takeIf { it.year == year && it.monthValue == month }?.dayOfMonth
+	val todayCell: Int? = today.takeIf { it.year == year && it.monthValue == month }?.dayOfMonth
 
 	val boxMod = Modifier
 		.border(width = 1.dp, color = MaterialTheme.colorScheme.secondary)
