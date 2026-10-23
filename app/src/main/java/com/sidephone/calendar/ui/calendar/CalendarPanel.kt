@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.sidephone.calendar.core.Calendar
 import com.sidephone.calendar.core.events.EventState
+import com.sidephone.calendar.core.grid.DayGrid
 import com.sidephone.calendar.core.grid.MonthGrid
 import com.sidephone.calendar.core.grid.YearGrid
 import com.sidephone.calendar.util.Weekdays
@@ -24,12 +25,17 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar) {
 	val grid = calendar.grid.collectAsState().value
 	val events: EventState = calendar.events.collectAsState().value
 	val (year, month, _) = calendar.date.collectAsState().value
-	val current = grid.current()
+	val selected = grid.position()
 
 	val textColor = MaterialTheme.colorScheme.onBackground
 	val highlightBackground = MaterialTheme.colorScheme.primary
 	val highlightTextColor = MaterialTheme.colorScheme.onPrimary
 	val inactiveCellTextColor = MaterialTheme.colorScheme.onSurfaceVariant
+
+	val eventBackground = MaterialTheme.colorScheme.secondary
+	val eventText = MaterialTheme.colorScheme.onSecondary
+	val eventHighlightedBackground = MaterialTheme.colorScheme.secondaryFixed
+	val eventHighlightedText = MaterialTheme.colorScheme.onSecondaryFixed
 
 
 	val weekdays = remember(year, month, grid is MonthGrid) {
@@ -44,6 +50,26 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar) {
 		.border(width = 1.dp, color = MaterialTheme.colorScheme.secondary)
 		.fillMaxHeight()
 
+
+	if (grid is DayGrid) {
+		ColumnDay(
+			modifier = Modifier,
+			selected = selected.second,
+			events = if (events is EventState.Day) events.items else emptyList(),
+			addNewText = textColor,
+			addNewBackground = MaterialTheme.colorScheme.surfaceVariant,
+			highlightText = highlightTextColor,
+			highlightBackground = highlightBackground,
+			eventText = eventText,
+			eventBackground = eventBackground,
+			eventHighlightText = eventHighlightedText,
+			eventHighlightBackground = eventHighlightedBackground,
+		)
+
+		return
+	}
+
+
 	Column(modifier = modifier.fillMaxSize()) {
 		if (grid is MonthGrid) {
 			Row(Modifier.height(42.dp)) {
@@ -57,16 +83,16 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar) {
 			}
 		}
 
-		for (column in grid.grid) {
+		for ((y, column) in grid.grid.withIndex()) {
 			Row(Modifier.weight(1f)) {
-				for (cell in column) {
+				for ((x, cell) in column.withIndex()) {
 					when (grid) {
 						is YearGrid -> CellYear(
 							modifier = boxMod.then(Modifier.weight(1f)),
 							textColor = textColor,
 							highlightBackground = highlightBackground,
 							highlightTextColor = highlightTextColor,
-							isHighlighted = cell == current,
+							isHighlighted = Pair(x, y) == selected,
 							month = cell
 						)
 
@@ -76,7 +102,7 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar) {
 							highlightBackground = highlightBackground,
 							highlightTextColor = highlightTextColor,
 							inactiveTextColor = inactiveCellTextColor,
-							isHighlighted = cell == current,
+							isHighlighted = Pair(x, y) == selected,
 							isToday = cell == todayCell,
 							day = cell,
 							eventCount = if (cell > 0 && events is EventState.Month) events.countsByDay[LocalDate.of(year, month, cell)] ?: 0 else 0
