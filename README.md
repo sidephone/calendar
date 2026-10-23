@@ -18,11 +18,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) 
     - ~~in month view: show event count per day~~
     - ~~in day view: show event list for the day~~
     - single event view
-  - Add event
+  - Add/Edit event
     - All day events
     - Recurring events
-  - Delete event
-  - Controls screen (based on the current tile)
+  - Delete event + confirmation dialog + touch-n-hold support
+  - Help screen (based on the current tile)
   - Colors
+- Touchscreen support
+    - swipe left/right to change pages
 - Notifications
 - Add license file

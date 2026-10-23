@@ -21,7 +21,7 @@ import com.sidephone.calendar.util.Weekdays
 import java.time.LocalDate
 
 @Composable
-fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar) {
+fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar, touchEnabled: Boolean) {
 	val grid = calendar.grid.collectAsState().value
 	val events: EventState = calendar.events.collectAsState().value
 	val (year, month, _) = calendar.date.collectAsState().value
@@ -56,6 +56,7 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar) {
 			modifier = modifier.fillMaxSize(),
 			calendar = calendar,
 			selected = selected.second,
+			touchEnabled = touchEnabled,
 			events = if (events is EventState.Day) events.items else emptyList(),
 			addNewText = textColor,
 			addNewBackground = MaterialTheme.colorScheme.surfaceVariant,

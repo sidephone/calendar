@@ -26,10 +26,6 @@ class Calendar(settings: Settings, app: Application, inputManager: InputManager)
 	fun onAction(action: Action) = engine.onAction(action) // handle actions from touchscreen
 	fun onKeyDown(keyCode: Int) = keypad.onKeyDown(keyCode) // handle actions on physical key down
 	fun onKeyUp(keyCode: Int) = keypad.onKeyUp(keyCode) // handle actions on physical key up
-	fun clickCell(x: Int, y: Int): Boolean {
-		if (!useTouch) return false
-		engine.select(x, y)
-		return engine.onAction(Action.OK)
-	}
+	fun clickCell(x: Int, y: Int) = useTouch && engine.select(x, y) && engine.onAction(Action.OK)
 	fun stopListeningForKeypadChange() = keypad.stopListening()
 }

@@ -46,7 +46,7 @@ fun ScreenMain(
 					isTouchOn = isTouchOn
 				)
 			}
-			CalendarPanel(modifier = Modifier.weight(1f), calendar = calendar)
+			CalendarPanel(modifier = Modifier.weight(1f), calendar = calendar, touchEnabled = isTouchOn)
 		}
 	}
 }
