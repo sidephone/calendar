@@ -11,11 +11,13 @@ import java.util.Calendar
  */
 class DayGrid(today: Calendar, private val events: StateFlow<EventState>) : Grid(today) {
 	override fun current() = currentY
+	fun eventId() = if (currentY == 0) 0 else events.value.eventIds.getOrNull(currentY - 1) ?: 0
 	override fun generateGrid(today: Calendar): List<List<Int>> = emptyList()
 	override fun initialX(today: Calendar) = 0
 	override fun initialY(today: Calendar) = 0
 	override fun left() {}
 	override fun right() {}
+
 
 	override fun down() {
 		if (currentY >= events.value.count) currentY = 0 // +1 for the "Add new" button

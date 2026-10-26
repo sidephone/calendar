@@ -1,29 +1,27 @@
 package com.sidephone.calendar.core
 
-import android.app.Application
 import com.sidephone.calendar.core.events.CalendarEvents
 import com.sidephone.calendar.core.events.EventTimeframe
 import com.sidephone.calendar.core.grid.DayGrid
 import com.sidephone.calendar.core.grid.Grid
 import com.sidephone.calendar.core.grid.MonthGrid
 import com.sidephone.calendar.core.grid.YearGrid
-import com.sidephone.calendar.db.Event
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDate
 import java.time.YearMonth
 import java.util.Calendar as Jalendar
 
-class Engine(app: Application) {
-	// events
-	private var events = CalendarEvents(app)
-
+class Engine(private val events: CalendarEvents) {
 	// date
 	private val date = Jalendar.getInstance()
 	private var grid: Grid = MonthGrid(date)
 	private var year: Int = date.get(Jalendar.YEAR)
 	private var month: Int = date.get(Jalendar.MONTH) + 1 // Calendar.MONTH is zero-based
 	private var day: Int = date.get(Jalendar.DAY_OF_MONTH)
+
+	// input
+	internal var onEditEvent: (Long) -> Unit = {}
 
 	// output
 	private val _dateFlow: MutableStateFlow<Triple<Int, Int, Int>> = MutableStateFlow(Triple(year, month, day))
@@ -54,8 +52,8 @@ class Engine(app: Application) {
 				else -> return false
 			}
 			Action.OK -> {
-				if (grid is DayGrid && grid.current() == 0) {
-					addEvent()
+				if (grid is DayGrid) {
+					onEditEvent((grid as DayGrid).eventId())
 				} else {
 					zoomIn()
 				}
@@ -140,14 +138,6 @@ class Engine(app: Application) {
 		day = date.get(Jalendar.DAY_OF_MONTH)
 
 		loadEvents()
-	}
-
-
-	private fun addEvent() {
-		events.saveEvent(Event(
-			title = "Stub Event #" + (Math.random() * 1_000_000).toInt(),
-			startDate = LocalDate.of(year, month, day)
-		))
 	}
 
 
