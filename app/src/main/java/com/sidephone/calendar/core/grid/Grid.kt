@@ -25,6 +25,25 @@ abstract class Grid(today: Calendar) : Cloneable {
 	fun position() = Pair(currentX, currentY)
 
 
+	open fun select(x: Int, y: Int): Boolean {
+		val prevX = currentX
+		val prevY = currentY
+
+		if (y < 0 || y >= grid.size || x < 0 || x >= grid[y].size) return false
+
+		currentX = x
+		currentY = y
+
+		if (current() < 0) {
+			currentX = prevX
+			currentY = prevY
+			return false
+		}
+
+		return true
+	}
+
+
 	open fun up() {
 		if (grid.isEmpty()) return
 		do { if (--currentY < 0) currentY = grid.size - 1 }

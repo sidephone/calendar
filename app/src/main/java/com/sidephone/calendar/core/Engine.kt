@@ -69,6 +69,17 @@ class Engine(app: Application) {
 	}
 
 
+	fun select(x: Int, y: Int): Boolean {
+		if (!grid.select(x, y)) return false
+
+		syncDate()
+		loadEvents()
+		_dateFlow.value = Triple(year, month, day)
+		_gridFlow.value = grid.copy()
+		return true
+	}
+
+
 	private fun up() {
 		grid.up()
 		syncDate()

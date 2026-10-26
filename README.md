@@ -14,17 +14,18 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) 
 ## TODO
 - Get rid of the "require" in Database.kt
 - UI
-  - Month view
-  - Day view
   - View events
-    - in month view: show event count per day
-    - in day view: show event list for the day
+    - ~~in month view: show event count per day~~
+    - ~~in day view: show event list for the day~~
     - single event view
-  - Add event
+  - Add/Edit event
     - All day events
     - Recurring events
-  - Delete operations
-  - Controls screen (based on the current tile)
+    - Display correctly the multi-day events on a day view
+  - Delete event + confirmation dialog + touch-n-hold support
+  - Help screen (based on the current tile)
   - Colors
+- Touchscreen support
+    - swipe left/right to change pages
 - Notifications
 - Add license file
