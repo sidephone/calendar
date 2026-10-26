@@ -21,6 +21,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) 
   - Add/Edit event
     - All day events
     - Recurring events
+    - Display correctly the multi-day events on a day view
   - Delete event + confirmation dialog + touch-n-hold support
   - Help screen (based on the current tile)
   - Colors
