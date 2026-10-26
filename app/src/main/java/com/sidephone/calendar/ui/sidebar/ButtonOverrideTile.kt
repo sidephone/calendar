@@ -8,7 +8,7 @@ import androidx.compose.ui.res.stringResource
 import com.sidephone.calendar.R
 import com.sidephone.calendar.core.Calendar
 import com.sidephone.calendar.input.Keypad
-import com.sidephone.calendar.ui.components.Button
+import com.sidephone.calendar.ui.components.IconButton
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -43,7 +43,7 @@ fun ButtonOverrideTile(
 		}
 	}
 
-	Button(
+	IconButton(
 		accessibilityTitle = stringResource(id = title),
 		imageIconResId = iconResId,
 		onClick = {

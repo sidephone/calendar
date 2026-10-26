@@ -34,3 +34,5 @@ val DarkColorScheme = darkColorScheme(
 	tertiary = Color(0XFF303637),
 	onTertiary = Color(0XFFDEE3E5),
 )
+
+val DisabledAlpha = 0.38f

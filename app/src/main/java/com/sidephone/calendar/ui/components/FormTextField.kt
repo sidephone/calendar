@@ -17,7 +17,7 @@ import androidx.compose.ui.text.input.ImeAction
 
 
 @Composable
-fun TextField(
+fun FormTextField(
 	modifier: Modifier,
 	titleResId: Int,
 	value: String,

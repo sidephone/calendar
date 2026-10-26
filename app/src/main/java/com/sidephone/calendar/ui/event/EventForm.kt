@@ -1,19 +1,17 @@
 package com.sidephone.calendar.ui.event
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Button
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.sidephone.calendar.R
 import com.sidephone.calendar.db.Event
-import com.sidephone.calendar.ui.components.TextField
+import com.sidephone.calendar.ui.components.FormSwitch
+import com.sidephone.calendar.ui.components.FormTextField
 import java.time.LocalTime
 
 @Composable
@@ -24,7 +22,7 @@ fun EventForm(
 	onSave: () -> Unit,
 ) {
 	Column(modifier = modifier.fillMaxSize()) {
-		TextField(
+		FormTextField(
 			value = event.title,
 			titleResId = R.string.event_form_title,
 			onValueChange = { onChange(event.copy(title = it)) },
@@ -32,7 +30,7 @@ fun EventForm(
 			modifier = Modifier.fillMaxWidth(),
 		)
 
-		TextField(
+		FormTextField(
 			value = event.description,
 			titleResId = R.string.event_form_description,
 			onValueChange = { onChange(event.copy(description = it)) },
@@ -40,7 +38,7 @@ fun EventForm(
 			modifier = Modifier.fillMaxWidth(),
 		)
 
-		TextField(
+		FormTextField(
 			value = event.address ?: "",
 			onValueChange = { onChange(event.copy(address = it)) },
 			titleResId = R.string.event_form_address,
@@ -48,18 +46,17 @@ fun EventForm(
 			modifier = Modifier.fillMaxWidth(),
 		)
 
-		Row(verticalAlignment = Alignment.CenterVertically) {
-			Switch(
-				checked = event.startTime == null,
-				onCheckedChange = { allDay ->
-					onChange(
-						if (allDay) event.copy(startTime = null, endTime = null)
-						else event.copy(startTime = LocalTime.of(9, 0))
-					)
-				}
-			)
-			Text(stringResource(R.string.event_form_all_day))
-		}
+		FormSwitch(
+			titleResId = R.string.event_form_all_day,
+			value = event.startTime == null,
+			disabled = false,
+			onValueChange = { allDay ->
+				onChange(
+					if (allDay) event.copy(startTime = null, endTime = null)
+					else event.copy(startTime = LocalTime.of(9, 0))
+				)
+			}
+		)
 
 		/* val startTime: LocalTime? = null,
     val endDate: LocalDate = startDate,
