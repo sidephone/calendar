@@ -25,7 +25,7 @@ abstract class Grid(today: Calendar) : Cloneable {
 	fun position() = Pair(currentX, currentY)
 
 
-	fun select(x: Int, y: Int): Boolean {
+	open fun select(x: Int, y: Int): Boolean {
 		val prevX = currentX
 		val prevY = currentY
 

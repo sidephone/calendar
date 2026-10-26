@@ -26,4 +26,11 @@ class DayGrid(today: Calendar, private val events: StateFlow<EventState>) : Grid
 		if (currentY <= 0) currentY = events.value.count // +1 for the "Add new" button
 		else currentY--
 	}
+
+	override fun select(x: Int, y: Int): Boolean {
+		if (y < 0 || y > events.value.count) return false // +1 for the "Add new" button
+
+		currentY = y
+		return true
+	}
 }
