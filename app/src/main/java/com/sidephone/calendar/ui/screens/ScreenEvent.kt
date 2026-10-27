@@ -1,6 +1,9 @@
 package com.sidephone.calendar.ui.screens
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -8,13 +11,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.sidephone.calendar.R
 import com.sidephone.calendar.core.Calendar
 import com.sidephone.calendar.db.Event
 import com.sidephone.calendar.ui.event.EventForm
 import java.time.LocalDate
 
 @Composable
-fun ScreenEvent(modifier: Modifier, calendar: Calendar, eventId: Long, onBack: () -> Unit) {
+fun ScreenEvent(
+	modifier: Modifier,
+	calendar: Calendar,
+	eventId: Long,
+	onBack: () -> Unit
+) {
 	BackHandler(enabled = true) { onBack() }
 
 	// New event: a blank draft exists immediately. Edit: starts empty until loaded.
@@ -31,13 +41,23 @@ fun ScreenEvent(modifier: Modifier, calendar: Calendar, eventId: Long, onBack: (
 		}
 	}
 
-	draft?.let { event ->
-		EventForm(
-			modifier = modifier,
-			event = event,
-			onChange = { draft = it },
-			onSave = { calendar.saveEvent(event); onBack() },
-			onCancel = { onBack() },
+	Column(modifier = modifier.fillMaxSize()) {
+		Text(
+			modifier = Modifier,
+			text = stringResource(
+				if (eventId == 0L) R.string.event_form_title_add
+				else R.string.event_form_title_edit
+			)
 		)
+
+		draft?.let { event ->
+			EventForm(
+				modifier = Modifier,
+				event = event,
+				onChange = { draft = it },
+				onSave = { calendar.saveEvent(event); onBack() },
+				onCancel = { onBack() },
+			)
+		}
 	}
 }

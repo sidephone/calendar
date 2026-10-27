@@ -13,9 +13,12 @@
 	<string name="event_all_day">(all day)</string>
 	<string name="event_no_title">(no title)</string>
 
+	<string name="event_form_title_add">Add Event</string>
+	<string name="event_form_title_edit">Edit Event</string>
 	<string name="event_form_address">Add Address</string>
 	<string name="event_form_all_day">All Day</string>
 	<string name="event_form_cancel">Cancel</string>
+	<string name="event_form_date">Date: %1$s</string>
 	<string name="event_form_description">Add Description</string>
 	<string name="event_form_start_time">Start Time</string>
 	<string name="event_form_end_time">End Time</string>

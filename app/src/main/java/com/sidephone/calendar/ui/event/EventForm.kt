@@ -42,6 +42,11 @@ fun EventForm(
 			.fillMaxSize()
 			.verticalScroll(rememberScrollState())
 	) {
+		Text(
+			modifier = Modifier,
+			text = stringResource(R.string.event_form_date, event.startDate.toString())
+		)
+
 		FormTextField(
 			value = event.title,
 			titleResId = R.string.event_form_title,
