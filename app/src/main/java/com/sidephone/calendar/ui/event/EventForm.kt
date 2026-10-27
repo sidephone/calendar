@@ -148,7 +148,7 @@ fun EventForm(
 		}
 
 		Button(
-			modifier = Modifier.keypadClickableButton(onClick = onSave),
+			modifier = Modifier.keypadClickableButton(onClick = { if (event.title.isNotBlank()) onSave() }),
 			onClick = onSave,
 			enabled = event.title.isNotBlank()
 		) {
