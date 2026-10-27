@@ -77,15 +77,14 @@ fun EventForm(
 					// Local state is the source of truth (the `event` prop may lag behind).
 					var end = LocalTime.of(endHour, endMinute)
 
-					if (hour == 23) {
+					if (event.endDate == event.startDate && hour == 23) {
 						if (minute == 59) {
 							start = LocalTime.of(23, 58)
 							end = LocalTime.of(23, 59)
 						} else if (end.isBefore(start)) {
 							end = LocalTime.of(23, 59)
 						}
-					} else if (end.isBefore(start)) {
-						end = start.plusHours(1)
+					} else if (event.endDate == event.startDate && end.isBefore(start)) {
 					}
 
 					onChange(event.copy(startTime = start, endTime = end))
