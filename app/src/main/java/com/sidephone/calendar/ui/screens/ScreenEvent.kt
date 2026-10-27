@@ -18,8 +18,8 @@ fun ScreenEvent(modifier: Modifier, calendar: Calendar, eventId: Long, onBack: (
 
 	// New event: a blank draft exists immediately. Edit: starts empty until loaded.
 	var draft by remember(eventId) {
-		val today = java.time.LocalDate.now()
-		mutableStateOf(if (eventId == 0L) Event(title = "", startDate = today) else null)
+val selectedDate = calendar.date.value.let { (year, month, day) -> java.time.LocalDate.of(year, month, day) }
+		mutableStateOf(if (eventId == 0L) Event(title = "", startDate = selectedDate) else null)
 	}
 
 	// Only runs for edits: fetch the saved event once and use it as the draft.
