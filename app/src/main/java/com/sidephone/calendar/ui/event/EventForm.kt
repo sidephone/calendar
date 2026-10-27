@@ -85,6 +85,7 @@ fun EventForm(
 							end = LocalTime.of(23, 59)
 						}
 					} else if (event.endDate == event.startDate && end.isBefore(start)) {
+						end = start.plusHours(1)
 					}
 
 					onChange(event.copy(startTime = start, endTime = end))
@@ -105,12 +106,12 @@ fun EventForm(
 					var start = LocalTime.of(startHour, startMinute)
 					var end = LocalTime.of(hour, minute)
 
-					if (start.hour == 23 && end.isBefore(start)) {
+					if (event.startDate == event.endDate && start.hour == 23 && end.isBefore(start)) {
 						if (startMinute == 59) {
 							start = LocalTime.of(23, 58)
 						}
 						end = start.plusMinutes(1)
-					} else if (end.isBefore(start)) {
+					} else if (event.startDate == event.endDate && end.isBefore(start)) {
 						end = start.plusHours(1)
 					}
 

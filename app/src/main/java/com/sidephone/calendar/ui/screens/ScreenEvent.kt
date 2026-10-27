@@ -11,6 +11,7 @@ import androidx.compose.ui.Modifier
 import com.sidephone.calendar.core.Calendar
 import com.sidephone.calendar.db.Event
 import com.sidephone.calendar.ui.event.EventForm
+import java.time.LocalDate
 
 @Composable
 fun ScreenEvent(modifier: Modifier, calendar: Calendar, eventId: Long, onBack: () -> Unit) {
@@ -18,7 +19,7 @@ fun ScreenEvent(modifier: Modifier, calendar: Calendar, eventId: Long, onBack: (
 
 	// New event: a blank draft exists immediately. Edit: starts empty until loaded.
 	var draft by remember(eventId) {
-val selectedDate = calendar.date.value.let { (year, month, day) -> java.time.LocalDate.of(year, month, day) }
+		val selectedDate = calendar.date.value.let { (year, month, day) -> LocalDate.of(year, month, day) }
 		mutableStateOf(if (eventId == 0L) Event(title = "", startDate = selectedDate) else null)
 	}
 
