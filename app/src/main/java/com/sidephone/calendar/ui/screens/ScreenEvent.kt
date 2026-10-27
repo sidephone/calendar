@@ -36,6 +36,7 @@ fun ScreenEvent(modifier: Modifier, calendar: Calendar, eventId: Long, onBack: (
 			event = event,
 			onChange = { draft = it },
 			onSave = { calendar.saveEvent(event); onBack() },
+			onCancel = { onBack() },
 		)
 	}
 }

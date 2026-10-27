@@ -20,6 +20,7 @@ import com.sidephone.calendar.db.Event
 import com.sidephone.calendar.ui.components.FormSwitch
 import com.sidephone.calendar.ui.components.FormTextField
 import com.sidephone.calendar.ui.components.FormTimeField
+import com.sidephone.calendar.ui.modifiers.keypadClickableButton
 import java.time.LocalTime
 
 @Composable
@@ -27,7 +28,8 @@ fun EventForm(
 	modifier: Modifier,
 	event: Event,
 	onChange: (Event) -> Unit,
-	onSave: () -> Unit
+	onSave: () -> Unit,
+	onCancel: () -> Unit
 ) {
 	var isAllDay by remember { mutableStateOf(event.startTime == null) }
 	var startHour by remember { mutableIntStateOf(event.startTime?.hour ?: 9) }
@@ -139,7 +141,18 @@ fun EventForm(
 			modifier = Modifier.fillMaxWidth(),
 		)
 
-		Button(onClick = onSave, enabled = event.title.isNotBlank()) {
+		Button(
+			modifier = Modifier.keypadClickableButton(onClick = onCancel),
+			onClick = onCancel,
+		) {
+			Text(stringResource(R.string.event_form_cancel))
+		}
+
+		Button(
+			modifier = Modifier.keypadClickableButton(onClick = onSave),
+			onClick = onSave,
+			enabled = event.title.isNotBlank()
+		) {
 			Text(stringResource(R.string.event_form_save))
 		}
 	}
