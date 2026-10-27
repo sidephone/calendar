@@ -17,7 +17,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun Button(modifier: Modifier = Modifier, accessibilityTitle: String, title: String = "", textIcon: String = "", imageIconResId: Int = 0, onClick: () -> Unit) {
+fun IconButton(modifier: Modifier = Modifier, accessibilityTitle: String, title: String = "", textIcon: String = "", imageIconResId: Int = 0, onClick: () -> Unit) {
 	Row(
 		modifier = modifier,
 		verticalAlignment = Alignment.CenterVertically

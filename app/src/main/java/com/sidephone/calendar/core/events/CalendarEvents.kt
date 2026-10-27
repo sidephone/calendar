@@ -26,8 +26,11 @@ class CalendarEvents(app: Application) : ViewModel() {
 
 	val list = getListForTimeframe()
 
+	/*** Get One ***/
+	suspend fun getEvent(id: Long): Event? = db.get(id)
 
-	/*** Get ***/
+
+	/*** Get Many ***/
 
 	@OptIn(ExperimentalCoroutinesApi::class)
 	private fun getListForTimeframe(): StateFlow<EventState> = timeframe

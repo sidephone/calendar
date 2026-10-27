@@ -13,6 +13,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -21,6 +22,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.sidephone.calendar.core.Calendar
 import com.sidephone.calendar.input.Keypad
+import com.sidephone.calendar.ui.screens.Screen
+import com.sidephone.calendar.ui.screens.ScreenEvent
 import com.sidephone.calendar.ui.screens.ScreenHelp
 import com.sidephone.calendar.ui.screens.ScreenMain
 import com.sidephone.calendar.ui.theme.AppTheme
@@ -49,26 +52,51 @@ class MainActivity : ComponentActivity() {
 					modifier = Modifier.fillMaxSize(),
 					snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
 				) { innerPadding ->
+					var screen by remember { mutableStateOf(Screen.MAIN) }
+					var currentEvent by remember { mutableLongStateOf(0L) }
+					calendar.onEditEvent = { event ->
+						currentEvent = event
+						screen = Screen.EVENT
+					}
+
 					val keypadTile = calendar.tile.collectAsState().value
 					val keypadOverride = calendar.tileOverride.collectAsState().value
 
 					var isTouchOn by remember { mutableStateOf(false) }
-					var isHelpScreenOn by remember { mutableStateOf(false) }
 
 					isTouchOn = keypadTile == Keypad.Layout.NONE || keypadTile == Keypad.Layout.UNKNOWN
 					calendar.useTouch = isTouchOn
 
-					if (isHelpScreenOn) {
-						ScreenHelp(modifier = Modifier.padding(innerPadding), keypadTile = keypadTile, onBack = { isHelpScreenOn = false })
-					} else {
-						ScreenMain(
-							modifier = Modifier.padding(innerPadding),
-							snackbarProps = Triple(snackbarHostState, scope, context),
-							calendar = calendar,
-							isTouchOn = isTouchOn,
-							keypadOverride = keypadOverride,
-							onHelp = { isHelpScreenOn = true }
-						)
+					when (screen) {
+						Screen.HELP -> {
+							calendar.listenForInput()
+							ScreenHelp(
+								modifier = Modifier.padding(innerPadding),
+								keypadTile = keypadTile,
+								onBack = { screen = Screen.MAIN })
+						}
+
+						Screen.EVENT -> {
+							calendar.ignoreInput()
+							ScreenEvent(
+								modifier = Modifier.padding(innerPadding),
+								calendar = calendar,
+								eventId = currentEvent,
+								onBack = { screen = Screen.MAIN }
+							)
+						}
+
+						Screen.MAIN -> {
+							calendar.listenForInput()
+							ScreenMain(
+								modifier = Modifier.padding(innerPadding),
+								snackbarProps = Triple(snackbarHostState, scope, context),
+								calendar = calendar,
+								isTouchOn = isTouchOn,
+								keypadOverride = keypadOverride,
+								onHelp = { screen = Screen.HELP }
+							)
+						}
 					}
 				}
 			}

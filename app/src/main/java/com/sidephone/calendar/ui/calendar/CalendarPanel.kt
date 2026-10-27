@@ -65,7 +65,7 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar, touchEnable
 			eventText = eventText,
 			eventBackground = eventBackground,
 			eventHighlightText = eventHighlightedText,
-			eventHighlightBackground = eventHighlightedBackground,
+			eventHighlightBackground = eventHighlightedBackground
 		)
 
 		return

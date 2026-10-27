@@ -3,11 +3,11 @@ package com.sidephone.calendar.ui.topbar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.sidephone.calendar.R
-import com.sidephone.calendar.ui.components.Button
+import com.sidephone.calendar.ui.components.IconButton
 
 @Composable
 fun ButtonHelp(onClick: () -> Unit) {
-	Button(
+	IconButton(
 		modifier = Modifier,
 		onClick = onClick,
 		imageIconResId = R.drawable.ic_help,

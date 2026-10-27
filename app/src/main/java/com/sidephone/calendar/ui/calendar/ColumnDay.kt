@@ -33,7 +33,7 @@ fun ColumnDay(
 	eventText: Color,
 	eventBackground: Color,
 	eventHighlightText: Color,
-	eventHighlightBackground: Color,
+	eventHighlightBackground: Color
 ) {
 	val listState: LazyListState = rememberLazyListState()
 

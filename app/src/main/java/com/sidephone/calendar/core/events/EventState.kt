@@ -17,4 +17,7 @@ sealed interface EventState {
 			is Month -> countsByDay.values.sum()
 			else -> 0
 		}
+
+	val eventIds: List<Long>
+		get() = if (this is Day) items.map { it.eventId } else emptyList()
 }
