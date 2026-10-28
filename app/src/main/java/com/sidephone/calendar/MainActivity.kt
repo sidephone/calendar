@@ -90,7 +90,9 @@ class MainActivity : ComponentActivity() {
 						}
 
 						Screen.MAIN -> {
-							calendar.listenForInput()
+							if (isDeleteEventShown) calendar.ignoreInput()
+							else calendar.listenForInput()
+
 							ScreenMain(
 								modifier = Modifier.padding(innerPadding),
 								snackbarProps = Triple(snackbarHostState, scope, context),

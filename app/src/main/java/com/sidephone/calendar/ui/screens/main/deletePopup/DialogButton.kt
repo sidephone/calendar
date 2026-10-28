@@ -61,7 +61,7 @@ fun DialogButton(
 			contentColor = if (isFocused) selectedTextColor else textColor,
 		),
 		modifier = modifier.onKeyEvent { event ->
-			if (event.type != KeyEventType.KeyUp) return@onKeyEvent false
+			if (event.type != KeyEventType.KeyDown || event.nativeKeyEvent.repeatCount != 0) return@onKeyEvent false
 			when (event.key) {
 				in ENTER_KEYS -> { onClick(); true }
 				in NEXT_KEYS -> focusManager.moveFocus(FocusDirection.Next)
