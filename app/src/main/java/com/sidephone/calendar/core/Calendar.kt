@@ -25,14 +25,21 @@ class Calendar(settings: Settings, app: Application, inputManager: InputManager)
 
 	// input
 	var useTouch = false
+	var onDeleteEvent: () -> Unit
+		get() = engine.onDeleteEvent
+		set(value) { engine.onDeleteEvent = value }
 	var onEditEvent: (Long) -> Unit
 		get() = engine.onEditEvent
 		set(value) { engine.onEditEvent = value }
 
 	// methods
-	init { keypad.onAction = { action -> engine.onAction(action) } }
+	init {
+		keypad.onAction = { action -> engine.onAction(action) }
+		engine.keypad = keypad.tile
+	}
 
 	suspend fun getEvent(id: Long): Event? = db.getEvent(id)
+	fun deleteEvent() = engine.deleteCurrent()
 	fun destroy() { keypad.destroy() }
 	fun listenForKeypadChange() = keypad.listenForChanges()
 	fun ignoreInput() { ignoreInput = true }
