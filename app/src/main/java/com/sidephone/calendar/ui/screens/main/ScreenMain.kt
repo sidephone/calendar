@@ -18,6 +18,7 @@ import com.sidephone.calendar.input.Keypad
 import com.sidephone.calendar.ui.components.sidebar.Sidebar
 import com.sidephone.calendar.ui.components.topbar.Topbar
 import com.sidephone.calendar.ui.screens.main.calendar.CalendarPanel
+import com.sidephone.calendar.ui.screens.main.deletePopup.PopupDeleteEvent
 import kotlinx.coroutines.CoroutineScope
 
 
@@ -29,6 +30,8 @@ fun ScreenMain(
 	isTouchOn: Boolean,
 	keypadOverride: Keypad.Layout,
 	onHelp: () -> Unit,
+	isDeleteEventShown: Boolean,
+	onDeleteEventDismissed: () -> Unit,
 ) {
 	var isSidebarVisible by remember { mutableStateOf(false) }
 
@@ -48,5 +51,12 @@ fun ScreenMain(
 			}
 			CalendarPanel(modifier = Modifier.weight(1f), calendar = calendar, touchEnabled = isTouchOn)
 		}
+	}
+
+	if (isDeleteEventShown) {
+		PopupDeleteEvent(
+			calendar = calendar,
+			onDismiss = onDeleteEventDismissed
+		)
 	}
 }

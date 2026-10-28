@@ -12,15 +12,14 @@ Tested with Android Studio Rabbit 1 | 2026.2.1
 This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) file for details.
 
 ## TODO
-- Get rid of the "require" in Database.kt
+- Sundial OK does not work on the Edit Event screen
 - UI
-  - Delete event + confirmation dialog + touch-n-hold support
   - Help screen (based on the current tile)
   - Colors
   - JakeType covers the bottom of the EventForm
 - Touchscreen support
     - swipe left/right to change pages
 - Notifications
-- Recurring events
-- Display correctly the multi-day events on a day view
+- Recurring events (+ make sure to edit and delete each occurrence separately)
+- Multi-day events (+ display them correctly on the day grid)
 - Add license file

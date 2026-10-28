@@ -6,6 +6,7 @@ import com.sidephone.calendar.core.grid.DayGrid
 import com.sidephone.calendar.core.grid.Grid
 import com.sidephone.calendar.core.grid.MonthGrid
 import com.sidephone.calendar.core.grid.YearGrid
+import com.sidephone.calendar.input.Keypad
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.time.LocalDate
@@ -22,6 +23,8 @@ class Engine(private val events: CalendarEvents) {
 
 	// input
 	internal var onEditEvent: (Long) -> Unit = {}
+	internal var onDeleteEvent: () -> Unit = {}
+	internal var keypad: StateFlow<Keypad.Layout> = MutableStateFlow(Keypad.Layout.UNKNOWN)
 
 	// output
 	private val _dateFlow: MutableStateFlow<Triple<Int, Int, Int>> = MutableStateFlow(Triple(year, month, day))
@@ -40,8 +43,27 @@ class Engine(private val events: CalendarEvents) {
 		when (action) {
 			Action.UP -> up()
 			Action.DOWN -> down()
-			Action.LEFT -> left()
-			Action.RIGHT -> right()
+			Action.LEFT -> {
+				if (grid is DayGrid) {
+					if (
+						(grid as DayGrid).eventId() != 0L
+						&& (
+							keypad.value == Keypad.Layout.SUNDIAL
+							|| keypad.value == Keypad.Layout.GAMEPAD
+							|| keypad.value == Keypad.Layout.T9_NO_DPAD
+						)
+					) onDeleteEvent()
+				} else {
+					left()
+				}
+			}
+			Action.RIGHT -> {
+				if (grid !is DayGrid) {
+					right()
+				}
+			}
+			Action.CONFIRM_DELETE -> if (grid is DayGrid && (grid as DayGrid).eventId() != 0L) onDeleteEvent()
+			Action.DELETE -> deleteCurrent()
 			Action.NEXT_PAGE -> changePage(1)
 			Action.PREVIOUS_PAGE -> changePage(-1)
 			Action.ZOOM_IN -> zoomIn()
@@ -138,6 +160,15 @@ class Engine(private val events: CalendarEvents) {
 		day = date.get(Jalendar.DAY_OF_MONTH)
 
 		loadEvents()
+	}
+
+
+	internal fun deleteCurrent() {
+		if (grid is DayGrid) {
+			val eventId = (grid as DayGrid).eventId()
+			events.deleteEvent(eventId)
+			loadEvents()
+		}
 	}
 
 

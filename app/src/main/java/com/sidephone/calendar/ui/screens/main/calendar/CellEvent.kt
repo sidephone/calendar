@@ -1,5 +1,7 @@
 package com.sidephone.calendar.ui.screens.main.calendar
 
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -14,7 +16,9 @@ fun CellEvent(
 	event: EventOccurrence,
 	highlighted: Boolean,
 	textColor: Color,
-	highlightTextColor: Color
+	highlightTextColor: Color,
+	onClick: () -> Unit,
+	onLongClick: () -> Unit
 ) {
 	val time = if (event.startTime == null) {
 		stringResource(R.string.event_all_day)
@@ -26,9 +30,16 @@ fun CellEvent(
 
 	val title = event.title.ifBlank { stringResource(R.string.event_no_title) }
 
-	Text(
-		text = "${time}: ${title}",
-		color = if (highlighted) highlightTextColor else textColor,
-		modifier = modifier,
-	)
+	Box(
+		modifier = modifier.combinedClickable(
+			onClick = onClick,
+			onLongClick = onLongClick,
+			onLongClickLabel = stringResource(R.string.event_delete_title) + ", " + title, // for accessibility
+		)
+	) {
+		Text(
+			text = "${time}: ${title}",
+			color = if (highlighted) highlightTextColor else textColor
+		)
+	}
 }

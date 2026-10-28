@@ -59,6 +59,9 @@ class MainActivity : ComponentActivity() {
 						screen = Screen.EVENT
 					}
 
+					var isDeleteEventShown by remember { mutableStateOf(false) }
+					calendar.onDeleteEvent = { isDeleteEventShown = true }
+
 					val keypadTile = calendar.tile.collectAsState().value
 					val keypadOverride = calendar.tileOverride.collectAsState().value
 
@@ -87,12 +90,16 @@ class MainActivity : ComponentActivity() {
 						}
 
 						Screen.MAIN -> {
-							calendar.listenForInput()
+							if (isDeleteEventShown) calendar.ignoreInput()
+							else calendar.listenForInput()
+
 							ScreenMain(
 								modifier = Modifier.padding(innerPadding),
 								snackbarProps = Triple(snackbarHostState, scope, context),
 								calendar = calendar,
 								isTouchOn = isTouchOn,
+								isDeleteEventShown = isDeleteEventShown,
+								onDeleteEventDismissed = { isDeleteEventShown = false },
 								keypadOverride = keypadOverride,
 								onHelp = { screen = Screen.HELP }
 							)

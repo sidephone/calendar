@@ -106,6 +106,7 @@ class ActionPad(private val settings: Settings, inputManager: InputManager) : Ke
 
 		// Compact QWERTY
 		keyActions[KeyEvent.KEYCODE_BACK] = Action.BACK
+		keyActions[KeyEvent.KEYCODE_DEL] = Action.CONFIRM_DELETE
 		keyActions[KeyEvent.KEYCODE_ENTER] = Action.OK
 		keyActions[KeyEvent.KEYCODE_E] = Action.ZOOM_OUT
 		keyActions[KeyEvent.KEYCODE_U] = Action.ZOOM_IN

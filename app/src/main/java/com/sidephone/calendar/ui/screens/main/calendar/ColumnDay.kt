@@ -16,6 +16,7 @@ import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.sidephone.calendar.R
+import com.sidephone.calendar.core.Action
 import com.sidephone.calendar.core.Calendar
 import com.sidephone.calendar.core.events.EventOccurrence
 
@@ -62,10 +63,12 @@ fun ColumnDay(
 				text = stringResource(id = R.string.event_add),
 				color = if (selected == 0) highlightText else addNewText,
 				modifier = Modifier
-					.focusProperties { canFocus = false }
-					.clickable { calendar.clickCell(0, 0) }
 					.background(if (selected == 0) highlightBackground else addNewBackground)
-					.fillMaxWidth(),
+					.fillMaxWidth()
+					.focusProperties { canFocus = false }
+					.clickable {
+						touchEnabled && calendar.selectCell(0, 0) && calendar.onAction(Action.OK)
+					}
 			)
 		}
 
@@ -76,13 +79,18 @@ fun ColumnDay(
 			CellEvent(
 				modifier = Modifier
 					.focusProperties { canFocus = false }
-					.clickable { calendar.clickCell(0, i + 1) }
 					.background(if (selected == i + 1) eventHighlightBackground else eventBackground)
 					.fillMaxWidth(),
 				event = event,
 				highlighted = selected == i + 1,
 				textColor = eventText,
-				highlightTextColor = eventHighlightText
+				highlightTextColor = eventHighlightText,
+				onClick = {
+					touchEnabled && calendar.selectCell(0, i + 1) && calendar.onAction(Action.OK)
+				},
+				onLongClick = {
+					touchEnabled && calendar.selectCell(0, i + 1) && calendar.onAction(Action.CONFIRM_DELETE)
+				}
 			)
 		}
 	}
