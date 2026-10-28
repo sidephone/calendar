@@ -39,7 +39,6 @@ class Calendar(settings: Settings, app: Application, inputManager: InputManager)
 	}
 
 	suspend fun getEvent(id: Long): Event? = db.getEvent(id)
-	fun deleteEvent() = engine.deleteCurrent()
 	fun destroy() { keypad.destroy() }
 	fun listenForKeypadChange() = keypad.listenForChanges()
 	fun ignoreInput() { ignoreInput = true }
@@ -48,7 +47,7 @@ class Calendar(settings: Settings, app: Application, inputManager: InputManager)
 	fun onAction(action: Action) = engine.onAction(action) // handle actions from touchscreen
 	fun onKeyDown(keyCode: Int) = !ignoreInput && keypad.onKeyDown(keyCode) // handle actions on physical key down
 	fun onKeyUp(keyCode: Int) = !ignoreInput && keypad.onKeyUp(keyCode) // handle actions on physical key up
-	fun clickCell(x: Int, y: Int) = useTouch && engine.select(x, y) && engine.onAction(Action.OK)
 	fun saveEvent(event: Event) = db.saveEvent(event)
+	fun selectCell(x: Int, y: Int) = engine.select(x, y)
 	fun stopListeningForKeypadChange() = keypad.stopListening()
 }

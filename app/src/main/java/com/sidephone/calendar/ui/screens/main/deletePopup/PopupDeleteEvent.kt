@@ -6,6 +6,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import com.sidephone.calendar.R
+import com.sidephone.calendar.core.Action
 import com.sidephone.calendar.core.Calendar
 
 
@@ -26,7 +27,7 @@ fun PopupDeleteEvent(calendar: Calendar, onDismiss: () -> Unit) {
 				selectedTextColor = buttonSelectedTextColor,
 				selectedBackground = buttonSelectedBackground,
 				onClick = {
-					calendar.deleteEvent()
+					calendar.onAction(Action.DELETE)
 					onDismiss()
 				}
 			)

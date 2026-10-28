@@ -12,6 +12,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.sidephone.calendar.core.Action
 import com.sidephone.calendar.core.Calendar
 import com.sidephone.calendar.core.events.EventState
 import com.sidephone.calendar.core.grid.DayGrid
@@ -91,17 +92,19 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar, touchEnable
 					when (grid) {
 						is YearGrid -> CellYear(
 							modifier = boxMod.then(Modifier.weight(1f)),
-							onClick = { calendar.clickCell(x, y) },
 							textColor = textColor,
 							highlightBackground = highlightBackground,
 							highlightTextColor = highlightTextColor,
 							isHighlighted = Pair(x, y) == selected,
-							month = cell
+							month = cell,
+							onClick = {
+								calendar.selectCell(x, y)
+								calendar.onAction(Action.OK)
+							},
 						)
 
 						is MonthGrid -> CellMonth(
 							modifier = boxMod.then(Modifier.weight(1f)),
-							onClick = { calendar.clickCell(x, y) },
 							textColor = textColor,
 							highlightBackground = highlightBackground,
 							highlightTextColor = highlightTextColor,
@@ -109,7 +112,11 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar, touchEnable
 							isHighlighted = Pair(x, y) == selected,
 							isToday = cell == todayCell,
 							day = cell,
-							eventCount = if (cell > 0 && events is EventState.Month) events.countsByDay[LocalDate.of(year, month, cell)] ?: 0 else 0
+							eventCount = if (cell > 0 && events is EventState.Month) events.countsByDay[LocalDate.of(year, month, cell)] ?: 0 else 0,
+							onClick = {
+								calendar.selectCell(x, y)
+								calendar.onAction(Action.OK)
+							},
 						)
 
 						else -> {}

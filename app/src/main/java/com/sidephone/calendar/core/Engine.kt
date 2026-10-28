@@ -59,7 +59,8 @@ class Engine(private val events: CalendarEvents) {
 					right()
 				}
 			}
-			Action.DELETE -> if (grid is DayGrid && (grid as DayGrid).eventId() != 0L) onDeleteEvent()
+			Action.CONFIRM_DELETE -> if (grid is DayGrid && (grid as DayGrid).eventId() != 0L) onDeleteEvent()
+			Action.DELETE -> deleteCurrent()
 			Action.NEXT_PAGE -> changePage(1)
 			Action.PREVIOUS_PAGE -> changePage(-1)
 			Action.ZOOM_IN -> zoomIn()

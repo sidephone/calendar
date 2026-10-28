@@ -14,7 +14,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) 
 ## TODO
 - Sundial OK does not work on the Edit Event screen
 - UI
-  - Delete event + confirmation dialog + touch-n-hold support
   - Help screen (based on the current tile)
   - Colors
   - JakeType covers the bottom of the EventForm
@@ -22,5 +21,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) 
     - swipe left/right to change pages
 - Notifications
 - Recurring events
-- Display correctly the multi-day events on a day view
+- Multi-day events (+ display them correctly on the day grid)
 - Add license file
