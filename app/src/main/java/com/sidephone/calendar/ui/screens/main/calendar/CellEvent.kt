@@ -39,8 +39,7 @@ fun CellEvent(
 	) {
 		Text(
 			text = "${time}: ${title}",
-			color = if (highlighted) highlightTextColor else textColor,
-			modifier = modifier,
+			color = if (highlighted) highlightTextColor else textColor
 		)
 	}
 }

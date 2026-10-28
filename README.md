@@ -20,6 +20,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) 
 - Touchscreen support
     - swipe left/right to change pages
 - Notifications
-- Recurring events
+- Recurring events (+ make sure to edit and delete each occurrence separately)
 - Multi-day events (+ display them correctly on the day grid)
 - Add license file
