@@ -46,9 +46,12 @@ class Engine(private val events: CalendarEvents) {
 			Action.LEFT -> {
 				if (grid is DayGrid) {
 					if (
-						keypad.value == Keypad.Layout.SUNDIAL
-						|| keypad.value == Keypad.Layout.GAMEPAD
-						|| keypad.value == Keypad.Layout.T9_NO_DPAD
+						(grid as DayGrid).eventId() != 0L
+						&& (
+							keypad.value == Keypad.Layout.SUNDIAL
+							|| keypad.value == Keypad.Layout.GAMEPAD
+							|| keypad.value == Keypad.Layout.T9_NO_DPAD
+						)
 					) onDeleteEvent()
 				} else {
 					left()
