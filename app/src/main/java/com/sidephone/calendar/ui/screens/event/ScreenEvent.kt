@@ -1,4 +1,4 @@
-package com.sidephone.calendar.ui.screens
+package com.sidephone.calendar.ui.screens.event
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
@@ -15,7 +15,7 @@ import androidx.compose.ui.res.stringResource
 import com.sidephone.calendar.R
 import com.sidephone.calendar.core.Calendar
 import com.sidephone.calendar.db.Event
-import com.sidephone.calendar.ui.event.EventForm
+import com.sidephone.calendar.ui.screens.event.form.EventForm
 import java.time.LocalDate
 
 @Composable

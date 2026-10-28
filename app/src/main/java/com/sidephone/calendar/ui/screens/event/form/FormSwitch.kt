@@ -1,4 +1,4 @@
-package com.sidephone.calendar.ui.components
+package com.sidephone.calendar.ui.screens.event.form
 
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
@@ -26,7 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.sidephone.calendar.ui.modifiers.keypadClickableButton
+import com.sidephone.calendar.ui.screens.event.modifiers.keypadClickableButton
 import com.sidephone.calendar.ui.theme.Dimens
 import com.sidephone.calendar.ui.theme.DisabledAlpha
 

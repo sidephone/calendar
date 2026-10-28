@@ -1,4 +1,4 @@
-package com.sidephone.calendar.ui.components
+package com.sidephone.calendar.ui.screens.event.form
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement

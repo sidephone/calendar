@@ -1,4 +1,4 @@
-package com.sidephone.calendar.ui.sidebar
+package com.sidephone.calendar.ui.components.sidebar
 
 import android.content.Context
 import androidx.compose.material3.SnackbarDuration
