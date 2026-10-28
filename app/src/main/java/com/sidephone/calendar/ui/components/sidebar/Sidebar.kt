@@ -23,10 +23,10 @@ fun Sidebar(
 		modifier = Modifier.width(64.dp),
 		horizontalAlignment = Alignment.CenterHorizontally
 	) {
+		ButtonOverrideTile(calendar = calendar, snackbarProps = snackbarProps, layoutOverride = keypadOverride)
 		if (isTouchOn) {
 			ButtonZoomIn(calendar)
 			ButtonZoomOut(calendar)
 		}
-		ButtonOverrideTile(calendar = calendar, snackbarProps = snackbarProps, layoutOverride = keypadOverride)
 	}
 }
