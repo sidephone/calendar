@@ -1,4 +1,4 @@
-package com.sidephone.calendar.ui.screens
+package com.sidephone.calendar.ui.screens.main
 
 
 import android.content.Context
@@ -15,9 +15,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.sidephone.calendar.core.Calendar
 import com.sidephone.calendar.input.Keypad
-import com.sidephone.calendar.ui.calendar.CalendarPanel
-import com.sidephone.calendar.ui.sidebar.Sidebar
-import com.sidephone.calendar.ui.topbar.Topbar
+import com.sidephone.calendar.ui.components.sidebar.Sidebar
+import com.sidephone.calendar.ui.components.topbar.Topbar
+import com.sidephone.calendar.ui.screens.main.calendar.CalendarPanel
 import kotlinx.coroutines.CoroutineScope
 
 

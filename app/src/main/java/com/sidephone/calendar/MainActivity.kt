@@ -23,9 +23,9 @@ import androidx.compose.ui.platform.LocalContext
 import com.sidephone.calendar.core.Calendar
 import com.sidephone.calendar.input.Keypad
 import com.sidephone.calendar.ui.screens.Screen
-import com.sidephone.calendar.ui.screens.ScreenEvent
 import com.sidephone.calendar.ui.screens.ScreenHelp
-import com.sidephone.calendar.ui.screens.ScreenMain
+import com.sidephone.calendar.ui.screens.event.ScreenEvent
+import com.sidephone.calendar.ui.screens.main.ScreenMain
 import com.sidephone.calendar.ui.theme.AppTheme
 
 class MainActivity : ComponentActivity() {

@@ -1,4 +1,4 @@
-package com.sidephone.calendar.ui.modifiers
+package com.sidephone.calendar.ui.screens.event.modifiers
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.KeyEvent

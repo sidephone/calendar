@@ -1,4 +1,4 @@
-package com.sidephone.calendar.ui.calendar
+package com.sidephone.calendar.ui.screens.main.calendar
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
@@ -17,7 +17,7 @@ import com.sidephone.calendar.core.events.EventState
 import com.sidephone.calendar.core.grid.DayGrid
 import com.sidephone.calendar.core.grid.MonthGrid
 import com.sidephone.calendar.core.grid.YearGrid
-import com.sidephone.calendar.util.Weekdays
+import com.sidephone.calendar.ui.screens.main.util.Weekdays
 import java.time.LocalDate
 
 @Composable

@@ -1,4 +1,4 @@
-package com.sidephone.calendar.ui.components
+package com.sidephone.calendar.ui.screens.event.form
 
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField

@@ -1,4 +1,4 @@
-package com.sidephone.calendar.ui.calendar
+package com.sidephone.calendar.ui.screens.main.calendar
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable

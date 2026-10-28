@@ -1,4 +1,4 @@
-package com.sidephone.calendar.ui.event
+package com.sidephone.calendar.ui.screens.event.form
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,10 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.sidephone.calendar.R
 import com.sidephone.calendar.db.Event
-import com.sidephone.calendar.ui.components.FormSwitch
-import com.sidephone.calendar.ui.components.FormTextField
-import com.sidephone.calendar.ui.components.FormTimeField
-import com.sidephone.calendar.ui.modifiers.keypadClickableButton
+import com.sidephone.calendar.ui.screens.event.modifiers.keypadClickableButton
 import java.time.LocalTime
 
 @Composable
