@@ -67,8 +67,7 @@ fun ColumnDay(
 					.fillMaxWidth()
 					.focusProperties { canFocus = false }
 					.clickable {
-						calendar.selectCell(0, 0)
-						calendar.onAction(Action.OK)
+						touchEnabled && calendar.selectCell(0, 0) && calendar.onAction(Action.OK)
 					}
 			)
 		}
@@ -87,14 +86,10 @@ fun ColumnDay(
 				textColor = eventText,
 				highlightTextColor = eventHighlightText,
 				onClick = {
-					calendar.selectCell(0, i + 1)
-					calendar.onAction(Action.OK)
+					touchEnabled && calendar.selectCell(0, i + 1) && calendar.onAction(Action.OK)
 				},
 				onLongClick = {
-					if (touchEnabled) {
-						calendar.selectCell(0, i + 1)
-						calendar.onAction(Action.CONFIRM_DELETE)
-					}
+					touchEnabled && calendar.selectCell(0, i + 1) && calendar.onAction(Action.CONFIRM_DELETE)
 				}
 			)
 		}

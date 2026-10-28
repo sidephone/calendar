@@ -97,10 +97,7 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar, touchEnable
 							highlightTextColor = highlightTextColor,
 							isHighlighted = Pair(x, y) == selected,
 							month = cell,
-							onClick = {
-								calendar.selectCell(x, y)
-								calendar.onAction(Action.OK)
-							},
+							onClick = { touchEnabled && calendar.selectCell(x, y) && calendar.onAction(Action.OK) },
 						)
 
 						is MonthGrid -> CellMonth(
@@ -113,10 +110,7 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar, touchEnable
 							isToday = cell == todayCell,
 							day = cell,
 							eventCount = if (cell > 0 && events is EventState.Month) events.countsByDay[LocalDate.of(year, month, cell)] ?: 0 else 0,
-							onClick = {
-								calendar.selectCell(x, y)
-								calendar.onAction(Action.OK)
-							},
+							onClick = { touchEnabled && calendar.selectCell(x, y) && calendar.onAction(Action.OK) },
 						)
 
 						else -> {}
