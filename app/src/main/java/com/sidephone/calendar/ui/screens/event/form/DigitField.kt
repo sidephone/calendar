@@ -163,12 +163,12 @@ fun DigitField(
 
 					// Only jump fields when the cursor is collapsed at the edge;
 					// otherwise let the text field move the cursor as usual.
-					Key.DirectionLeft ->
+					Key.DirectionLeft, Key.MediaPrevious ->
 						if (onPrev != null && sel.collapsed && sel.start == 0) {
 							onPrev(); true
 						} else false
 
-					Key.DirectionRight ->
+					Key.DirectionRight, Key.MediaNext ->
 						if (onNext != null && sel.collapsed && sel.end == value.text.length) {
 							onNext(); true
 						} else false
@@ -179,7 +179,7 @@ fun DigitField(
 						} else false
 
 					// --- Your existing Enter / D-pad Center handling goes here ---
-					Key.Enter, Key.NumPadEnter, Key.DirectionCenter -> {
+					Key.Enter, Key.NumPadEnter, Key.DirectionCenter, Key.MediaPlayPause -> {
 						commit(); onConfirm(); true
 					}
 
