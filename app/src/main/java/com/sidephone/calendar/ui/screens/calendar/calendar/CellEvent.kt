@@ -1,4 +1,4 @@
-package com.sidephone.calendar.ui.screens.main.calendar
+package com.sidephone.calendar.ui.screens.calendar.calendar
 
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box

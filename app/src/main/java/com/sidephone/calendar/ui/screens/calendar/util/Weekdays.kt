@@ -1,4 +1,4 @@
-package com.sidephone.calendar.ui.screens.main.util
+package com.sidephone.calendar.ui.screens.calendar.util
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

@@ -1,4 +1,4 @@
-package com.sidephone.calendar.ui.screens.main
+package com.sidephone.calendar.ui.screens.calendar
 
 
 import android.content.Context
@@ -17,13 +17,13 @@ import com.sidephone.calendar.core.Calendar
 import com.sidephone.calendar.input.Keypad
 import com.sidephone.calendar.ui.components.sidebar.Sidebar
 import com.sidephone.calendar.ui.components.topbar.Topbar
-import com.sidephone.calendar.ui.screens.main.calendar.CalendarPanel
-import com.sidephone.calendar.ui.screens.main.deletePopup.PopupDeleteEvent
+import com.sidephone.calendar.ui.screens.calendar.calendar.CalendarPanel
+import com.sidephone.calendar.ui.screens.calendar.deletePopup.PopupDeleteEvent
 import kotlinx.coroutines.CoroutineScope
 
 
 @Composable
-fun ScreenMain(
+fun ScreenCalendar(
 	modifier: Modifier,
 	snackbarProps: Triple<SnackbarHostState, CoroutineScope, Context>,
 	calendar: Calendar,

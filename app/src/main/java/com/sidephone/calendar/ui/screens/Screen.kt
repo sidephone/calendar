@@ -1,7 +1,7 @@
 package com.sidephone.calendar.ui.screens
 
 enum class Screen {
-	MAIN,
+	CALENDAR,
 	HELP,
 	EVENT
 }

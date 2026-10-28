@@ -1,4 +1,4 @@
-package com.sidephone.calendar.ui.screens.main.deletePopup
+package com.sidephone.calendar.ui.screens.calendar.deletePopup
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme

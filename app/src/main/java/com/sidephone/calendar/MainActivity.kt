@@ -25,7 +25,7 @@ import com.sidephone.calendar.input.Keypad
 import com.sidephone.calendar.ui.screens.Screen
 import com.sidephone.calendar.ui.screens.ScreenHelp
 import com.sidephone.calendar.ui.screens.event.ScreenEvent
-import com.sidephone.calendar.ui.screens.main.ScreenMain
+import com.sidephone.calendar.ui.screens.calendar.ScreenCalendar
 import com.sidephone.calendar.ui.theme.AppTheme
 
 class MainActivity : ComponentActivity() {
@@ -52,7 +52,7 @@ class MainActivity : ComponentActivity() {
 					modifier = Modifier.fillMaxSize(),
 					snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
 				) { innerPadding ->
-					var screen by remember { mutableStateOf(Screen.MAIN) }
+					var screen by remember { mutableStateOf(Screen.CALENDAR) }
 					var currentEvent by remember { mutableLongStateOf(0L) }
 					calendar.onEditEvent = { event ->
 						currentEvent = event
@@ -76,7 +76,7 @@ class MainActivity : ComponentActivity() {
 							ScreenHelp(
 								modifier = Modifier.padding(innerPadding),
 								keypadTile = keypadTile,
-								onBack = { screen = Screen.MAIN })
+								onBack = { screen = Screen.CALENDAR })
 						}
 
 						Screen.EVENT -> {
@@ -85,15 +85,15 @@ class MainActivity : ComponentActivity() {
 								modifier = Modifier.padding(innerPadding),
 								calendar = calendar,
 								eventId = currentEvent,
-								onBack = { screen = Screen.MAIN }
+								onBack = { screen = Screen.CALENDAR }
 							)
 						}
 
-						Screen.MAIN -> {
+						Screen.CALENDAR -> {
 							if (isDeleteEventShown) calendar.ignoreInput()
 							else calendar.listenForInput()
 
-							ScreenMain(
+							ScreenCalendar(
 								modifier = Modifier.padding(innerPadding),
 								snackbarProps = Triple(snackbarHostState, scope, context),
 								calendar = calendar,

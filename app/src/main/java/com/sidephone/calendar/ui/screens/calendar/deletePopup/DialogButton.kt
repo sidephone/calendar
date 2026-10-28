@@ -1,4 +1,4 @@
-package com.sidephone.calendar.ui.screens.main.deletePopup
+package com.sidephone.calendar.ui.screens.calendar.deletePopup
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
