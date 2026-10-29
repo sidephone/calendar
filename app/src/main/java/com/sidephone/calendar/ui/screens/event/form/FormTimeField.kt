@@ -11,7 +11,6 @@ import com.sidephone.calendar.ui.theme.Dimens
 
 @Composable
 fun FormTimeField(
-	modifier: Modifier = Modifier,
 	@StringRes titleResId: Int,
 	hour: Int,
 	minute: Int,
@@ -19,7 +18,7 @@ fun FormTimeField(
 	onDone: () -> Unit = {},
 ) {
 	TimeField(
-		modifier = modifier
+		modifier = Modifier
 			.fillMaxWidth()
 			.padding(horizontal = Dimens.FORM_INPUT_SPACING),
 		titleResId = titleResId,

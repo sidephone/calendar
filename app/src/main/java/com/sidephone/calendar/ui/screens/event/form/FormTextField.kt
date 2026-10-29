@@ -1,5 +1,6 @@
 package com.sidephone.calendar.ui.screens.event.form
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -20,7 +21,6 @@ import androidx.compose.ui.text.input.ImeAction
 
 @Composable
 fun FormTextField(
-	modifier: Modifier,
 	titleResId: Int,
 	value: String,
 	onValueChange: (String) -> Unit,
@@ -29,7 +29,7 @@ fun FormTextField(
 	cursorColor: Color,
 ) {
 	OutlinedTextField(
-		modifier = modifier.dpadFocusNavigation(),
+		modifier = Modifier.fillMaxWidth().dpadFocusNavigation(),
 		colors = OutlinedTextFieldDefaults.colors(
 			focusedBorderColor = outlineColor,
 			focusedLabelColor = outlineColor,

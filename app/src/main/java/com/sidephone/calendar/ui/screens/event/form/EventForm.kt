@@ -53,7 +53,6 @@ fun EventForm(
 			titleResId = R.string.event_form_title,
 			onValueChange = { onChange(event.copy(title = it)) },
 			singleLine = true,
-			modifier = Modifier.fillMaxWidth(),
 			outlineColor = highlightColor,
 			cursorColor = textColor
 		)
@@ -76,7 +75,6 @@ fun EventForm(
 
 		if (!isAllDay) {
 			FormTimeField(
-				modifier = Modifier.fillMaxWidth(),
 				titleResId = R.string.event_form_start_time,
 				hour = startHour,
 				minute = startMinute,
@@ -106,7 +104,6 @@ fun EventForm(
 			)
 
 			FormTimeField(
-				modifier = Modifier.fillMaxWidth(),
 				titleResId = R.string.event_form_end_time,
 				hour = endHour,
 				minute = endMinute,
@@ -149,7 +146,6 @@ fun EventForm(
 				titleResId = R.string.event_form_description,
 				onValueChange = { onChange(event.copy(description = it)) },
 				singleLine = false,
-				modifier = Modifier.fillMaxWidth(),
 				outlineColor = highlightColor,
 				cursorColor = textColor
 			)
@@ -159,7 +155,6 @@ fun EventForm(
 				onValueChange = { onChange(event.copy(address = it)) },
 				titleResId = R.string.event_form_address,
 				singleLine = true,
-				modifier = Modifier.fillMaxWidth(),
 				outlineColor = highlightColor,
 				cursorColor = textColor
 			)
