@@ -1,16 +1,21 @@
 package com.sidephone.calendar.ui.screens.calendar.calendar
 
-import androidx.compose.foundation.border
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.unit.dp
 import com.sidephone.calendar.core.Action
 import com.sidephone.calendar.core.Calendar
@@ -82,8 +87,14 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar, touchEnable
 	val today = LocalDate.now()
 	val todayCell: Int? = today.takeIf { it.year == year && it.monthValue == month }?.dayOfMonth
 
-	val cellDefault = Modifier
-		.border(width = 1.dp, color = borderColor)
+	val cellWithBorder = Modifier
+		.drawBehind {
+			val w = 1.dp.toPx()
+			// right edge
+			drawRect(borderColor, topLeft = Offset(size.width - w, 0f), size = Size(w, size.height))
+			// bottom edge
+			drawRect(borderColor, topLeft = Offset(0f, size.height - w), size = Size(size.width, w))
+		}
 		.fillMaxHeight()
 
 
@@ -97,12 +108,19 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar, touchEnable
 				onSwipeRight = { calendar.onAction(Action.PREVIOUS_PAGE) },
 			)
 	) {
+		// top border
+		Box(Modifier
+			.fillMaxWidth()
+			.height(1.dp)
+			.background(borderColor)
+		)
 
+		// weekday row (only for month grid)
 		if (grid is MonthGrid) {
-			Row(Modifier.height(42.dp)) {
+			Row(Modifier.height(Dimens.MONTH_WEEKDAY_ROW_HEIGHT)) {
 				for (letter in weekdays) {
 					CellWeekday(
-						modifier = cellDefault.then(Modifier.weight(1f)),
+						modifier = cellWithBorder.then(Modifier.weight(1f)),
 						textColor = textColor,
 						letter = letter
 					)
@@ -110,12 +128,13 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar, touchEnable
 			}
 		}
 
+		// grid
 		for ((y, column) in grid.grid.withIndex()) {
 			Row(Modifier.weight(1f)) {
 				for ((x, cell) in column.withIndex()) {
 					when (grid) {
 						is YearGrid -> CellYear(
-							modifier = cellDefault.then(Modifier.weight(1f)),
+							modifier = cellWithBorder.then(Modifier.weight(1f)),
 							textColor = textColor,
 							highlightBackground = cellHighlightBackground,
 							highlightTextColor = cellHighlightTextColor,
@@ -125,7 +144,7 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar, touchEnable
 						)
 
 						is MonthGrid -> CellMonth(
-							modifier = cellDefault.then(Modifier.weight(1f)),
+							modifier = cellWithBorder.then(Modifier.weight(1f)),
 							textColor = textColor,
 							eventColor = eventMarker,
 							highlightBackground = cellHighlightBackground,
