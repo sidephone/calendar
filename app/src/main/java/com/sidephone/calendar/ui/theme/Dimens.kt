@@ -3,6 +3,7 @@ package com.sidephone.calendar.ui.theme
 import androidx.compose.ui.unit.dp
 
 object Dimens {
+
 	const val EVENT_MARKERS_MAX_SLOTS = 4   // 3 squares + "+"; use 5 if the cell is wide enough
 	val EVENT_MARKER_SIZE = 6.dp
 	val EVENT_MARKER_SPACING = 3.dp
@@ -18,6 +19,8 @@ object Dimens {
 	val FORM_TIME_FIELD_HEIGHT = 32.dp
 
 	val JAKE_TYPE_PADDING = 32.dp
+
+	val MONTH_WEEKDAY_ROW_HEIGHT = 42.dp
 
 	val SWIPE_THRESHOLD = 64.dp
 }

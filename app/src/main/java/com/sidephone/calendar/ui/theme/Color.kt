@@ -33,7 +33,7 @@ val LightColorScheme = lightColorScheme(
 val DarkColorScheme = darkColorScheme(
 	// Grid
 	background  = Color(0xFF121212),
-	outline = Color(0xFF262B2D), // borders
+	outline = Color(0xFF33373a), // borders
 	secondary = Color(0xFF26A69A), // event marker
 	onBackground = Color(0xFFDEE3E5), // date numbers, week days
 	onSurfaceVariant = Color(0xFF6F6F77), // date numbers outside the current month
