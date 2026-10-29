@@ -1,15 +1,16 @@
-package com.sidephone.calendar.ui.screens.event.form
+package com.sidephone.calendar.ui.components.timeField
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -23,6 +24,7 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
@@ -35,6 +37,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 
@@ -46,6 +49,13 @@ fun DigitField(
 	max: Int,
 	maxFirstDigit: Int,
 	focusRequester: FocusRequester,
+	textColor: Color,
+	inputBackgroundColor: Color,
+	borderColor: Color,
+	selectedBorderColor: Color,
+	borderRadius: Dp,
+	width: Dp,
+	height: Dp,
 	onCommit: (Int) -> Unit,
 	onPrev: (() -> Unit)?,
 	onNext: (() -> Unit)?,
@@ -74,8 +84,7 @@ fun DigitField(
 		syncTick++
 	}
 
-	val colors = MaterialTheme.colorScheme
-	val borderColor = if (focused) colors.primary else colors.outline
+	val borderColor = if (focused) selectedBorderColor else borderColor
 
 	BasicTextField(
 		value = value,
@@ -127,11 +136,8 @@ fun DigitField(
 			}
 		},
 		singleLine = true,
-		textStyle = MaterialTheme.typography.displayMedium.copy(
-			textAlign = TextAlign.Center,
-			color = colors.onSurface,
-		),
-		cursorBrush = SolidColor(colors.primary),
+		textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center, color = textColor),
+		cursorBrush = SolidColor(textColor),
 		keyboardOptions = KeyboardOptions(
 			keyboardType = KeyboardType.Number,
 			imeAction = ImeAction.Next,
@@ -141,7 +147,8 @@ fun DigitField(
 			onDone = { commit(); onConfirm() },
 		),
 		modifier = Modifier
-			.width(88.dp)
+			.width(width)
+			.height(height)
 			.focusRequester(focusRequester)
 			.onFocusChanged {
 				focused = it.isFocused
@@ -186,8 +193,8 @@ fun DigitField(
 					else -> false
 				}
 			}
-			.background(colors.surfaceVariant, RoundedCornerShape(8.dp))
-			.border(BorderStroke(if (focused) 3.dp else 1.dp, borderColor), RoundedCornerShape(8.dp)),
+			.background(inputBackgroundColor, RoundedCornerShape(borderRadius))
+			.border(BorderStroke(if (focused) 3.dp else 1.dp, borderColor), RoundedCornerShape(borderRadius)),
 		decorationBox = { inner -> Box(contentAlignment = Alignment.Center) { inner() } },
 	)
 }
