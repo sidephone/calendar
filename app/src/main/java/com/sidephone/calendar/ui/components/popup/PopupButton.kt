@@ -43,8 +43,10 @@ private val NEXT_KEYS = setOf(
 @Composable
 fun DialogButton(
 	modifier: Modifier = Modifier,
-	textResId: Int,
+	textResId: Int = 0,
+	text: String = "",
 	textColor: Color,
+	backgroundColor: Color = Color.Transparent,
 	selectedTextColor: Color,
 	selectedBackground: Color,
 	onClick: () -> Unit,
@@ -57,7 +59,7 @@ fun DialogButton(
 		onClick = onClick,
 		interactionSource = interactionSource,
 		colors = ButtonDefaults.textButtonColors(
-			containerColor = if (isFocused) selectedBackground else Color.Transparent,
+			containerColor = if (isFocused) selectedBackground else backgroundColor,
 			contentColor = if (isFocused) selectedTextColor else textColor,
 		),
 		modifier = modifier.onKeyEvent { event ->
@@ -70,6 +72,6 @@ fun DialogButton(
 			}
 		},
 	) {
-		Text(stringResource(textResId))
+		Text(if (textResId == 0) text else stringResource(textResId))
 	}
 }

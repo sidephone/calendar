@@ -2,13 +2,11 @@ package com.sidephone.calendar.ui.screens.event.form
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -19,7 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.sidephone.calendar.R
 import com.sidephone.calendar.db.Event
-import com.sidephone.calendar.ui.components.keypadClickableModifier
+import com.sidephone.calendar.ui.components.popup.DialogButton
 import com.sidephone.calendar.ui.theme.Dimens
 import java.time.LocalTime
 
@@ -130,15 +128,14 @@ fun EventForm(
 			)
 		}
 
-		Button(
-			modifier = Modifier.keypadClickableModifier(onClick = { showMoreOptions = !showMoreOptions }),
-			onClick = { showMoreOptions = !showMoreOptions },
-		) {
-			Text(
-				stringResource(R.string.event_form_show_more_options)
-					+ (if (showMoreOptions) " ▲" else " ▼")
-			)
-		}
+		DialogButton(
+			text = stringResource(R.string.event_form_show_more_options) + (if (showMoreOptions) " ▲" else " ▼"),
+			textColor = MaterialTheme.colorScheme.onTertiary,
+			backgroundColor = MaterialTheme.colorScheme.tertiary,
+			selectedTextColor = MaterialTheme.colorScheme.tertiary,
+			selectedBackground = MaterialTheme.colorScheme.onTertiary,
+			onClick = { showMoreOptions = !showMoreOptions }
+		)
 
 		if (showMoreOptions) {
 			FormTextField(
@@ -160,19 +157,28 @@ fun EventForm(
 			)
 		}
 
-		Button(
-			modifier = Modifier.keypadClickableModifier(onClick = onCancel),
-			onClick = onCancel,
+		Row(
+			horizontalArrangement = Arrangement.spacedBy(Dimens.FORM_INPUT_SPACING)
 		) {
-			Text(stringResource(R.string.event_form_cancel))
-		}
+			DialogButton(
+				modifier = Modifier.weight(1f),
+				textResId = R.string.event_form_cancel,
+				textColor = MaterialTheme.colorScheme.onTertiary,
+				backgroundColor = MaterialTheme.colorScheme.tertiary,
+				selectedTextColor = MaterialTheme.colorScheme.tertiary,
+				selectedBackground = MaterialTheme.colorScheme.onTertiary,
+				onClick = onCancel
+			)
 
-		Button(
-			modifier = Modifier.keypadClickableModifier(onClick = { if (event.title.isNotBlank()) onSave() }),
-			onClick = onSave,
-			enabled = event.title.isNotBlank()
-		) {
-			Text(stringResource(R.string.event_form_save))
+			DialogButton(
+				modifier = Modifier.weight(1f),
+				textResId = R.string.event_form_save,
+				textColor = MaterialTheme.colorScheme.onPrimary,
+				backgroundColor = MaterialTheme.colorScheme.primary,
+				selectedTextColor = MaterialTheme.colorScheme.primary,
+				selectedBackground = MaterialTheme.colorScheme.onPrimary,
+				onClick = { if (event.title.isNotBlank()) onSave() }
+			)
 		}
 	}
 }
