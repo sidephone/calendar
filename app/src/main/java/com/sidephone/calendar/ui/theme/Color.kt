@@ -26,14 +26,12 @@ val DarkColorScheme = darkColorScheme(
 	background  = Color(0xFF121212),
 	outline = Color(0xFF262B2D), // borders
 	secondary = Color(0xFF26A69A), // event marker
-
-	// Text
 	onBackground = Color(0xFFDEE3E5), // date numbers, week days
 	onSurfaceVariant = Color(0xFF6F6F77), // date numbers outside the current month
 
-	// Interactive elements, e.g. selected cell
-	primary = Color(0xFF00796B), // selected cell background
-	onPrimary = Color(0xFFFFFFFF), // selected cell text
+	// interactive elements, e.g. selected cell, selected button
+	primary = Color(0xFF00796B), // background
+	onPrimary = Color(0xFFFFFFFF), // text
 
 	// event list
 	primaryContainer = Color(0xFF004E5A), // event background
@@ -42,9 +40,12 @@ val DarkColorScheme = darkColorScheme(
 	tertiary = Color(0xFF37393E), // add-event background
 	onTertiary = Color(0xFFDEE3E5), // add-event text
 
+	// popup
+	surface = Color(0xFF2C2C2E), // popup background
+	onSurface = Color(0xFFF2F3F5), // popup title text
+	onSecondaryContainer = Color(0xFFD8D9DA), // popup body text
+
 	// unused
-	surface = Color(0xFF2C2C2E),
-	onSurface = Color(0xFFF2F3F5),
 	surfaceVariant = Color(0xFF38383A),
 )
 
