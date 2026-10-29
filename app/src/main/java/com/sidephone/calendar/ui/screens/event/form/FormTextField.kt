@@ -45,7 +45,7 @@ fun FormTextField(
 
 
 @Composable
-fun Modifier.dpadFocusNavigation(): Modifier {
+private fun Modifier.dpadFocusNavigation(): Modifier {
 	val focus = LocalFocusManager.current
 
 	return onPreviewKeyEvent { e ->

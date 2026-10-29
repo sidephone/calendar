@@ -1,5 +1,6 @@
 package com.sidephone.calendar.ui.screens.event.form
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,7 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.sidephone.calendar.R
 import com.sidephone.calendar.db.Event
-import com.sidephone.calendar.ui.screens.event.modifiers.keypadClickableButton
+import com.sidephone.calendar.ui.components.keypadClickableModifier
+import com.sidephone.calendar.ui.theme.Dimens
 import java.time.LocalTime
 
 @Composable
@@ -29,6 +31,8 @@ fun EventForm(
 	onSave: () -> Unit,
 	onCancel: () -> Unit
 ) {
+	var showMoreOptions by remember { mutableStateOf(false) }
+
 	var isAllDay by remember { mutableStateOf(event.startTime == null) }
 	var startHour by remember { mutableIntStateOf(event.startTime?.hour ?: 9) }
 	var startMinute by remember { mutableIntStateOf(event.startTime?.minute ?: 0) }
@@ -41,13 +45,9 @@ fun EventForm(
 	Column(
 		modifier = modifier
 			.fillMaxSize()
-			.verticalScroll(rememberScrollState())
+			.verticalScroll(rememberScrollState()),
+		verticalArrangement = Arrangement.spacedBy(Dimens.FORM_INPUT_SPACING)
 	) {
-		Text(
-			modifier = Modifier,
-			text = stringResource(R.string.event_form_date, event.startDate.toString())
-		)
-
 		FormTextField(
 			value = event.title,
 			titleResId = R.string.event_form_title,
@@ -59,7 +59,7 @@ fun EventForm(
 		)
 
 		FormSwitch(
-			titleResId = R.string.event_form_all_day,
+			title = stringResource(R.string.event_form_all_day, event.startDate.toString()),
 			value = isAllDay,
 			disabled = false,
 			onValueChange = { allDay ->
@@ -133,35 +133,47 @@ fun EventForm(
 			)
 		}
 
-		FormTextField(
-			value = event.description,
-			titleResId = R.string.event_form_description,
-			onValueChange = { onChange(event.copy(description = it)) },
-			singleLine = false,
-			modifier = Modifier.fillMaxWidth(),
-			outlineColor = highlightColor,
-			cursorColor = textColor
-		)
+		Button(
+			modifier = Modifier.keypadClickableModifier(onClick = { showMoreOptions = !showMoreOptions }),
+			onClick = { showMoreOptions = !showMoreOptions },
+		) {
+			Text(
+				stringResource(R.string.event_form_show_more_options)
+					+ (if (showMoreOptions) " ▲" else " ▼")
+			)
+		}
 
-		FormTextField(
-			value = event.address ?: "",
-			onValueChange = { onChange(event.copy(address = it)) },
-			titleResId = R.string.event_form_address,
-			singleLine = true,
-			modifier = Modifier.fillMaxWidth(),
-			outlineColor = highlightColor,
-			cursorColor = textColor
-		)
+		if (showMoreOptions) {
+			FormTextField(
+				value = event.description,
+				titleResId = R.string.event_form_description,
+				onValueChange = { onChange(event.copy(description = it)) },
+				singleLine = false,
+				modifier = Modifier.fillMaxWidth(),
+				outlineColor = highlightColor,
+				cursorColor = textColor
+			)
+
+			FormTextField(
+				value = event.address ?: "",
+				onValueChange = { onChange(event.copy(address = it)) },
+				titleResId = R.string.event_form_address,
+				singleLine = true,
+				modifier = Modifier.fillMaxWidth(),
+				outlineColor = highlightColor,
+				cursorColor = textColor
+			)
+		}
 
 		Button(
-			modifier = Modifier.keypadClickableButton(onClick = onCancel),
+			modifier = Modifier.keypadClickableModifier(onClick = onCancel),
 			onClick = onCancel,
 		) {
 			Text(stringResource(R.string.event_form_cancel))
 		}
 
 		Button(
-			modifier = Modifier.keypadClickableButton(onClick = { if (event.title.isNotBlank()) onSave() }),
+			modifier = Modifier.keypadClickableModifier(onClick = { if (event.title.isNotBlank()) onSave() }),
 			onClick = onSave,
 			enabled = event.title.isNotBlank()
 		) {

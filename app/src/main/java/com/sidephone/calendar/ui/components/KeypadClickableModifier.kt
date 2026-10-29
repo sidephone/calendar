@@ -1,4 +1,4 @@
-package com.sidephone.calendar.ui.screens.event.modifiers
+package com.sidephone.calendar.ui.components
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.key.KeyEvent
@@ -7,7 +7,7 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
 import android.view.KeyEvent as AndroidKeyEvent
 
-fun Modifier.keypadClickableButton(onClick: () -> Unit): Modifier =
+fun Modifier.keypadClickableModifier(onClick: () -> Unit): Modifier =
 	this.onKeyEvent { event: KeyEvent ->
 		if (
 			event.type == KeyEventType.KeyDown
