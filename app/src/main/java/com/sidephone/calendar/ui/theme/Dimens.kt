@@ -16,4 +16,6 @@ object Dimens {
 	val FORM_SWITCH_PADDING = 8.dp
 	val FORM_TIME_FIELD_WIDTH = 56.dp
 	val FORM_TIME_FIELD_HEIGHT = 32.dp
+
+	val JAKE_TYPE_PADDING = 32.dp
 }

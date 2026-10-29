@@ -1,9 +1,12 @@
 package com.sidephone.calendar.ui.screens.event.form
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -157,9 +160,7 @@ fun EventForm(
 			)
 		}
 
-		Row(
-			horizontalArrangement = Arrangement.spacedBy(Dimens.FORM_INPUT_SPACING)
-		) {
+		Row(horizontalArrangement = Arrangement.spacedBy(Dimens.FORM_INPUT_SPACING)) {
 			DialogButton(
 				modifier = Modifier.weight(1f),
 				textResId = R.string.event_form_cancel,
@@ -180,5 +181,9 @@ fun EventForm(
 				onClick = { if (event.title.isNotBlank()) onSave() }
 			)
 		}
+
+		// JakeType keyboard covers the bottom of the form, when a text field is focused, so add some
+		// padding to avoid it.
+		Box(modifier = Modifier.fillMaxWidth().height(Dimens.JAKE_TYPE_PADDING))
 	}
 }
