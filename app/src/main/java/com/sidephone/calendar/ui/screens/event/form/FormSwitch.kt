@@ -28,7 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sidephone.calendar.ui.screens.event.modifiers.keypadClickableButton
 import com.sidephone.calendar.ui.theme.Dimens
-import com.sidephone.calendar.ui.theme.DisabledAlpha
+import com.sidephone.calendar.ui.theme.DISABLED_ALPHA
 
 
 @Composable
@@ -86,7 +86,7 @@ fun FormSwitch(
 				Text(
 					text = stringResource(titleResId),
 					style = typography.titleLarge,
-					color = if (disabled) colorScheme.onBackground.copy(alpha = DisabledAlpha)
+					color = if (disabled) colorScheme.onBackground.copy(alpha = DISABLED_ALPHA)
 					else if (isFocused) colorScheme.onSecondary
 					else colorScheme.onBackground,
 				)
@@ -98,7 +98,7 @@ fun FormSwitch(
 							else summaryOffResId
 						),
 						style = typography.titleMedium,
-						color = if (disabled) colorScheme.onSurfaceVariant.copy(alpha = DisabledAlpha)
+						color = if (disabled) colorScheme.onSurfaceVariant.copy(alpha = DISABLED_ALPHA)
 						else if (isFocused) colorScheme.onSecondary
 						else colorScheme.onSurfaceVariant
 					)

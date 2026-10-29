@@ -38,25 +38,10 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar, touchEnable
 	val eventMarker = MaterialTheme.colorScheme.secondary
 	val eventBackground = MaterialTheme.colorScheme.primaryContainer
 	val eventText = MaterialTheme.colorScheme.onPrimaryContainer
-//	val eventHighlightedBackground = MaterialTheme.colorScheme.secondaryFixed
-//	val eventHighlightedText = MaterialTheme.colorScheme.onSecondaryFixed
+	val eventMetaText = MaterialTheme.colorScheme.onPrimaryFixed
 
 	val addNewEventText = MaterialTheme.colorScheme.onTertiary
 	val addNewEventBackground = MaterialTheme.colorScheme.tertiary
-
-
-	val weekdays = remember(year, month, grid is MonthGrid) {
-		if (grid is MonthGrid) grid.grid[0].map { Weekdays.getFirstLetter(year, month, it) }
-		else emptyList()
-	}
-
-	val today = LocalDate.now()
-	val todayCell: Int? = today.takeIf { it.year == year && it.monthValue == month }?.dayOfMonth
-
-
-	val boxMod = Modifier
-		.border(width = 1.dp, color = borderColor)
-		.fillMaxHeight()
 
 
 	if (grid is DayGrid) {
@@ -73,11 +58,25 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar, touchEnable
 			eventText = eventText,
 			eventBackground = eventBackground,
 			eventHighlightText = eventBackground,
-			eventHighlightBackground = eventText
+			eventHighlightBackground = eventText,
+			eventMetaText = eventMetaText
 		)
 
 		return
 	}
+
+
+	val weekdays = remember(year, month, grid is MonthGrid) {
+		if (grid is MonthGrid) grid.grid[0].map { Weekdays.getFirstLetter(year, month, it) }
+		else emptyList()
+	}
+
+	val today = LocalDate.now()
+	val todayCell: Int? = today.takeIf { it.year == year && it.monthValue == month }?.dayOfMonth
+
+	val cellDefault = Modifier
+		.border(width = 1.dp, color = borderColor)
+		.fillMaxHeight()
 
 
 	Column(modifier = modifier.fillMaxSize()) {
@@ -85,7 +84,7 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar, touchEnable
 			Row(Modifier.height(42.dp)) {
 				for (letter in weekdays) {
 					CellWeekday(
-						modifier = boxMod.then(Modifier.weight(1f)),
+						modifier = cellDefault.then(Modifier.weight(1f)),
 						textColor = textColor,
 						letter = letter
 					)
@@ -98,7 +97,7 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar, touchEnable
 				for ((x, cell) in column.withIndex()) {
 					when (grid) {
 						is YearGrid -> CellYear(
-							modifier = boxMod.then(Modifier.weight(1f)),
+							modifier = cellDefault.then(Modifier.weight(1f)),
 							textColor = textColor,
 							highlightBackground = cellHighlightBackground,
 							highlightTextColor = cellHighlightTextColor,
@@ -108,7 +107,7 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar, touchEnable
 						)
 
 						is MonthGrid -> CellMonth(
-							modifier = boxMod.then(Modifier.weight(1f)),
+							modifier = cellDefault.then(Modifier.weight(1f)),
 							textColor = textColor,
 							eventColor = eventMarker,
 							highlightBackground = cellHighlightBackground,

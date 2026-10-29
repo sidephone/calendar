@@ -22,48 +22,30 @@ val LightColorScheme = lightColorScheme(
 )
 
 val DarkColorScheme = darkColorScheme(
-	// Base colors
+	// Grid
 	background  = Color(0xFF121212),
-	surface = Color(0xFF2C2C2E),
-	surfaceVariant = Color(0xFF38383A),
+	outline = Color(0xFF262B2D), // borders
+	secondary = Color(0xFF26A69A), // event marker
 
 	// Text
 	onBackground = Color(0xFFDEE3E5), // date numbers, week days
-	onSurface = Color(0xFFF2F3F5),
-	onSurfaceVariant = Color(0xFF6F6F77), // date numbers for days outside of the current month
+	onSurfaceVariant = Color(0xFF6F6F77), // date numbers outside the current month
 
 	// Interactive elements, e.g. selected cell
-	primary = Color(0xFF00796B),
-	onPrimary = Color(0xFFFFFFFF),
+	primary = Color(0xFF00796B), // selected cell background
+	onPrimary = Color(0xFFFFFFFF), // selected cell text
 
-	primaryContainer = Color(0xFF004E5A),
-	onPrimaryContainer = Color(0xFFD0E8E9),
-	onPrimaryFixed = Color(0xFFB8C7CB),  // event metadata
+	// event list
+	primaryContainer = Color(0xFF004E5A), // event background
+	onPrimaryContainer = Color(0xFFD0E8E9), // event text
+	onPrimaryFixed = Color(0xFFA5C3C8),  // event metadata
+	tertiary = Color(0xFF37393E), // add-event background
+	onTertiary = Color(0xFFDEE3E5), // add-event text
 
-	// Calendar grid
-	outline = Color(0xFF262B2D),
-
-	// Event markers
-	secondary = Color(0xFF26A69A), // event marker in the grid
-
-	// Add-event button
-	tertiary = Color(0xFF303637),
-	onTertiary = Color(0xFFDEE3E5),
-
-
-	// calendar grid
-//	background = Color(0XFF121212),
-//	onBackground = Color(0XFFDEE3E5), // date numbers, week days
-//	onSurfaceVariant = Color(0XFF9CA3AF),  // date numbers for days outside of the current month
-//
-//	primary = Color(0XFFBDC5EB), // grid lines
-//	onPrimary = Color(0XFF272F4D),
-//
-//	secondary = Color(0XFF004E5A), // event background
-//	onSecondary = Color(0XFFA5EEFF), // event text
-//
-//	tertiary = Color(0XFF303637), // add new event background
-//	onTertiary = Color(0XFFDEE3E5), // add new event text
+	// unused
+	surface = Color(0xFF2C2C2E),
+	onSurface = Color(0xFFF2F3F5),
+	surfaceVariant = Color(0xFF38383A),
 )
 
-val DisabledAlpha = 0.38f
+const val DISABLED_ALPHA = 0.38f
