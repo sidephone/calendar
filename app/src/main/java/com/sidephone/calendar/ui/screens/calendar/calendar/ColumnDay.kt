@@ -61,11 +61,11 @@ fun ColumnDay(
 
 
 	LazyColumn(modifier = modifier, state = listState, userScrollEnabled = touchEnabled) {
-		item(key = "help") {
-			if (
-				events.isNotEmpty() &&
-				(tile == Keypad.Layout.SUNDIAL || tile == Keypad.Layout.GAMEPAD || tile == Keypad.Layout.T9_NO_DPAD)
-			) {
+		if (
+			events.isNotEmpty() &&
+			(tile == Keypad.Layout.SUNDIAL || tile == Keypad.Layout.GAMEPAD || tile == Keypad.Layout.T9_NO_DPAD)
+		) {
+			item(key = "help") {
 				Text(
 					modifier = Modifier.padding(Dimens.FORM_INPUT_SPACING),
 					fontStyle = FontStyle.Italic,
