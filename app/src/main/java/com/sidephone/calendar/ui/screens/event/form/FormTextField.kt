@@ -1,11 +1,14 @@
 package com.sidephone.calendar.ui.screens.event.form
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
@@ -18,14 +21,20 @@ import androidx.compose.ui.text.input.ImeAction
 
 @Composable
 fun FormTextField(
-	modifier: Modifier,
 	titleResId: Int,
 	value: String,
 	onValueChange: (String) -> Unit,
-	singleLine: Boolean
+	singleLine: Boolean,
+	outlineColor: Color,
+	cursorColor: Color,
 ) {
 	OutlinedTextField(
-		modifier = modifier.dpadFocusNavigation(),
+		modifier = Modifier.fillMaxWidth().dpadFocusNavigation(),
+		colors = OutlinedTextFieldDefaults.colors(
+			focusedBorderColor = outlineColor,
+			focusedLabelColor = outlineColor,
+			cursorColor = cursorColor
+		),
 		keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
 		value = value,
 		onValueChange = onValueChange,
@@ -36,7 +45,7 @@ fun FormTextField(
 
 
 @Composable
-fun Modifier.dpadFocusNavigation(): Modifier {
+private fun Modifier.dpadFocusNavigation(): Modifier {
 	val focus = LocalFocusManager.current
 
 	return onPreviewKeyEvent { e ->

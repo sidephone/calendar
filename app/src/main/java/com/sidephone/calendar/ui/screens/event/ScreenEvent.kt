@@ -3,6 +3,8 @@ package com.sidephone.calendar.ui.screens.event
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -16,6 +18,7 @@ import com.sidephone.calendar.R
 import com.sidephone.calendar.core.Calendar
 import com.sidephone.calendar.db.Event
 import com.sidephone.calendar.ui.screens.event.form.EventForm
+import com.sidephone.calendar.ui.theme.Dimens
 import java.time.LocalDate
 
 @Composable
@@ -41,9 +44,10 @@ fun ScreenEvent(
 		}
 	}
 
-	Column(modifier = modifier.fillMaxSize()) {
+	Column(modifier = modifier.fillMaxSize().padding(Dimens.FORM_INPUT_SPACING)) {
 		Text(
-			modifier = Modifier,
+			style = MaterialTheme.typography.titleLarge,
+			modifier = Modifier.padding(vertical = Dimens.FORM_INPUT_SPACING),
 			text = stringResource(
 				if (eventId == 0L) R.string.event_form_title_add
 				else R.string.event_form_title_edit

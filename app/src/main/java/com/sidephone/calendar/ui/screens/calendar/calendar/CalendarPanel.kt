@@ -28,15 +28,42 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar, touchEnable
 	val (year, month, _) = calendar.date.collectAsState().value
 	val selected = grid.position()
 
-	val textColor = MaterialTheme.colorScheme.onBackground
-	val highlightBackground = MaterialTheme.colorScheme.primary
-	val highlightTextColor = MaterialTheme.colorScheme.onPrimary
-	val inactiveCellTextColor = MaterialTheme.colorScheme.onSurfaceVariant
+	val borderColor = MaterialTheme.colorScheme.outline
 
-	val eventBackground = MaterialTheme.colorScheme.secondary
-	val eventText = MaterialTheme.colorScheme.onSecondary
-	val eventHighlightedBackground = MaterialTheme.colorScheme.secondaryFixed
-	val eventHighlightedText = MaterialTheme.colorScheme.onSecondaryFixed
+	val textColor = MaterialTheme.colorScheme.onBackground
+	val cellHighlightBackground = MaterialTheme.colorScheme.primary
+	val cellHighlightTextColor = MaterialTheme.colorScheme.onPrimary
+	val cellInactiveTextColor = MaterialTheme.colorScheme.onSurfaceVariant
+
+	val eventMarker = MaterialTheme.colorScheme.secondary
+	val eventBackground = MaterialTheme.colorScheme.primaryContainer
+	val eventText = MaterialTheme.colorScheme.onPrimaryContainer
+	val eventMetaText = MaterialTheme.colorScheme.onPrimaryFixed
+
+	val addNewEventText = MaterialTheme.colorScheme.onTertiary
+	val addNewEventBackground = MaterialTheme.colorScheme.tertiary
+
+
+	if (grid is DayGrid) {
+		ColumnDay(
+			modifier = modifier.fillMaxSize(),
+			calendar = calendar,
+			selected = selected.second,
+			touchEnabled = touchEnabled,
+			events = if (events is EventState.Day) events.items else emptyList(),
+			addNewText = addNewEventText,
+			addNewBackground = addNewEventBackground,
+			addNewHighlightText = addNewEventBackground,
+			addNewHighlightBackground = addNewEventText,
+			eventText = eventText,
+			eventBackground = eventBackground,
+			eventHighlightText = eventBackground,
+			eventHighlightBackground = eventText,
+			eventMetaText = eventMetaText
+		)
+
+		return
+	}
 
 
 	val weekdays = remember(year, month, grid is MonthGrid) {
@@ -47,30 +74,9 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar, touchEnable
 	val today = LocalDate.now()
 	val todayCell: Int? = today.takeIf { it.year == year && it.monthValue == month }?.dayOfMonth
 
-	val boxMod = Modifier
-		.border(width = 1.dp, color = MaterialTheme.colorScheme.secondary)
+	val cellDefault = Modifier
+		.border(width = 1.dp, color = borderColor)
 		.fillMaxHeight()
-
-
-	if (grid is DayGrid) {
-		ColumnDay(
-			modifier = modifier.fillMaxSize(),
-			calendar = calendar,
-			selected = selected.second,
-			touchEnabled = touchEnabled,
-			events = if (events is EventState.Day) events.items else emptyList(),
-			addNewText = textColor,
-			addNewBackground = MaterialTheme.colorScheme.surfaceVariant,
-			highlightText = highlightTextColor,
-			highlightBackground = highlightBackground,
-			eventText = eventText,
-			eventBackground = eventBackground,
-			eventHighlightText = eventHighlightedText,
-			eventHighlightBackground = eventHighlightedBackground
-		)
-
-		return
-	}
 
 
 	Column(modifier = modifier.fillMaxSize()) {
@@ -78,7 +84,7 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar, touchEnable
 			Row(Modifier.height(42.dp)) {
 				for (letter in weekdays) {
 					CellWeekday(
-						modifier = boxMod.then(Modifier.weight(1f)),
+						modifier = cellDefault.then(Modifier.weight(1f)),
 						textColor = textColor,
 						letter = letter
 					)
@@ -91,21 +97,22 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar, touchEnable
 				for ((x, cell) in column.withIndex()) {
 					when (grid) {
 						is YearGrid -> CellYear(
-							modifier = boxMod.then(Modifier.weight(1f)),
+							modifier = cellDefault.then(Modifier.weight(1f)),
 							textColor = textColor,
-							highlightBackground = highlightBackground,
-							highlightTextColor = highlightTextColor,
+							highlightBackground = cellHighlightBackground,
+							highlightTextColor = cellHighlightTextColor,
 							isHighlighted = Pair(x, y) == selected,
 							month = cell,
 							onClick = { touchEnabled && calendar.selectCell(x, y) && calendar.onAction(Action.OK) },
 						)
 
 						is MonthGrid -> CellMonth(
-							modifier = boxMod.then(Modifier.weight(1f)),
+							modifier = cellDefault.then(Modifier.weight(1f)),
 							textColor = textColor,
-							highlightBackground = highlightBackground,
-							highlightTextColor = highlightTextColor,
-							inactiveTextColor = inactiveCellTextColor,
+							eventColor = eventMarker,
+							highlightBackground = cellHighlightBackground,
+							highlightTextColor = cellHighlightTextColor,
+							inactiveTextColor = cellInactiveTextColor,
 							isHighlighted = Pair(x, y) == selected,
 							isToday = cell == todayCell,
 							day = cell,

@@ -1,5 +1,6 @@
 package com.sidephone.calendar.ui.components.topbar
 
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -12,6 +13,7 @@ fun ButtonHelp(onClick: () -> Unit) {
 		modifier = Modifier,
 		onClick = onClick,
 		imageIconResId = R.drawable.ic_help,
+		color = MaterialTheme.colorScheme.onBackground,
 		accessibilityTitle = stringResource(R.string.action_show_help)
 	)
 }

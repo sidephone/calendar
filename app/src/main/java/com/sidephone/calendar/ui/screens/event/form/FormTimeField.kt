@@ -1,22 +1,13 @@
 package com.sidephone.calendar.ui.screens.event.form
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.LayoutDirection
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-
+import com.sidephone.calendar.ui.components.timeField.TimeField
+import com.sidephone.calendar.ui.theme.Dimens
 
 @Composable
 fun FormTimeField(
@@ -24,53 +15,25 @@ fun FormTimeField(
 	hour: Int,
 	minute: Int,
 	onTimeChange: (hour: Int, minute: Int) -> Unit,
-	modifier: Modifier = Modifier,
 	onDone: () -> Unit = {},
 ) {
-	val hoursFocus = remember { FocusRequester() }
-	val minutesFocus = remember { FocusRequester() }
-
-	Row(
-		modifier = modifier,
-		verticalAlignment = Alignment.CenterVertically,
-		horizontalArrangement = Arrangement.spacedBy(12.dp),
-	) {
-		// Title
-		Text(
-			text = stringResource(titleResId),
-			style = MaterialTheme.typography.bodyLarge,
-			color = MaterialTheme.colorScheme.onSurface,
-		)
-
-		// Keep HH:MM in reading order (and D-pad left/right consistent) in RTL.
-		CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
-			Row(
-				verticalAlignment = Alignment.CenterVertically,
-				horizontalArrangement = Arrangement.spacedBy(8.dp),
-			) {
-				DigitField(
-					number = hour,
-					max = 23,
-					maxFirstDigit = 2,
-					focusRequester = hoursFocus,
-					onCommit = { onTimeChange(it, minute) },
-					onPrev = null,
-					onNext = { minutesFocus.requestFocus() },
-					onConfirm = { minutesFocus.requestFocus() },
-				)
-				Text(":", fontSize = 32.sp, color = MaterialTheme.colorScheme.onSurface)
-				DigitField(
-					number = minute,
-					max = 59,
-					maxFirstDigit = 5,
-					focusRequester = minutesFocus,
-					onCommit = { onTimeChange(hour, it) },
-					onPrev = { hoursFocus.requestFocus() },
-					onNext = null,
-					onConfirm = onDone,
-					onFilled = onDone,
-				)
-			}
-		}
-	}
+	TimeField(
+		modifier = Modifier
+			.fillMaxWidth()
+			.padding(horizontal = Dimens.FORM_INPUT_SPACING),
+		titleResId = titleResId,
+		hour = hour,
+		minute = minute,
+		labelTextColor = MaterialTheme.colorScheme.onBackground,
+		inputTextColor = MaterialTheme.colorScheme.onSurface,
+		inputBackgroundColor = MaterialTheme.colorScheme.surface,
+		borderColor = MaterialTheme.colorScheme.outline,
+		selectedBorderColor = MaterialTheme.colorScheme.primary,
+		borderRadius = Dimens.FORM_INPUT_BORDER_RADIUS,
+		inputSpacing = Dimens.FORM_INPUT_SPACING,
+		inputWidth = Dimens.FORM_TIME_FIELD_WIDTH,
+		inputHeight = Dimens.FORM_TIME_FIELD_HEIGHT,
+		onTimeChange = onTimeChange,
+		onDone = onDone
+	)
 }

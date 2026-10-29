@@ -1,4 +1,4 @@
-package com.sidephone.calendar.ui.screens.calendar.deletePopup
+package com.sidephone.calendar.ui.components.popup
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
@@ -43,10 +43,14 @@ private val NEXT_KEYS = setOf(
 @Composable
 fun DialogButton(
 	modifier: Modifier = Modifier,
-	textResId: Int,
+	textResId: Int = 0,
+	text: String = "",
 	textColor: Color,
+	backgroundColor: Color = Color.Transparent,
 	selectedTextColor: Color,
 	selectedBackground: Color,
+	disabledAlpha: Float = 0.5f,
+	enabled: Boolean = true,
 	onClick: () -> Unit,
 ) {
 	val focusManager = LocalFocusManager.current
@@ -55,10 +59,13 @@ fun DialogButton(
 
 	TextButton(
 		onClick = onClick,
+		enabled = enabled,
 		interactionSource = interactionSource,
 		colors = ButtonDefaults.textButtonColors(
-			containerColor = if (isFocused) selectedBackground else Color.Transparent,
+			containerColor = if (isFocused) selectedBackground else backgroundColor,
 			contentColor = if (isFocused) selectedTextColor else textColor,
+			disabledContainerColor = backgroundColor.copy(alpha = disabledAlpha),
+			disabledContentColor = textColor.copy(alpha = disabledAlpha)
 		),
 		modifier = modifier.onKeyEvent { event ->
 			if (event.type != KeyEventType.KeyDown || event.nativeKeyEvent.repeatCount != 0) return@onKeyEvent false
@@ -70,6 +77,6 @@ fun DialogButton(
 			}
 		},
 	) {
-		Text(stringResource(textResId))
+		Text(if (textResId == 0) text else stringResource(textResId))
 	}
 }

@@ -1,12 +1,15 @@
 package com.sidephone.calendar.ui.screens.event.form
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -17,8 +20,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.sidephone.calendar.R
 import com.sidephone.calendar.db.Event
-import com.sidephone.calendar.ui.screens.event.modifiers.keypadClickableButton
+import com.sidephone.calendar.ui.components.popup.DialogButton
+import com.sidephone.calendar.ui.theme.DISABLED_ALPHA
+import com.sidephone.calendar.ui.theme.Dimens
 import java.time.LocalTime
+
 
 @Composable
 fun EventForm(
@@ -28,32 +34,34 @@ fun EventForm(
 	onSave: () -> Unit,
 	onCancel: () -> Unit
 ) {
+	var showMoreOptions by remember { mutableStateOf(false) }
+
 	var isAllDay by remember { mutableStateOf(event.startTime == null) }
 	var startHour by remember { mutableIntStateOf(event.startTime?.hour ?: 9) }
 	var startMinute by remember { mutableIntStateOf(event.startTime?.minute ?: 0) }
 	var endHour by remember { mutableIntStateOf(event.endTime?.hour ?: 10) }
 	var endMinute by remember { mutableIntStateOf(event.endTime?.minute ?: 0) }
 
+	val highlightColor = MaterialTheme.colorScheme.secondary
+	val textColor = MaterialTheme.colorScheme.onBackground
+
 	Column(
 		modifier = modifier
 			.fillMaxSize()
-			.verticalScroll(rememberScrollState())
+			.verticalScroll(rememberScrollState()),
+		verticalArrangement = Arrangement.spacedBy(Dimens.FORM_INPUT_SPACING)
 	) {
-		Text(
-			modifier = Modifier,
-			text = stringResource(R.string.event_form_date, event.startDate.toString())
-		)
-
 		FormTextField(
 			value = event.title,
 			titleResId = R.string.event_form_title,
 			onValueChange = { onChange(event.copy(title = it)) },
 			singleLine = true,
-			modifier = Modifier.fillMaxWidth(),
+			outlineColor = highlightColor,
+			cursorColor = textColor
 		)
 
 		FormSwitch(
-			titleResId = R.string.event_form_all_day,
+			title = stringResource(R.string.event_form_all_day, event.startDate.toString()),
 			value = isAllDay,
 			disabled = false,
 			onValueChange = { allDay ->
@@ -70,7 +78,6 @@ fun EventForm(
 
 		if (!isAllDay) {
 			FormTimeField(
-				modifier = Modifier.fillMaxWidth(),
 				titleResId = R.string.event_form_start_time,
 				hour = startHour,
 				minute = startMinute,
@@ -100,7 +107,6 @@ fun EventForm(
 			)
 
 			FormTimeField(
-				modifier = Modifier.fillMaxWidth(),
 				titleResId = R.string.event_form_end_time,
 				hour = endHour,
 				minute = endMinute,
@@ -127,35 +133,61 @@ fun EventForm(
 			)
 		}
 
-		FormTextField(
-			value = event.description,
-			titleResId = R.string.event_form_description,
-			onValueChange = { onChange(event.copy(description = it)) },
-			singleLine = false,
-			modifier = Modifier.fillMaxWidth(),
+		DialogButton(
+			text = stringResource(R.string.event_form_show_more_options) + (if (showMoreOptions) " ▲" else " ▼"),
+			textColor = MaterialTheme.colorScheme.onTertiary,
+			backgroundColor = MaterialTheme.colorScheme.tertiary,
+			selectedTextColor = MaterialTheme.colorScheme.tertiary,
+			selectedBackground = MaterialTheme.colorScheme.onTertiary,
+			onClick = { showMoreOptions = !showMoreOptions }
 		)
 
-		FormTextField(
-			value = event.address ?: "",
-			onValueChange = { onChange(event.copy(address = it)) },
-			titleResId = R.string.event_form_address,
-			singleLine = true,
-			modifier = Modifier.fillMaxWidth(),
-		)
+		if (showMoreOptions) {
+			FormTextField(
+				value = event.description,
+				titleResId = R.string.event_form_description,
+				onValueChange = { onChange(event.copy(description = it)) },
+				singleLine = false,
+				outlineColor = highlightColor,
+				cursorColor = textColor
+			)
 
-		Button(
-			modifier = Modifier.keypadClickableButton(onClick = onCancel),
-			onClick = onCancel,
-		) {
-			Text(stringResource(R.string.event_form_cancel))
+			FormTextField(
+				value = event.address ?: "",
+				onValueChange = { onChange(event.copy(address = it)) },
+				titleResId = R.string.event_form_address,
+				singleLine = true,
+				outlineColor = highlightColor,
+				cursorColor = textColor
+			)
 		}
 
-		Button(
-			modifier = Modifier.keypadClickableButton(onClick = { if (event.title.isNotBlank()) onSave() }),
-			onClick = onSave,
-			enabled = event.title.isNotBlank()
-		) {
-			Text(stringResource(R.string.event_form_save))
+		Row(horizontalArrangement = Arrangement.spacedBy(Dimens.FORM_INPUT_SPACING)) {
+			DialogButton(
+				modifier = Modifier.weight(1f),
+				textResId = R.string.event_form_cancel,
+				textColor = MaterialTheme.colorScheme.onTertiary,
+				backgroundColor = MaterialTheme.colorScheme.tertiary,
+				selectedTextColor = MaterialTheme.colorScheme.tertiary,
+				selectedBackground = MaterialTheme.colorScheme.onTertiary,
+				onClick = onCancel
+			)
+
+			DialogButton(
+				modifier = Modifier.weight(1f),
+				enabled = event.title.isNotBlank(),
+				disabledAlpha = DISABLED_ALPHA,
+				textResId = R.string.event_form_save,
+				textColor = MaterialTheme.colorScheme.onPrimary,
+				backgroundColor = MaterialTheme.colorScheme.primary,
+				selectedTextColor = MaterialTheme.colorScheme.primary,
+				selectedBackground = MaterialTheme.colorScheme.onPrimary,
+				onClick = { if (event.title.isNotBlank()) onSave() }
+			)
 		}
+
+		// JakeType keyboard covers the bottom of the form, when a text field is focused, so add some
+		// padding to avoid it.
+		Box(modifier = Modifier.fillMaxWidth().height(Dimens.JAKE_TYPE_PADDING))
 	}
 }

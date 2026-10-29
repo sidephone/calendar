@@ -1,6 +1,7 @@
 package com.sidephone.calendar.ui.components.topbar
 
 import androidx.compose.foundation.layout.Row
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -33,7 +34,11 @@ fun Topbar(calendar: Calendar, noTouch: Boolean, onHelp: () -> Unit, onToggleSid
 
 	Row(verticalAlignment = Alignment.CenterVertically) {
 		ButtonToggleSidebar(onToggleSidebar = onToggleSidebar)
-		Text(modifier = Modifier.weight(1f), text = title)
+		Text(
+			modifier = Modifier.weight(1f),
+			color = MaterialTheme.colorScheme.onBackground,
+			text = title
+		)
 		if (noTouch) {
 			ButtonHelp(onClick = onHelp)
 		}

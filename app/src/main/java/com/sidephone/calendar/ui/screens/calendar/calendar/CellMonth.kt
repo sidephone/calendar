@@ -19,10 +19,8 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
+import com.sidephone.calendar.ui.theme.Dimens
 
-
-private const val MAX_EVENT_MARKER_SLOTS = 4   // 3 squares + "+"; use 5 if the cell is wide enough
 
 @Composable
 fun CellMonth(
@@ -36,19 +34,19 @@ fun CellMonth(
 	day: Int,
 	isToday: Boolean = false,
 	eventCount: Int,
+	eventColor: Color,
 ) {
-	val eventBoxes = minOf(eventCount, MAX_EVENT_MARKER_SLOTS)
-	val eventOverflow = eventCount > MAX_EVENT_MARKER_SLOTS
+	val eventBoxes = minOf(eventCount, Dimens.EVENT_MARKERS_MAX_SLOTS)
+	val eventOverflow = eventCount > Dimens.EVENT_MARKERS_MAX_SLOTS
+
+	val clickable = modifier
+		.focusProperties { canFocus = false }
+		.clickable { onClick() }
 
 	Column(
 		modifier =
-			if (isHighlighted) modifier
-				.background(highlightBackground)
-				.focusProperties { canFocus = false }
-				.clickable { onClick() }
-			else modifier
-				.focusProperties { canFocus = false }
-				.clickable { onClick() }
+			if (isHighlighted) clickable.background(highlightBackground)
+			else clickable
 	) {
 		// day number
 		Text(
@@ -69,16 +67,16 @@ fun CellMonth(
 		// event markers
 		Row(
 			modifier = Modifier.fillMaxWidth(),
-			horizontalArrangement = Arrangement.spacedBy(3.dp, Alignment.CenterHorizontally),
+			horizontalArrangement = Arrangement.spacedBy(Dimens.EVENT_MARKER_SPACING, Alignment.CenterHorizontally),
 			verticalAlignment = Alignment.CenterVertically
 		) {
 			val color =
 				if (isHighlighted) highlightTextColor
-				else textColor
+				else eventColor
 
 			repeat(eventBoxes) { i ->
-				if (eventOverflow && i == eventBoxes - 1) PlusMarker(Modifier.size(6.dp), color)
-				else Box(Modifier.size(6.dp).background(color))
+				if (eventOverflow && i == eventBoxes - 1) PlusMarker(Modifier.size(Dimens.EVENT_MARKER_SIZE), color)
+				else Box(Modifier.size(Dimens.EVENT_MARKER_SIZE).background(color))
 			}
 		}
 	}

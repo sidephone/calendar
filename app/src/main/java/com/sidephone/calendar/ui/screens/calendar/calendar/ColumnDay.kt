@@ -1,14 +1,10 @@
 package com.sidephone.calendar.ui.screens.calendar.calendar
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.animateScrollBy
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -29,12 +25,13 @@ fun ColumnDay(
 	events: List<EventOccurrence>,
 	addNewText: Color,
 	addNewBackground: Color,
-	highlightText: Color,
-	highlightBackground: Color,
+	addNewHighlightText: Color,
+	addNewHighlightBackground: Color,
 	eventText: Color,
 	eventBackground: Color,
 	eventHighlightText: Color,
-	eventHighlightBackground: Color
+	eventHighlightBackground: Color,
+	eventMetaText: Color
 ) {
 	val listState: LazyListState = rememberLazyListState()
 
@@ -59,16 +56,16 @@ fun ColumnDay(
 
 	LazyColumn(modifier = modifier, state = listState, userScrollEnabled = touchEnabled) {
 		item(key = "add") {
-			Text(
-				text = stringResource(id = R.string.event_add),
-				color = if (selected == 0) highlightText else addNewText,
-				modifier = Modifier
-					.background(if (selected == 0) highlightBackground else addNewBackground)
-					.fillMaxWidth()
-					.focusProperties { canFocus = false }
-					.clickable {
-						touchEnabled && calendar.selectCell(0, 0) && calendar.onAction(Action.OK)
-					}
+			CellEvent(
+				modifier = Modifier.focusProperties { canFocus = false },
+				altText = stringResource(id = R.string.event_add),
+				textColor = if (selected == 0) addNewHighlightText else addNewText,
+				metaTextColor = if (selected == 0) addNewHighlightText else addNewText,
+				backgroundColor = if (selected == 0) addNewHighlightBackground else addNewBackground,
+				onClick = {
+					touchEnabled && calendar.selectCell(0, 0) && calendar.onAction(Action.OK)
+				},
+				onLongClick = {},
 			)
 		}
 
@@ -77,14 +74,11 @@ fun ColumnDay(
 			key = { _, e -> "${e.eventId}:${e.originalDate.toEpochDay()}" }
 		) { i, event ->
 			CellEvent(
-				modifier = Modifier
-					.focusProperties { canFocus = false }
-					.background(if (selected == i + 1) eventHighlightBackground else eventBackground)
-					.fillMaxWidth(),
+				modifier = Modifier.focusProperties { canFocus = false },
 				event = event,
-				highlighted = selected == i + 1,
-				textColor = eventText,
-				highlightTextColor = eventHighlightText,
+				textColor = if (selected == i + 1) eventHighlightText else eventText,
+				metaTextColor = if (selected == i + 1) eventHighlightText else eventMetaText,
+				backgroundColor = if (selected == i + 1) eventHighlightBackground else eventBackground,
 				onClick = {
 					touchEnabled && calendar.selectCell(0, i + 1) && calendar.onAction(Action.OK)
 				},
