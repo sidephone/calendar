@@ -18,4 +18,6 @@ object Dimens {
 	val FORM_TIME_FIELD_HEIGHT = 32.dp
 
 	val JAKE_TYPE_PADDING = 32.dp
+
+	val SWIPE_THRESHOLD = 64.dp
 }

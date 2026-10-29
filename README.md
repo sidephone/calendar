@@ -14,8 +14,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) 
 ## TODO
 - UI
   - Help screen (based on the current tile)
-- Touchscreen support
-    - swipe left/right to change pages
 - Notifications
 - Recurring events (+ make sure to edit and delete each occurrence separately)
 - Multi-day events (+ display them correctly on the day grid)

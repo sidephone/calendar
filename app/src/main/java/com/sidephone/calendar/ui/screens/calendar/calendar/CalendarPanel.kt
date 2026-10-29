@@ -19,6 +19,7 @@ import com.sidephone.calendar.core.grid.DayGrid
 import com.sidephone.calendar.core.grid.MonthGrid
 import com.sidephone.calendar.core.grid.YearGrid
 import com.sidephone.calendar.ui.screens.calendar.util.Weekdays
+import com.sidephone.calendar.ui.theme.Dimens
 import java.time.LocalDate
 
 @Composable
@@ -46,7 +47,14 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar, touchEnable
 
 	if (grid is DayGrid) {
 		ColumnDay(
-			modifier = modifier.fillMaxSize(),
+			modifier = modifier
+				.fillMaxSize()
+				.onHorizontalSwipe(
+					enabled = touchEnabled,
+					swipeThreshold = Dimens.SWIPE_THRESHOLD,
+					onSwipeLeft = { calendar.onAction(Action.NEXT_PAGE) },
+					onSwipeRight = { calendar.onAction(Action.PREVIOUS_PAGE) },
+				),
 			calendar = calendar,
 			selected = selected.second,
 			touchEnabled = touchEnabled,
@@ -79,7 +87,17 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar, touchEnable
 		.fillMaxHeight()
 
 
-	Column(modifier = modifier.fillMaxSize()) {
+	Column(
+		modifier = modifier
+			.fillMaxSize()
+			.onHorizontalSwipe(
+				enabled = touchEnabled,
+				swipeThreshold = Dimens.SWIPE_THRESHOLD,
+				onSwipeLeft = { calendar.onAction(Action.NEXT_PAGE) },
+				onSwipeRight = { calendar.onAction(Action.PREVIOUS_PAGE) },
+			)
+	) {
+
 		if (grid is MonthGrid) {
 			Row(Modifier.height(42.dp)) {
 				for (letter in weekdays) {
