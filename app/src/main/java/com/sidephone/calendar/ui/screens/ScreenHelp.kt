@@ -3,6 +3,7 @@ package com.sidephone.calendar.ui.screens
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -12,6 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.sidephone.calendar.R
 import com.sidephone.calendar.input.Keypad
+import com.sidephone.calendar.ui.theme.Dimens
 
 @Composable
 fun ScreenHelp(modifier: Modifier, keypadTile: Keypad.Layout, onBack: () -> Unit) {
@@ -47,7 +49,7 @@ fun ScreenHelp(modifier: Modifier, keypadTile: Keypad.Layout, onBack: () -> Unit
 
 	Column(modifier = modifier.fillMaxWidth()) {
 		Text(
-			modifier = Modifier.fillMaxWidth(),
+			modifier = Modifier.padding(Dimens.FORM_INPUT_SPACING).fillMaxWidth(),
 			text = title,
 			style = MaterialTheme.typography.headlineLarge,
 			fontWeight = FontWeight.Bold,
@@ -55,6 +57,7 @@ fun ScreenHelp(modifier: Modifier, keypadTile: Keypad.Layout, onBack: () -> Unit
 			color = MaterialTheme.colorScheme.onBackground
 		)
 		Text(
+			modifier = Modifier.padding(Dimens.FORM_INPUT_SPACING).fillMaxWidth(),
 			text = content,
 			style = MaterialTheme.typography.bodyMedium,
 			color = MaterialTheme.colorScheme.onBackground

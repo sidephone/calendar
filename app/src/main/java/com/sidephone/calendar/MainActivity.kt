@@ -72,7 +72,7 @@ class MainActivity : ComponentActivity() {
 
 					when (screen) {
 						Screen.HELP -> {
-							calendar.listenForInput()
+							calendar.ignoreInput()
 							ScreenHelp(
 								modifier = Modifier.padding(innerPadding),
 								keypadTile = keypadTile,

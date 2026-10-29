@@ -38,8 +38,9 @@
 	<string name="help_title_gamepad">Gamepad Shortcuts</string>
 	<string name="help_title_sundial">Sundial Shortcuts</string>
 	<string name="help_title_t9">T9 Keypad Shortcuts</string>
-	<string name="help_content_compact_qwerty">TODO QWERTY</string>
-	<string name="help_content_gamepad">TODO GAMEPAD</string>
-	<string name="help_content_sundial">TODO SUNDIAL</string>
-	<string name="help_content_t9">TODO T9</string>
+	<string name="help_content_compact_qwerty">● 2/4/6/8: Select items on the screen\n● ENTER: Press buttons, activate items, etc\n● 1: Zoom Out\n● 3: Zoom In\n● ✱ SYM: Previous Page\n● # ^aA^: Next Page\n● ⌫: Delete items or text</string>
+	<string name="help_content_gamepad">● D-Pad Up/Down/Left/Right: Select items on the screen\n● Start (Bottom-Left): Press buttons, activate items, etc\n● X: Zoom Out\n● Y: Zoom In\n● A: Previous Page\n● B: Next Page\n● On the events list, press Left to delete an event.</string>
+	<string name="help_content_sundial">● Up/Down/Left/Right: Select items on the screen\n● Center: Press buttons, activate items, etc\n● Top-Left: Zoom Out\n● Top-Right: Zoom In\n● Bottom-Left: Previous Page\n● Bottom-Right: Next Page\n● On the events list, press Left to delete an event.</string>
+	<string name="help_content_t9">● D-Pad Up/Down/Left/Right or 2/4/6/8: Select items on the screen\n● D-Pad Center or 5: Press buttons, activate items, etc\n● 1: Zoom Out\n● 3: Zoom In\n● ✱: Previous Page\n● #: Next Page\n● ⌫: Delete items or text</string>
+	<string name="help_press_left_to_delete">Press Left to delete an event.</string>
 </resources>
