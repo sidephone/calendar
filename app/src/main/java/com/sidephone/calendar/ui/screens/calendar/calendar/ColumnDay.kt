@@ -1,25 +1,31 @@
 package com.sidephone.calendar.ui.screens.calendar.calendar
 
 import androidx.compose.foundation.gestures.animateScrollBy
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.focusProperties
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import com.sidephone.calendar.R
 import com.sidephone.calendar.core.Action
 import com.sidephone.calendar.core.Calendar
 import com.sidephone.calendar.core.events.EventOccurrence
+import com.sidephone.calendar.input.Keypad
+import com.sidephone.calendar.ui.theme.Dimens
 
 @Composable
 fun ColumnDay(
 	modifier: Modifier,
 	calendar: Calendar,
+	tile: Keypad.Layout,
 	selected: Int,
 	touchEnabled: Boolean,
 	events: List<EventOccurrence>,
@@ -31,7 +37,7 @@ fun ColumnDay(
 	eventBackground: Color,
 	eventHighlightText: Color,
 	eventHighlightBackground: Color,
-	eventMetaText: Color
+	eventMetaText: Color,
 ) {
 	val listState: LazyListState = rememberLazyListState()
 
@@ -55,6 +61,20 @@ fun ColumnDay(
 
 
 	LazyColumn(modifier = modifier, state = listState, userScrollEnabled = touchEnabled) {
+		if (
+			events.isNotEmpty() &&
+			(tile == Keypad.Layout.SUNDIAL || tile == Keypad.Layout.GAMEPAD || tile == Keypad.Layout.T9_NO_DPAD)
+		) {
+			item(key = "help") {
+				Text(
+					modifier = Modifier.padding(Dimens.FORM_INPUT_SPACING),
+					fontStyle = FontStyle.Italic,
+					text = stringResource(id = R.string.help_press_left_to_delete),
+					color = eventMetaText,
+				)
+			}
+		}
+
 		item(key = "add") {
 			CellEvent(
 				modifier = Modifier.focusProperties { canFocus = false },

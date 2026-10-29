@@ -12,8 +12,6 @@ Tested with Android Studio Rabbit 1 | 2026.2.1
 This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) file for details.
 
 ## TODO
-- UI
-  - Help screen (based on the current tile)
 - Notifications
 - Recurring events (+ make sure to edit and delete each occurrence separately)
 - Multi-day events (+ display them correctly on the day grid)

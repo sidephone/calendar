@@ -30,6 +30,7 @@ import java.time.LocalDate
 @Composable
 fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar, touchEnabled: Boolean) {
 	val grid = calendar.grid.collectAsState().value
+	val tile = calendar.tile.collectAsState().value
 	val events: EventState = calendar.events.collectAsState().value
 	val (year, month, _) = calendar.date.collectAsState().value
 	val selected = grid.position()
@@ -61,6 +62,7 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar, touchEnable
 					onSwipeRight = { calendar.onAction(Action.PREVIOUS_PAGE) },
 				),
 			calendar = calendar,
+			tile = tile,
 			selected = selected.second,
 			touchEnabled = touchEnabled,
 			events = if (events is EventState.Day) events.items else emptyList(),
