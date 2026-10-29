@@ -29,8 +29,8 @@ fun ColumnDay(
 	events: List<EventOccurrence>,
 	addNewText: Color,
 	addNewBackground: Color,
-	highlightText: Color,
-	highlightBackground: Color,
+	addNewHighlightText: Color,
+	addNewHighlightBackground: Color,
 	eventText: Color,
 	eventBackground: Color,
 	eventHighlightText: Color,
@@ -61,9 +61,9 @@ fun ColumnDay(
 		item(key = "add") {
 			Text(
 				text = stringResource(id = R.string.event_add),
-				color = if (selected == 0) highlightText else addNewText,
+				color = if (selected == 0) addNewHighlightText else addNewText,
 				modifier = Modifier
-					.background(if (selected == 0) highlightBackground else addNewBackground)
+					.background(if (selected == 0) addNewHighlightBackground else addNewBackground)
 					.fillMaxWidth()
 					.focusProperties { canFocus = false }
 					.clickable {

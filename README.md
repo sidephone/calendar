@@ -13,6 +13,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) 
 
 ## TODO
 - UI
+  - Display event metadata
   - Help screen (based on the current tile)
   - Colors
   - JakeType covers the bottom of the EventForm

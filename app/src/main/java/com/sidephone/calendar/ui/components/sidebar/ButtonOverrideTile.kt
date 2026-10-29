@@ -1,6 +1,7 @@
 package com.sidephone.calendar.ui.components.sidebar
 
 import android.content.Context
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -46,6 +47,7 @@ fun ButtonOverrideTile(
 	IconButton(
 		accessibilityTitle = stringResource(id = title),
 		imageIconResId = iconResId,
+		color = MaterialTheme.colorScheme.onBackground,
 		onClick = {
 			snackbarProps.second.launch {
 				snackbarProps.first.currentSnackbarData?.dismiss()

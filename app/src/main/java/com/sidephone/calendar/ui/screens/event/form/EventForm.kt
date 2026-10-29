@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,6 +35,9 @@ fun EventForm(
 	var endHour by remember { mutableIntStateOf(event.endTime?.hour ?: 10) }
 	var endMinute by remember { mutableIntStateOf(event.endTime?.minute ?: 0) }
 
+	val highlightColor = MaterialTheme.colorScheme.secondary
+	val textColor = MaterialTheme.colorScheme.onBackground
+
 	Column(
 		modifier = modifier
 			.fillMaxSize()
@@ -50,6 +54,8 @@ fun EventForm(
 			onValueChange = { onChange(event.copy(title = it)) },
 			singleLine = true,
 			modifier = Modifier.fillMaxWidth(),
+			outlineColor = highlightColor,
+			cursorColor = textColor
 		)
 
 		FormSwitch(
@@ -133,6 +139,8 @@ fun EventForm(
 			onValueChange = { onChange(event.copy(description = it)) },
 			singleLine = false,
 			modifier = Modifier.fillMaxWidth(),
+			outlineColor = highlightColor,
+			cursorColor = textColor
 		)
 
 		FormTextField(
@@ -141,6 +149,8 @@ fun EventForm(
 			titleResId = R.string.event_form_address,
 			singleLine = true,
 			modifier = Modifier.fillMaxWidth(),
+			outlineColor = highlightColor,
+			cursorColor = textColor
 		)
 
 		Button(

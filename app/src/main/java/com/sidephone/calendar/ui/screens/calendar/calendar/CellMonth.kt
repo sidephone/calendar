@@ -36,6 +36,7 @@ fun CellMonth(
 	day: Int,
 	isToday: Boolean = false,
 	eventCount: Int,
+	eventColor: Color,
 ) {
 	val eventBoxes = minOf(eventCount, MAX_EVENT_MARKER_SLOTS)
 	val eventOverflow = eventCount > MAX_EVENT_MARKER_SLOTS
@@ -74,7 +75,7 @@ fun CellMonth(
 		) {
 			val color =
 				if (isHighlighted) highlightTextColor
-				else textColor
+				else eventColor
 
 			repeat(eventBoxes) { i ->
 				if (eventOverflow && i == eventBoxes - 1) PlusMarker(Modifier.size(6.dp), color)
