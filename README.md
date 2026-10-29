@@ -11,6 +11,8 @@ Tested with Android Studio Rabbit 1 | 2026.2.1
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) file for details.
 
+Calendar icons created by [Icon home - Flaticon](https://www.flaticon.com/free-icons/calendar).
+
 ## TODO
 - Notifications
 - Recurring events (+ make sure to edit and delete each occurrence separately)
