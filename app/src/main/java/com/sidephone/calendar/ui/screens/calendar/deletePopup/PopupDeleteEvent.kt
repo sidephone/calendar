@@ -20,10 +20,7 @@ fun PopupDeleteEvent(calendar: Calendar, onDismiss: () -> Unit) {
 		buttonTextColor = MaterialTheme.colorScheme.onSurface,
 		buttonSelectedTextColor = MaterialTheme.colorScheme.onPrimary,
 		buttonSelectedBackground = MaterialTheme.colorScheme.primary,
-		onConfirm = {
-			calendar.onAction(Action.DELETE)
-			onDismiss()
-		},
+		onConfirm = { calendar.onAction(Action.DELETE) },
 		onDismiss = onDismiss
 	)
 }
