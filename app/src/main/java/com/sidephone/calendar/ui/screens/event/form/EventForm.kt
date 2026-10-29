@@ -21,8 +21,10 @@ import androidx.compose.ui.res.stringResource
 import com.sidephone.calendar.R
 import com.sidephone.calendar.db.Event
 import com.sidephone.calendar.ui.components.popup.DialogButton
+import com.sidephone.calendar.ui.theme.DISABLED_ALPHA
 import com.sidephone.calendar.ui.theme.Dimens
 import java.time.LocalTime
+
 
 @Composable
 fun EventForm(
@@ -173,6 +175,8 @@ fun EventForm(
 
 			DialogButton(
 				modifier = Modifier.weight(1f),
+				enabled = event.title.isNotBlank(),
+				disabledAlpha = DISABLED_ALPHA,
 				textResId = R.string.event_form_save,
 				textColor = MaterialTheme.colorScheme.onPrimary,
 				backgroundColor = MaterialTheme.colorScheme.primary,

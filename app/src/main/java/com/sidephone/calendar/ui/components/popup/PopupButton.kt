@@ -49,6 +49,8 @@ fun DialogButton(
 	backgroundColor: Color = Color.Transparent,
 	selectedTextColor: Color,
 	selectedBackground: Color,
+	disabledAlpha: Float = 0.5f,
+	enabled: Boolean = true,
 	onClick: () -> Unit,
 ) {
 	val focusManager = LocalFocusManager.current
@@ -57,10 +59,13 @@ fun DialogButton(
 
 	TextButton(
 		onClick = onClick,
+		enabled = enabled,
 		interactionSource = interactionSource,
 		colors = ButtonDefaults.textButtonColors(
 			containerColor = if (isFocused) selectedBackground else backgroundColor,
 			contentColor = if (isFocused) selectedTextColor else textColor,
+			disabledContainerColor = backgroundColor.copy(alpha = disabledAlpha),
+			disabledContentColor = textColor.copy(alpha = disabledAlpha)
 		),
 		modifier = modifier.onKeyEvent { event ->
 			if (event.type != KeyEventType.KeyDown || event.nativeKeyEvent.repeatCount != 0) return@onKeyEvent false
