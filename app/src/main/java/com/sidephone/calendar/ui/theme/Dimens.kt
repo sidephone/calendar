@@ -12,6 +12,7 @@ object Dimens {
 	val EVENT_LIST_MARGIN = Pair(8.dp, 4.dp)
 	val EVENT_LIST_PADDING = Pair(8.dp, 4.dp)
 
+	val FORM_CATEGORY_SPACING = 16.dp
 	val FORM_INPUT_BORDER_RADIUS = 8.dp
 	val FORM_INPUT_SPACING = 8.dp
 	val FORM_SWITCH_PADDING = 8.dp

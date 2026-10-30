@@ -1,6 +1,8 @@
 <resources>
 	<string name="app_name">Sidephone Calendar</string>
 
+	<string name="add_more">＋ Add More</string>
+
 	<string name="action_show_help">Show help</string>
 	<string name="action_zoom_in">Zoom in</string>
 	<string name="action_zoom_out">Zoom out</string>
@@ -43,4 +45,11 @@
 	<string name="help_content_sundial">● Up/Down/Left/Right: Select items on the screen\n● Center: Press buttons, activate items, etc\n● Top-Left: Zoom Out\n● Top-Right: Zoom In\n● Bottom-Left: Previous Page\n● Bottom-Right: Next Page\n● On the events list, press Left to delete an event.</string>
 	<string name="help_content_t9">● D-Pad Up/Down/Left/Right or 2/4/6/8: Select items on the screen\n● D-Pad Center or 5: Press buttons, activate items, etc\n● 1: Zoom Out\n● 3: Zoom In\n● ✱: Previous Page\n● #: Next Page\n● ⌫: Delete items or text</string>
 	<string name="help_press_left_to_delete">Press Left to delete an event.</string>
+
+	<string name="reminder_list_title">Reminders</string>
+	<string name="reminder_add_new">＋ Add Reminder</string>
+	<string name="reminder_at_event">at time of event</string>
+	<string name="reminder_minutes_before">minutes before</string>
+	<string name="reminder_hours_before">hours before</string>
+	<string name="reminder_days_before">days before</string>
 </resources>

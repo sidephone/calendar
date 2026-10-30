@@ -14,6 +14,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) 
 Calendar icons created by [Icon home - Flaticon](https://www.flaticon.com/free-icons/calendar).
 
 ## TODO
-- Notifications
+- Reminders
+    - add a "X" for deleting reminders
+    - display the reminders on the event card
+    - tidy up FormRemindersField
+    - remove the leading zero
+    - install alarms on startup (check if this covers reboot and reinstall)
+    - install or delete alarms on event save
+- Add location, reminder and notes icons on the event card
 - Recurring events (+ make sure to edit and delete each occurrence separately)
 - Multi-day events (+ display them correctly on the day grid)
