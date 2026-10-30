@@ -6,6 +6,8 @@ import com.sidephone.calendar.input.Keypad
 
 class Settings(context: Context) {
 	companion object {
+		const val REMINDER_MAX_MINUTES = 30 * 24 * 60 // 30 days
+
 		private const val PREFS_NAME = "SidephoneCalendarSettings"
 		private const val SCREEN_LAYOUT_KEY = "screen_layout"
 	}

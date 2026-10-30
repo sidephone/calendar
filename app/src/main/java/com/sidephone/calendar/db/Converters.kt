@@ -16,4 +16,10 @@ class Converters {
 
 	@ColumnTypeConverter
 	fun toTime(v: Int?): LocalTime? = v?.let { LocalTime.ofSecondOfDay(it.toLong()) }
+
+	@ColumnTypeConverter
+	fun fromMinutes(v: List<Int>?): String? = v?.distinct()?.sorted()?.joinToString(",")
+
+	@ColumnTypeConverter
+	fun toMinutes(v: String?): List<Int>? = v?.let { if (it.isEmpty()) emptyList() else it.split(',').map(String::toInt) }
 }
