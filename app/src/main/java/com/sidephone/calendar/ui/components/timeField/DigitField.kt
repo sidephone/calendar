@@ -185,7 +185,6 @@ fun DigitField(
 							onPrev(); true
 						} else false
 
-					// --- Your existing Enter / D-pad Center handling goes here ---
 					Key.Enter, Key.NumPadEnter, Key.DirectionCenter, Key.MediaPlayPause -> {
 						commit(); onConfirm(); true
 					}

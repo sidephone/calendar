@@ -75,7 +75,7 @@ fun Switch(
 					indication = LocalIndication.current,
 					onValueChange = { checked -> toggle(checked) }
 				)
-				.keypadClickableModifier(onClick = { if (!disabled) toggle(!isChecked) }),
+				.keypadClickable(onClick = { if (!disabled) toggle(!isChecked) }),
 			verticalAlignment = Alignment.CenterVertically,
 			horizontalArrangement = Arrangement.SpaceBetween
 		) {

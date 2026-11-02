@@ -31,6 +31,7 @@ import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.sidephone.calendar.ui.components.keypadClickable
 import com.sidephone.calendar.ui.theme.Dimens
 
 
@@ -70,7 +71,8 @@ internal fun UnitSelector(
 					if (e.type == KeyEventType.KeyDown && e.key == Key.DirectionLeft) { onPrev(); true }
 					else false
 				}
-				.clickable { expanded = true }   // also handles OK / Enter / DPAD_CENTER
+				.clickable { expanded = true }
+				.keypadClickable(onClick = { expanded = true })
 				.padding(horizontal = Dimens.FORM_INPUT_SPACING),
 			verticalAlignment = Alignment.CenterVertically
 		) {
@@ -84,11 +86,13 @@ internal fun UnitSelector(
 		DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
 			for (u in ReminderUnit.entries) {
 				DropdownMenuItem(
-					modifier = if (u == unit) Modifier.focusRequester(selectedItem) else Modifier,
+					modifier =
+						if (u == unit) Modifier.focusRequester(selectedItem).keypadClickable(onClick = { if (expanded) onSelect(u); expanded = false })
+						else Modifier.keypadClickable(onClick = { if (expanded) onSelect(u); expanded = false }),
 					text = { Text(stringResource(u.label)) },
 					onClick = {
+						if (expanded) onSelect(u)
 						expanded = false
-						onSelect(u)
 					},
 				)
 			}
