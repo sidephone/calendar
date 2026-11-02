@@ -142,8 +142,8 @@ fun CellEvent(
 				)
 
 				val reminderText = ReminderUnit.from(minutes).let { unit ->
-					if (unit == ReminderUnit.AT_EVENT) {
-						"$minutes ${stringResource(unit.label)}"
+if (unit == ReminderUnit.AT_EVENT) {
+						stringResource(unit.label)
 					} else {
 						val time = minutes / unit.factor
 						"$time ${stringResource(unit.label, time)}"
