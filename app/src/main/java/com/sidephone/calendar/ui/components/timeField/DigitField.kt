@@ -41,13 +41,20 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 
-private fun Int.toFieldValue() = TextFieldValue("%02d".format(this), TextRange(2))
+private fun Int.toFieldValue(leadingZero: Boolean): TextFieldValue {
+	val text = if (leadingZero) "%02d".format(this) else toString()
+	return TextFieldValue(text, TextRange(text.length))
+}
 
+/**
+ * Digit input for numbers up to "max".
+ */
 @Composable
 fun DigitField(
 	number: Int,
 	max: Int,
-	maxFirstDigit: Int,
+	maxFirstDigit: Int = 9,
+	leadingZero: Boolean = true,
 	focusRequester: FocusRequester,
 	textColor: Color,
 	inputBackgroundColor: Color,
@@ -62,9 +69,14 @@ fun DigitField(
 	onConfirm: () -> Unit,
 	onFilled: (() -> Unit)? = onNext,
 ) {
-	var value by remember { mutableStateOf(number.toFieldValue()) }
+	val digitCount = if (leadingZero) 2 else max.toString().length
+
+	var value by remember { mutableStateOf(number.toFieldValue(leadingZero)) }
 	var focused by remember { mutableStateOf(false) }
 	var dirty by remember { mutableStateOf(false) }
+	// leadingZero = false only: true until the first edit after focus/commit, so that the first
+	// digit replaces the shown number instead of being appended to it.
+	var fresh by remember { mutableStateOf(false) }
 	// Bumped after every commit so we re-check against the parent's final value,
 	// even when that value didn't change (e.g. user typed 59, parent kept 58).
 	var syncTick by remember { mutableIntStateOf(0) }
@@ -72,14 +84,15 @@ fun DigitField(
 	val focus = LocalFocusManager.current
 
 	LaunchedEffect(number, syncTick) {
-		if (value.text.toIntOrNull() != number) value = number.toFieldValue()
+		if (value.text.toIntOrNull() != number) value = number.toFieldValue(leadingZero)
 	}
 
 	fun commit() {
 		if (!dirty) return
 		dirty = false
 		val n = (value.text.toIntOrNull() ?: number).coerceIn(0, max)
-		value = n.toFieldValue()
+		value = n.toFieldValue(leadingZero)
+		fresh = true
 		onCommit(n)
 		syncTick++
 	}
@@ -99,11 +112,16 @@ fun DigitField(
 			var cursor: Int
 			var inserted = raw.length > old.length
 
-			if (raw.length > 2) {
+			if (!leadingZero && fresh && inserted) {
+				// First digit after focusing: replace the previous number instead of appending to it.
+				val p = (new.selection.start - 1).coerceIn(0, raw.length - 1)
+				digits = raw[p].toString()
+				cursor = 1
+			} else if (raw.length > digitCount) {
 				// Field was full: overwrite at the cursor, or start over if at the end.
 				val p = (new.selection.start - 1).coerceIn(0, raw.length - 1)
 				val typed = raw[p]
-				if (old.length == 2 && p < 2) {
+				if (old.length == digitCount && p < digitCount) {
 					digits = old.replaceRange(p, p + 1, typed.toString())
 					cursor = p + 1
 				} else {
@@ -116,21 +134,34 @@ fun DigitField(
 				cursor = new.selection.end.coerceIn(0, raw.length)
 			}
 
-			// T9 convenience: "5" can only mean 05 for hours (or 6-9 for minutes).
-			if (inserted && digits.length == 1 && digits[0].digitToInt() > maxFirstDigit) {
-				digits = "0$digits"
-				cursor = 2
+			if (leadingZero) {
+				// T9 convenience: "5" can only mean 05 for hours (or 6-9 for minutes).
+				if (inserted && digits.length == 1 && digits[0].digitToInt() > maxFirstDigit) {
+					digits = "0$digits"
+					cursor = 2
+				}
+			} else if (digits.length > 1 && digits[0] == '0') {
+				// No leading zeros: "05" -> "5", "00" -> "0".
+				digits = digits.trimStart('0').ifEmpty { "0" }
+				cursor = digits.length
 			}
 
-			if (digits.length == 2 && digits.toInt() > max) {
+			if (digits.length == digitCount && digits.toInt() > max) {
 				digits = max.toString()
-				cursor = 2
+				cursor = digits.length
 			}
 
 			value = TextFieldValue(digits, TextRange(cursor))
 			dirty = true
+			fresh = false
 
-			if (inserted && digits.length == 2 && cursor == 2) {
+			val digitsNum = if (digits.isEmpty()) 0 else digits.toLong()
+			val filled =
+				if (leadingZero) digits.length == 2 && cursor == 2
+				else cursor == digits.length &&
+						(digits.length == digitCount || digitsNum * 10 > max)
+
+			if (inserted && filled) {
 				commit()
 				onFilled?.invoke()
 			}
@@ -152,7 +183,7 @@ fun DigitField(
 			.focusRequester(focusRequester)
 			.onFocusChanged {
 				focused = it.isFocused
-				if (!it.isFocused) commit()
+				if (it.isFocused) fresh = true else commit()
 			}
 			.onPreviewKeyEvent { event ->
 				if (event.type != KeyEventType.KeyDown) return@onPreviewKeyEvent false

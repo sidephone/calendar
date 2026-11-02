@@ -61,7 +61,7 @@ fun FormReminderField(
 				DigitField(
 					number = amount,
 					max = max,
-					maxFirstDigit = max.toString().first().digitToInt(),
+					leadingZero = false,
 					focusRequester = inputFocus,
 					textColor = MaterialTheme.colorScheme.onBackground,
 					inputBackgroundColor = MaterialTheme.colorScheme.surface,
