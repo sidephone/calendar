@@ -14,8 +14,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.sidephone.calendar.R
 import com.sidephone.calendar.Settings
+import com.sidephone.calendar.ui.components.IconButton
+import com.sidephone.calendar.ui.components.keypadClickable
 import com.sidephone.calendar.ui.components.timeField.DigitField
 import com.sidephone.calendar.ui.theme.Dimens
 
@@ -30,10 +34,12 @@ import com.sidephone.calendar.ui.theme.Dimens
 fun FormReminderField(
 	modifier: Modifier = Modifier,
 	minutes: Int,
-	onTimeChange: (minutes: Int) -> Unit
+	onTimeChange: (minutes: Int) -> Unit,
+	onDeleteEntry: () -> Unit,
 ) {
 	val inputFocus = remember { FocusRequester() }
 	val unitFocus = remember { FocusRequester() }
+	val deleteFocus = remember { FocusRequester() }
 
 	// The unit is UI state: derive it once from the stored value and then keep it, so typing "60"
 	// in minutes does not flip the field to "1 hour" while the user is still editing.
@@ -78,11 +84,24 @@ fun FormReminderField(
 			unit = unit,
 			focusRequester = unitFocus,
 			onPrev = { if (unit != ReminderUnit.AT_EVENT) inputFocus.requestFocus() },
+			onNext = { deleteFocus.requestFocus() },
 			onSelect = { new ->
 				unit = new
 				if (new == ReminderUnit.AT_EVENT) onTimeChange(0)
 				else commit(if (amount == 0) 1 else amount, new)   // never leave "0 minutes before"
 			},
+		)
+
+		IconButton(
+			modifier = Modifier.keypadClickable(onClick = { onDeleteEntry() }),
+			focusRequester = deleteFocus,
+			imageIconResId = R.drawable.ic_delete,
+			accessibilityTitle = stringResource(R.string.reminder_delete),
+			color = MaterialTheme.colorScheme.onTertiary,
+			highlightColor = MaterialTheme.colorScheme.onTertiary,
+			highlightBackground = MaterialTheme.colorScheme.tertiary,
+			onPrev = { unitFocus.requestFocus() },
+			onClick = { onDeleteEntry() }
 		)
 	}
 }

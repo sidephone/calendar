@@ -48,8 +48,9 @@
 
 	<string name="reminder_list_title">Reminders</string>
 	<string name="reminder_add_new">＋ Add Reminder</string>
-	<string name="reminder_at_event">at time of event</string>
-	<string name="reminder_minutes_before">minutes before</string>
-	<string name="reminder_hours_before">hours before</string>
-	<string name="reminder_days_before">days before</string>
+	<string name="reminder_delete">Delete Reminder</string>
+	<string name="reminder_option_at_event">at time of event</string>
+	<string name="reminder_option_minutes_before">minutes before</string>
+	<string name="reminder_option_hours_before">hours before</string>
+	<string name="reminder_option_days_before">days before</string>
 </resources>

@@ -15,7 +15,6 @@ Calendar icons created by [Icon home - Flaticon](https://www.flaticon.com/free-i
 
 ## TODO
 - Reminders
-    - add a "X" for deleting reminders
     - display the reminders on the event card
     - remove the leading zero
     - install alarms on startup (check if this covers reboot and reinstall)

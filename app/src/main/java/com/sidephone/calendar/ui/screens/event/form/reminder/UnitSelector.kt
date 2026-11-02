@@ -37,9 +37,11 @@ import com.sidephone.calendar.ui.theme.Dimens
 
 @Composable
 internal fun UnitSelector(
+	modifier: Modifier = Modifier,
 	unit: ReminderUnit,
 	focusRequester: FocusRequester,
 	onPrev: () -> Unit,
+	onNext: () -> Unit,
 	onSelect: (ReminderUnit) -> Unit,
 ) {
 	var expanded by remember { mutableStateOf(false) }
@@ -57,7 +59,7 @@ internal fun UnitSelector(
 
 	Box {
 		Row(
-			modifier = Modifier
+			modifier = modifier
 				.height(Dimens.FORM_TIME_FIELD_HEIGHT)
 				.background(MaterialTheme.colorScheme.surface, shape)
 				.border(
@@ -68,8 +70,13 @@ internal fun UnitSelector(
 				.focusRequester(focusRequester)
 				.onFocusChanged { focused = it.isFocused }
 				.onPreviewKeyEvent { e ->
-					if (e.type == KeyEventType.KeyDown && e.key == Key.DirectionLeft) { onPrev(); true }
-					else false
+					if (e.type != KeyEventType.KeyDown) return@onPreviewKeyEvent false
+
+					when (e.key) {
+						Key.DirectionLeft, Key.MediaPrevious -> { onPrev(); true }
+						Key.DirectionRight, Key.MediaNext -> { onNext(); true }
+						else -> false
+					}
 				}
 				.clickable { expanded = true }
 				.keypadClickable(onClick = { expanded = true })

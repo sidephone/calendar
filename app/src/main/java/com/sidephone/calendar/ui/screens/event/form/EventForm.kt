@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.sidephone.calendar.R
 import com.sidephone.calendar.Settings
 import com.sidephone.calendar.db.Event
@@ -149,13 +150,20 @@ fun EventForm(
 		// reminders list
 		event.reminders.forEachIndexed { i, minutes ->
 			FormReminderField(
-				modifier = Modifier.padding(vertical = Dimens.FORM_INPUT_SPACING),
+				modifier = Modifier.padding(vertical = 0.dp), // the delete button produces padding itself
 				minutes = minutes,
 				onTimeChange = { minutes ->
 					onChange(
 						event.copy(
 							reminders =
 								event.reminders.toMutableList().apply { set(i, minutes) }
+						))
+				},
+				onDeleteEntry = {
+					onChange(
+						event.copy(
+							reminders =
+								event.reminders.toMutableList().apply { removeAt(i) }
 						))
 				}
 			)
