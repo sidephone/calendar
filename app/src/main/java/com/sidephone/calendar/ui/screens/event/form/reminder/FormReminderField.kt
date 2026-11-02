@@ -48,10 +48,12 @@ var unit by remember(minutes) { mutableStateOf(ReminderUnit.from(minutes)) }
 	val max = Settings.REMINDER_MAX_MINUTES / unit.factor
 	val amount = (minutes / unit.factor).coerceIn(0, max)
 
-	fun commit(amount: Int, unit: ReminderUnit) {
-		val limit = Settings.REMINDER_MAX_MINUTES / unit.factor
-		onTimeChange(amount.coerceIn(0, limit) * unit.factor)
-	}
+fun commit(amount: Int, selectedUnit: ReminderUnit) {
+	val limit = Settings.REMINDER_MAX_MINUTES / selectedUnit.factor
+	val value = amount.coerceIn(0, limit) * selectedUnit.factor
+	if (value == 0) unit = ReminderUnit.AT_EVENT
+	onTimeChange(value)
+}
 
 	Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
 		// Amount (hidden for "at event")
