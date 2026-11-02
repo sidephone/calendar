@@ -43,7 +43,7 @@ fun FormReminderField(
 
 	// The unit is UI state: derive it once from the stored value and then keep it, so typing "60"
 	// in minutes does not flip the field to "1 hour" while the user is still editing.
-	var unit by remember { mutableStateOf(ReminderUnit.from(minutes)) }
+var unit by remember(minutes) { mutableStateOf(ReminderUnit.from(minutes)) }
 
 	val max = Settings.REMINDER_MAX_MINUTES / unit.factor
 	val amount = (minutes / unit.factor).coerceIn(0, max)
