@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
@@ -18,9 +19,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.sidephone.calendar.R
+import com.sidephone.calendar.Settings
 import com.sidephone.calendar.db.Event
 import com.sidephone.calendar.ui.components.popup.DialogButton
+import com.sidephone.calendar.ui.screens.event.form.reminder.FormReminderField
 import com.sidephone.calendar.ui.theme.DISABLED_ALPHA
 import com.sidephone.calendar.ui.theme.Dimens
 import java.time.LocalTime
@@ -51,6 +55,8 @@ fun EventForm(
 			.verticalScroll(rememberScrollState()),
 		verticalArrangement = Arrangement.spacedBy(Dimens.FORM_INPUT_SPACING)
 	) {
+
+		// title
 		FormTextField(
 			value = event.title,
 			titleResId = R.string.event_form_title,
@@ -60,6 +66,7 @@ fun EventForm(
 			cursorColor = textColor
 		)
 
+		// all-day switch
 		FormSwitch(
 			title = stringResource(R.string.event_form_all_day, event.startDate.toString()),
 			value = isAllDay,
@@ -77,6 +84,7 @@ fun EventForm(
 		)
 
 		if (!isAllDay) {
+			// start time
 			FormTimeField(
 				titleResId = R.string.event_form_start_time,
 				hour = startHour,
@@ -106,6 +114,7 @@ fun EventForm(
 				onDone = { /* no-op */ }
 			)
 
+			// end time
 			FormTimeField(
 				titleResId = R.string.event_form_end_time,
 				hour = endHour,
@@ -133,6 +142,50 @@ fun EventForm(
 			)
 		}
 
+		// reminders section
+		if (event.reminders.isNotEmpty()) {
+			FormCategory(titleResId = R.string.reminder_list_title)
+		}
+
+		// reminders list
+		event.reminders.forEachIndexed { i, minutes ->
+			FormReminderField(
+				modifier = Modifier.padding(vertical = 0.dp), // the delete button produces padding itself
+				minutes = minutes,
+				onTimeChange = { minutes ->
+					onChange(
+						event.copy(
+							reminders =
+								event.reminders.toMutableList().apply { set(i, minutes) }
+						))
+				},
+				onDeleteEntry = {
+					onChange(
+						event.copy(
+							reminders =
+								event.reminders.toMutableList().apply { removeAt(i) }
+						))
+				}
+			)
+		}
+
+		// add reminder
+		DialogButton(
+			text = stringResource(
+				if (event.reminders.isEmpty()) R.string.reminder_add_new else R.string.add_more
+			),
+			textColor = MaterialTheme.colorScheme.onTertiary,
+			backgroundColor = MaterialTheme.colorScheme.tertiary,
+			selectedTextColor = MaterialTheme.colorScheme.tertiary,
+			selectedBackground = MaterialTheme.colorScheme.onTertiary,
+			onClick = {
+				onChange(event.copy(reminders = event.reminders + Settings.REMINDER_DEFAULT))
+			}
+		)
+
+		FormCategory()
+
+		// more options
 		DialogButton(
 			text = stringResource(R.string.event_form_show_more_options) + (if (showMoreOptions) " ▲" else " ▼"),
 			textColor = MaterialTheme.colorScheme.onTertiary,
@@ -143,6 +196,7 @@ fun EventForm(
 		)
 
 		if (showMoreOptions) {
+			// description
 			FormTextField(
 				value = event.description,
 				titleResId = R.string.event_form_description,
@@ -152,6 +206,7 @@ fun EventForm(
 				cursorColor = textColor
 			)
 
+			// address
 			FormTextField(
 				value = event.address ?: "",
 				onValueChange = { onChange(event.copy(address = it)) },
@@ -162,7 +217,11 @@ fun EventForm(
 			)
 		}
 
-		Row(horizontalArrangement = Arrangement.spacedBy(Dimens.FORM_INPUT_SPACING)) {
+		// cancel / save
+		Row(
+			Modifier.padding(vertical = Dimens.FORM_INPUT_SPACING),
+			horizontalArrangement = Arrangement.spacedBy(Dimens.FORM_INPUT_SPACING)
+		) {
 			DialogButton(
 				modifier = Modifier.weight(1f),
 				textResId = R.string.event_form_cancel,

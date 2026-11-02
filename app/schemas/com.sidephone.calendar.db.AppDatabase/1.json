@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "da7e3fd0df38a9f1ae8488ca7fb16eaa",
+    "identityHash": "5a031b411f018c8c5051c2e01b999da4",
     "entities": [
       {
         "tableName": "Event",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `description` TEXT NOT NULL, `address` TEXT, `startDate` INTEGER NOT NULL, `startTime` INTEGER, `endDate` INTEGER NOT NULL, `endTime` INTEGER, `freq` TEXT NOT NULL, `interval` INTEGER NOT NULL, `weekdays` INTEGER NOT NULL, `untilDate` INTEGER, `maxOccurrences` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `description` TEXT NOT NULL, `address` TEXT, `startDate` INTEGER NOT NULL, `startTime` INTEGER, `endDate` INTEGER NOT NULL, `endTime` INTEGER, `freq` TEXT NOT NULL, `interval` INTEGER NOT NULL, `weekdays` INTEGER NOT NULL, `untilDate` INTEGER, `maxOccurrences` INTEGER, `reminders` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -80,6 +80,12 @@
             "fieldPath": "maxOccurrences",
             "columnName": "maxOccurrences",
             "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "reminders",
+            "columnName": "reminders",
+            "affinity": "TEXT",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -111,7 +117,7 @@
       },
       {
         "tableName": "EventOverride",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`eventId` INTEGER NOT NULL, `originalDate` INTEGER NOT NULL, `cancelled` INTEGER NOT NULL, `title` TEXT, `description` TEXT, `address` TEXT, `allDay` INTEGER, `startTime` INTEGER, `endTime` INTEGER, `movedStartDate` INTEGER, `movedEndDate` INTEGER, PRIMARY KEY(`eventId`, `originalDate`), FOREIGN KEY(`eventId`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`eventId` INTEGER NOT NULL, `originalDate` INTEGER NOT NULL, `cancelled` INTEGER NOT NULL, `title` TEXT, `description` TEXT, `address` TEXT, `allDay` INTEGER, `startTime` INTEGER, `endTime` INTEGER, `movedStartDate` INTEGER, `movedEndDate` INTEGER, `reminders` TEXT, PRIMARY KEY(`eventId`, `originalDate`), FOREIGN KEY(`eventId`) REFERENCES `Event`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "eventId",
@@ -170,6 +176,11 @@
             "fieldPath": "movedEndDate",
             "columnName": "movedEndDate",
             "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "reminders",
+            "columnName": "reminders",
+            "affinity": "TEXT"
           }
         ],
         "primaryKey": {
@@ -207,7 +218,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'da7e3fd0df38a9f1ae8488ca7fb16eaa')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5a031b411f018c8c5051c2e01b999da4')"
     ]
   }
 }

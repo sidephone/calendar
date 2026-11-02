@@ -59,4 +59,22 @@ interface EventDao {
         """
 	)
 	suspend fun search(q: String): List<Event>
+
+	// events with reminders
+	@Query(
+		"""
+			SELECT * FROM Event WHERE
+			(
+				(freq = 'NONE' AND startDate <= :to AND endDate >= :from)
+				OR (freq != 'NONE' AND startDate <= :to AND (untilDate IS NULL OR untilDate + (endDate - startDate) >= :from))
+				OR id IN (
+					SELECT eventId FROM EventOverride
+					WHERE movedStartDate IS NOT NULL AND movedStartDate <= :to AND movedEndDate >= :from)
+			) AND (
+				reminders != ''
+				OR id IN (SELECT eventId FROM EventOverride WHERE reminders IS NOT NULL AND reminders != '')
+			)
+		"""
+	)
+	suspend fun eventsWithReminders(from: LocalDate, to: LocalDate): List<Event>
 }

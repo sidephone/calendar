@@ -128,6 +128,7 @@ object EventRecurrence {
 				startTime = startTime,
 				endTime = endTime,
 				recurring = e.freq != Freq.NONE,
+				reminders = o?.reminders ?: e.reminders,
 			)
 			d = d.plusDays(1)
 		}

@@ -7,18 +7,17 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
 import android.view.KeyEvent as AndroidKeyEvent
 
-fun Modifier.keypadClickableModifier(onClick: () -> Unit): Modifier =
+private val ACTION_KEYS = listOf(
+	AndroidKeyEvent.KEYCODE_BUTTON_START,
+	AndroidKeyEvent.KEYCODE_DPAD_CENTER,
+	AndroidKeyEvent.KEYCODE_ENTER,
+	AndroidKeyEvent.KEYCODE_MEDIA_PLAY_PAUSE
+)
+
+fun Modifier.keypadClickable(onClick: () -> Unit): Modifier =
 	this.onKeyEvent { event: KeyEvent ->
-		if (
-			event.type == KeyEventType.KeyDown
-			&& (
-				event.nativeKeyEvent.keyCode == AndroidKeyEvent.KEYCODE_BUTTON_START
-				|| event.nativeKeyEvent.keyCode == AndroidKeyEvent.KEYCODE_DPAD_CENTER
-				|| event.nativeKeyEvent.keyCode == AndroidKeyEvent.KEYCODE_ENTER
-				|| event.nativeKeyEvent.keyCode == AndroidKeyEvent.KEYCODE_MEDIA_PLAY_PAUSE
-			)
-		) {
-			onClick()
+		if (ACTION_KEYS.contains(event.nativeKeyEvent.keyCode)) {
+			if (event.type == KeyEventType.KeyDown) onClick()
 			true // consume the event
 		} else {
 			false

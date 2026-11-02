@@ -29,6 +29,7 @@ private fun occurrence(id: Long) = EventOccurrence(
 	startTime = null,
 	endTime = null,
 	recurring = false,
+	reminders = emptyList()
 )
 
 private fun dayState(vararg ids: Long): EventState =
