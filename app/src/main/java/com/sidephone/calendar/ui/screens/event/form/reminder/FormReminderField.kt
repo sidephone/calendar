@@ -43,17 +43,17 @@ fun FormReminderField(
 
 	// The unit is UI state: derive it once from the stored value and then keep it, so typing "60"
 	// in minutes does not flip the field to "1 hour" while the user is still editing.
-var unit by remember(minutes) { mutableStateOf(ReminderUnit.from(minutes)) }
+	var unit by remember(minutes) { mutableStateOf(ReminderUnit.from(minutes)) }
 
 	val max = Settings.REMINDER_MAX_MINUTES / unit.factor
 	val amount = (minutes / unit.factor).coerceIn(0, max)
 
-fun commit(amount: Int, selectedUnit: ReminderUnit) {
-	val limit = Settings.REMINDER_MAX_MINUTES / selectedUnit.factor
-	val value = amount.coerceIn(0, limit) * selectedUnit.factor
-	if (value == 0) unit = ReminderUnit.AT_EVENT
-	onTimeChange(value)
-}
+	fun commit(amount: Int, selectedUnit: ReminderUnit) {
+		val limit = Settings.REMINDER_MAX_MINUTES / selectedUnit.factor
+		val value = amount.coerceIn(0, limit) * selectedUnit.factor
+		if (value == 0) unit = ReminderUnit.AT_EVENT
+		onTimeChange(value)
+	}
 
 	Row(modifier = modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
 		// Amount (hidden for "at event")
