@@ -51,6 +51,9 @@
 	<string name="reminder_delete">Delete Reminder</string>
 	<string name="reminder_option_at_event">at time of event</string>
 	<string name="reminder_option_minutes_before">minutes before</string>
+	<string name="reminder_option_minute_before">minute before</string>
 	<string name="reminder_option_hours_before">hours before</string>
+	<string name="reminder_option_hour_before">hour before</string>
 	<string name="reminder_option_days_before">days before</string>
+	<string name="reminder_option_day_before">day before</string>
 </resources>
