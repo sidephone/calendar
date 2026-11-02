@@ -17,7 +17,7 @@ Calendar icons created by [Icon home - Flaticon](https://www.flaticon.com/free-i
 - Reminders
     - add a "X" for deleting reminders
     - display the reminders on the event card
-    - tidy up FormRemindersField
+    - ensure support for all tiles
     - remove the leading zero
     - install alarms on startup (check if this covers reboot and reinstall)
     - install or delete alarms on event save
