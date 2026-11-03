@@ -15,6 +15,5 @@ Calendar icons created by [Icon home - Flaticon](https://www.flaticon.com/free-i
 
 ## TODO
 - Prevent reminders in the past
-- Add a note that all-day events start at 9:00
 - Recurring events (+ make sure to edit and delete each occurrence separately)
 - Multi-day events (+ display them correctly on the day grid)

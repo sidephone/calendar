@@ -23,6 +23,7 @@
 	<string name="event_form_title_edit">Edit Event</string>
 	<string name="event_form_address">Add Address</string>
 	<string name="event_form_all_day">All Day (%1$s)</string>
+	<string name="event_form_all_day_starts_at">All-day events start at 00:00.</string>
 	<string name="event_form_cancel">Cancel</string>
 	<string name="event_form_show_more_options">More Options</string>
 	<string name="event_form_description">Add Description</string>

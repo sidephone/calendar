@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -19,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import com.sidephone.calendar.R
 import com.sidephone.calendar.Settings
@@ -145,6 +147,14 @@ fun EventForm(
 		// reminders section
 		if (event.reminders.isNotEmpty()) {
 			FormCategory(titleResId = R.string.reminder_list_title)
+			if (event.endTime == null) {
+				Text(
+					style = MaterialTheme.typography.bodyMedium,
+					fontStyle = FontStyle.Italic,
+					modifier = Modifier.padding(horizontal = Dimens.FORM_INPUT_SPACING),
+					text = stringResource(R.string.event_form_all_day_starts_at),
+				)
+			}
 		}
 
 		// reminders list
