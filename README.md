@@ -15,7 +15,6 @@ Calendar icons created by [Icon home - Flaticon](https://www.flaticon.com/free-i
 
 ## TODO
 - Reminders
-    - install alarms on startup (check if this covers reboot and reinstall)
-    - install or delete alarms on event save
+    - show notifications
 - Recurring events (+ make sure to edit and delete each occurrence separately)
 - Multi-day events (+ display them correctly on the day grid)

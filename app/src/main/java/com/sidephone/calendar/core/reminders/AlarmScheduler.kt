@@ -29,7 +29,8 @@ class AlarmScheduler(context: Context) {
 
 
 	/**
-	 * Sets the alarm for [triggerAt] (local time), replacing any existing one. null cancels it.
+	 * Sets the alarm for [triggerAt] (local time), replacing any existing one. null cancels it. Safe
+	 * to call multiple times. It won't schedule duplicate alarms.
 	 */
 	fun scheduleAt(triggerAt: LocalDateTime?) {
 		if (triggerAt == null) {
@@ -52,7 +53,8 @@ class AlarmScheduler(context: Context) {
 
 
 	/**
-	 * Recomputes the next reminder from the database and (re)sets or cancels the alarm.
+	 * Recomputes the next reminder from the database and (re)sets or cancels the alarm. It's safe to
+	 * call multiple times. It won't schedule duplicate alarms.
 	 */
 	suspend fun scheduleFrom(store: EventStore) {
 		scheduleAt(store.nextReminder(LocalDateTime.now())?.triggerAt)

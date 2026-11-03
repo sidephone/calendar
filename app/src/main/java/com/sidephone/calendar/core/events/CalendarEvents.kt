@@ -27,6 +27,10 @@ class CalendarEvents(app: Application, private val alarmScheduler: AlarmSchedule
 
 	val list = getListForTimeframe()
 
+	init {
+		viewModelScope.launch { alarmScheduler.scheduleFrom(db) } // schedule lost alarms on app start
+	}
+
 	/*** Get One ***/
 	suspend fun getEvent(id: Long): Event? = db.get(id)
 
