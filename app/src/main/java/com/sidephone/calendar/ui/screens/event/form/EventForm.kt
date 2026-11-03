@@ -27,6 +27,9 @@ import com.sidephone.calendar.Settings
 import com.sidephone.calendar.db.Event
 import com.sidephone.calendar.ui.components.popup.DialogButton
 import com.sidephone.calendar.ui.screens.event.form.reminder.FormReminderField
+import com.sidephone.calendar.ui.screens.event.form.validation.PopupInvalidForm
+import com.sidephone.calendar.ui.screens.event.form.validation.SaveValidationStatus
+import com.sidephone.calendar.ui.screens.event.form.validation.validateEvent
 import com.sidephone.calendar.ui.theme.DISABLED_ALPHA
 import com.sidephone.calendar.ui.theme.Dimens
 import java.time.LocalTime
@@ -41,6 +44,7 @@ fun EventForm(
 	onCancel: () -> Unit
 ) {
 	var showMoreOptions by remember { mutableStateOf(false) }
+	var validationStatus: Triple<SaveValidationStatus, String, Int> by remember { mutableStateOf(Triple(SaveValidationStatus.OK, "", 0)) }
 
 	var isAllDay by remember { mutableStateOf(event.startTime == null) }
 	var startHour by remember { mutableIntStateOf(event.startTime?.hour ?: 9) }
@@ -251,12 +255,17 @@ fun EventForm(
 				backgroundColor = MaterialTheme.colorScheme.primary,
 				selectedTextColor = MaterialTheme.colorScheme.primary,
 				selectedBackground = MaterialTheme.colorScheme.onPrimary,
-				onClick = { if (event.title.isNotBlank()) onSave() }
+				onClick = {
+					validationStatus = validateEvent(event)
+					if (validationStatus.first == SaveValidationStatus.OK) onSave()
+				}
 			)
 		}
 
 		// JakeType keyboard covers the bottom of the form, when a text field is focused, so add some
 		// padding to avoid it.
 		Box(modifier = Modifier.fillMaxWidth().height(Dimens.JAKE_TYPE_PADDING))
+
+		PopupInvalidForm(validationStatus) { validationStatus = it }
 	}
 }
