@@ -16,13 +16,15 @@ data class EventReminder(
 	val title: String,
 	val address: String?,
 	val start: LocalDateTime,      // start of the occurrence (all-day: its start date at 00:00)
+	val allDay: Boolean,           // true: ignore the time part of [start]
 	val minutesBefore: Int,
 ) {
 	val triggerAt: LocalDateTime get() = start.minusMinutes(minutesBefore.toLong())
 
 	companion object {
 		/** Largest "before" offset (30 days). Keeps the look-ahead window of the scheduler bounded. */
-		const val MAX_DAYS = Settings.REMINDER_MAX_MINUTES / (24 * 60)
+		const val MAX_MINUTES = Settings.REMINDER_MAX_MINUTES * 24 * 60
+		const val MAX_DAYS = MAX_MINUTES / (24 * 60)
 
 		/** Largest "after" offset: just under one day after the anchor (23:59 on the start day for all-day). */
 		const val MIN_MINUTES = -(24 * 60 - 1)
@@ -37,8 +39,9 @@ data class EventReminder(
 				.flatMap { o ->
 					val start = o.startDate.atTime(o.startTime ?: LocalTime.MIDNIGHT)
 					o.reminders.distinct().map { m ->
-						EventReminder(o.eventId, o.originalDate, o.title, o.address, start, m)
+						EventReminder(o.eventId, o.originalDate, o.title, o.address, start, o.allDay, m)
 					}
 				}
 	}
 }
+

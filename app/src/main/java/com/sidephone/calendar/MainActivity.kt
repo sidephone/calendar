@@ -1,11 +1,13 @@
 package com.sidephone.calendar
 
 import android.hardware.input.InputManager
+import android.os.Build
 import android.os.Bundle
 import android.view.KeyEvent
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -30,6 +32,7 @@ import com.sidephone.calendar.ui.theme.AppTheme
 
 class MainActivity : ComponentActivity() {
 	private lateinit var calendar: Calendar
+	private val notificationPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -39,7 +42,6 @@ class MainActivity : ComponentActivity() {
 			application,
 			getSystemService(INPUT_SERVICE) as InputManager
 		)
-
 
 		enableEdgeToEdge()
 		setContent {
@@ -106,6 +108,7 @@ class MainActivity : ComponentActivity() {
 						}
 					}
 				}
+				askForPermissions()
 			}
 		}
 	}
@@ -131,5 +134,11 @@ class MainActivity : ComponentActivity() {
 	override fun onDestroy() {
 		super.onDestroy()
 		calendar.destroy()
+	}
+
+	private fun askForPermissions() {
+		if (Build.VERSION.SDK_INT >= 33) {
+			notificationPermission.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+		}
 	}
 }

@@ -56,8 +56,8 @@ class AlarmScheduler(context: Context) {
 	 * Recomputes the next reminder from the database and (re)sets or cancels the alarm. It's safe to
 	 * call multiple times. It won't schedule duplicate alarms.
 	 */
-	suspend fun scheduleFrom(store: EventStore) {
-		scheduleAt(store.nextReminder(LocalDateTime.now())?.triggerAt)
+	suspend fun scheduleFrom(store: EventStore, after: LocalDateTime = LocalDateTime.now()) {
+		scheduleAt(store.nextReminder(after)?.triggerAt)
 	}
 
 
