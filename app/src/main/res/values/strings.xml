@@ -63,6 +63,7 @@
 	<string name="reminder_option_day_before">day before</string>
 
 	<string name="notification_event">%1$s at %2$s</string>
+	<string name="notification_event_now">Now</string>
 	<string name="notification_event_today">Today at %1$s</string>
 	<string name="notification_event_today_all_day">Today</string>
 	<string name="notification_event_tomorrow">Tomorrow at %1$s</string>

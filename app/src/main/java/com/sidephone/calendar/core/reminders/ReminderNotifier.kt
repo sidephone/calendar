@@ -94,6 +94,7 @@ class ReminderNotifier(context: Context) {
 		)
 	}
 
+
 	private fun details(r: EventReminder): String {
 		return listOfNotNull(title(r), r.address?.takeIf { it.isNotBlank() }).joinToString("\n")
 	}
@@ -105,7 +106,8 @@ class ReminderNotifier(context: Context) {
 		val time = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT).format(r.start)
 
 		return if (r.start.dayOfYear == today.dayOfYear) {
-			if (r.allDay) context.getString(R.string.notification_event_today_all_day)
+			if (r.minutesBefore == 0) context.getString(R.string.notification_event_now)
+			else if (r.allDay) context.getString(R.string.notification_event_today_all_day)
 			else context.getString(R.string.notification_event_today, time)
 		} else if (r.start.dayOfYear == today.plusDays(1).dayOfYear) {
 			if (r.allDay) context.getString(R.string.notification_event_tomorrow_all_day)

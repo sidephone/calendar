@@ -258,7 +258,7 @@ fun EventForm(
 				onClick = {
 					val result = validateEvent(event)
 					validationStatus = result
-					if (result.first == SaveValidationStatus.OK) onSave()
+					if (event.title.isNotBlank() && validationStatus.first == SaveValidationStatus.OK) onSave()
 				}
 			)
 		}
