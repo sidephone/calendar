@@ -4,13 +4,14 @@ import android.app.Application
 import android.hardware.input.InputManager
 import com.sidephone.calendar.Settings
 import com.sidephone.calendar.core.events.CalendarEvents
+import com.sidephone.calendar.core.reminders.AlarmScheduler
 import com.sidephone.calendar.db.Event
 import com.sidephone.calendar.input.ActionPad
 import com.sidephone.calendar.input.Keypad
 import kotlinx.coroutines.flow.StateFlow
 
 class Calendar(settings: Settings, app: Application, inputManager: InputManager) {
-	private val db = CalendarEvents(app)
+	private val db = CalendarEvents(app, AlarmScheduler(app))
 	private val engine = Engine(db)
 	private val keypad = ActionPad(settings, inputManager)
 
@@ -47,7 +48,7 @@ class Calendar(settings: Settings, app: Application, inputManager: InputManager)
 	fun onAction(action: Action) = engine.onAction(action) // handle actions from touchscreen
 	fun onKeyDown(keyCode: Int) = !ignoreInput && keypad.onKeyDown(keyCode) // handle actions on physical key down
 	fun onKeyUp(keyCode: Int) = !ignoreInput && keypad.onKeyUp(keyCode) // handle actions on physical key up
-	fun saveEvent(event: Event) = db.saveEvent(event)
+	fun saveEvent(event: Event) { db.saveEvent(event) }
 	fun selectCell(x: Int, y: Int) = engine.select(x, y)
 	fun stopListeningForKeypadChange() = keypad.stopListening()
 }

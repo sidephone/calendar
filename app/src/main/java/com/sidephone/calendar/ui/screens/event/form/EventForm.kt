@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -19,12 +20,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import com.sidephone.calendar.R
 import com.sidephone.calendar.Settings
 import com.sidephone.calendar.db.Event
 import com.sidephone.calendar.ui.components.popup.DialogButton
 import com.sidephone.calendar.ui.screens.event.form.reminder.FormReminderField
+import com.sidephone.calendar.ui.screens.event.form.validation.PopupInvalidForm
+import com.sidephone.calendar.ui.screens.event.form.validation.SaveValidationStatus
+import com.sidephone.calendar.ui.screens.event.form.validation.validateEvent
 import com.sidephone.calendar.ui.theme.DISABLED_ALPHA
 import com.sidephone.calendar.ui.theme.Dimens
 import java.time.LocalTime
@@ -39,6 +44,7 @@ fun EventForm(
 	onCancel: () -> Unit
 ) {
 	var showMoreOptions by remember { mutableStateOf(false) }
+	var validationStatus: Triple<SaveValidationStatus, String, Int> by remember { mutableStateOf(Triple(SaveValidationStatus.OK, "", 0)) }
 
 	var isAllDay by remember { mutableStateOf(event.startTime == null) }
 	var startHour by remember { mutableIntStateOf(event.startTime?.hour ?: 9) }
@@ -145,6 +151,14 @@ fun EventForm(
 		// reminders section
 		if (event.reminders.isNotEmpty()) {
 			FormCategory(titleResId = R.string.reminder_list_title)
+			if (event.startTime == null) {
+				Text(
+					style = MaterialTheme.typography.bodyMedium,
+					fontStyle = FontStyle.Italic,
+					modifier = Modifier.padding(horizontal = Dimens.FORM_INPUT_SPACING),
+					text = stringResource(R.string.event_form_all_day_starts_at),
+				)
+			}
 		}
 
 		// reminders list
@@ -241,12 +255,18 @@ fun EventForm(
 				backgroundColor = MaterialTheme.colorScheme.primary,
 				selectedTextColor = MaterialTheme.colorScheme.primary,
 				selectedBackground = MaterialTheme.colorScheme.onPrimary,
-				onClick = { if (event.title.isNotBlank()) onSave() }
+				onClick = {
+					val result = validateEvent(event)
+					validationStatus = result
+					if (event.title.isNotBlank() && validationStatus.first == SaveValidationStatus.OK) onSave()
+				}
 			)
 		}
 
 		// JakeType keyboard covers the bottom of the form, when a text field is focused, so add some
 		// padding to avoid it.
 		Box(modifier = Modifier.fillMaxWidth().height(Dimens.JAKE_TYPE_PADDING))
+
+		PopupInvalidForm(validationStatus) { validationStatus = it }
 	}
 }

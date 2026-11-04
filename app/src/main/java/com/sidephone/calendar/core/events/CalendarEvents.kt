@@ -3,6 +3,7 @@ package com.sidephone.calendar.core.events
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.sidephone.calendar.core.reminders.AlarmScheduler
 import com.sidephone.calendar.db.AppDatabase
 import com.sidephone.calendar.db.Event
 import com.sidephone.calendar.db.EventOverride
@@ -20,11 +21,15 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
-class CalendarEvents(app: Application) : ViewModel() {
+class CalendarEvents(app: Application, private val alarmScheduler: AlarmScheduler) : ViewModel() {
 	private val db: EventStore = EventStore(AppDatabase.get(app).eventDao())
 	private val timeframe = MutableStateFlow<EventTimeframe>(EventTimeframe.Day(LocalDate.now()))
 
 	val list = getListForTimeframe()
+
+	init {
+		viewModelScope.launch { alarmScheduler.scheduleFrom(db) } // schedule lost alarms on app start
+	}
 
 	/*** Get One ***/
 	suspend fun getEvent(id: Long): Event? = db.get(id)
@@ -53,9 +58,9 @@ class CalendarEvents(app: Application) : ViewModel() {
 
 	/*** Edit ***/
 
-	fun saveEvent(event: Event) = viewModelScope.launch { db.save(event) }
-	fun deleteEvent(eventId: Long) = viewModelScope.launch { db.delete(eventId) }
-	fun deleteOccurrence(o: EventOccurrence) = viewModelScope.launch { db.deleteOccurrence(o) }
-	fun saveOverride(o: EventOverride) = viewModelScope.launch { db.saveOverride(o) }
-	fun resetOccurrence(o: EventOccurrence) = viewModelScope.launch { db.resetOccurrence(o.eventId, o.originalDate) }
+	fun saveEvent(event: Event) = viewModelScope.launch { db.save(event); alarmScheduler.scheduleFrom(db) }
+	fun deleteEvent(eventId: Long) = viewModelScope.launch { db.delete(eventId); alarmScheduler.scheduleFrom(db) }
+	fun deleteOccurrence(o: EventOccurrence) = viewModelScope.launch { db.deleteOccurrence(o); alarmScheduler.scheduleFrom(db) }
+	fun saveOverride(o: EventOverride) = viewModelScope.launch { db.saveOverride(o); alarmScheduler.scheduleFrom(db) }
+	fun resetOccurrence(o: EventOccurrence) = viewModelScope.launch { db.resetOccurrence(o.eventId, o.originalDate); alarmScheduler.scheduleFrom(db) }
 }

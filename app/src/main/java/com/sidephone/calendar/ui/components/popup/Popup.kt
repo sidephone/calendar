@@ -10,7 +10,8 @@ import androidx.compose.ui.res.stringResource
 fun Popup(
 	titleResId: Int,
 	bodyResId: Int,
-	confirmButtonResId: Int,
+	body: String = "",
+	confirmButtonResId: Int = 0,
 	cancelButtonResId: Int = android.R.string.cancel,
 	titleColor: Color,
 	bodyColor: Color,
@@ -18,25 +19,33 @@ fun Popup(
 	buttonTextColor: Color,
 	buttonSelectedTextColor: Color,
 	buttonSelectedBackground: Color,
-	onConfirm: () -> Unit,
-	onDismiss: () -> Unit
+	onConfirm: (() -> Unit)? = null,
+	onDismiss: () -> Unit,
 ) {
 	AlertDialog(
 		onDismissRequest = onDismiss,
-		title = { Text(stringResource(titleResId), color = titleColor) },
-		text = { Text(stringResource(bodyResId), color = bodyColor) },
+		title = { Text(
+			stringResource(titleResId),
+			color = titleColor
+		)},
+		text = { Text(
+			text = body.ifBlank { stringResource(bodyResId) },
+			color = bodyColor
+		)},
 		containerColor = backgroundColor,
 		confirmButton = {
-			DialogButton(
-				textResId = confirmButtonResId,
-				textColor = buttonTextColor,
-				selectedTextColor = buttonSelectedTextColor,
-				selectedBackground = buttonSelectedBackground,
-				onClick = {
-					onConfirm()
-					onDismiss()
-				}
-			)
+			if (onConfirm != null) {
+				DialogButton(
+					textResId = confirmButtonResId,
+					textColor = buttonTextColor,
+					selectedTextColor = buttonSelectedTextColor,
+					selectedBackground = buttonSelectedBackground,
+					onClick = {
+						onConfirm()
+						onDismiss()
+					}
+				)
+			}
 		},
 		dismissButton = {
 			DialogButton(
