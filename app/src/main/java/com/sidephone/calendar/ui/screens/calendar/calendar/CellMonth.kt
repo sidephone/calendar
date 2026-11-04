@@ -29,6 +29,8 @@ fun CellMonth(
 	textColor: Color,
 	highlightBackground: Color,
 	highlightTextColor: Color,
+	todayBackground: Color,
+	todayTextColor: Color,
 	inactiveTextColor: Color,
 	isHighlighted: Boolean,
 	day: Int,
@@ -46,6 +48,7 @@ fun CellMonth(
 	Column(
 		modifier =
 			if (isHighlighted) clickable.background(highlightBackground)
+			else if (isToday) clickable.background(todayBackground)
 			else clickable
 	) {
 		// day number
@@ -55,6 +58,7 @@ fun CellMonth(
 			fontWeight = if (isToday) FontWeight.Bold else FontWeight.Normal,
 			color =
 				if (isHighlighted) highlightTextColor
+				else if (isToday) todayTextColor
 				else if (day < 0) inactiveTextColor
 				else textColor,
 			text =
@@ -72,6 +76,7 @@ fun CellMonth(
 		) {
 			val color =
 				if (isHighlighted) highlightTextColor
+				else if (isToday) todayTextColor
 				else eventColor
 
 			repeat(eventBoxes) { i ->

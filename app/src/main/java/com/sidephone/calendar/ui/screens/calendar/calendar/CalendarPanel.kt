@@ -24,6 +24,7 @@ import com.sidephone.calendar.core.grid.DayGrid
 import com.sidephone.calendar.core.grid.MonthGrid
 import com.sidephone.calendar.core.grid.YearGrid
 import com.sidephone.calendar.ui.screens.calendar.util.Weekdays
+import com.sidephone.calendar.ui.theme.DISABLED_ALPHA
 import com.sidephone.calendar.ui.theme.Dimens
 import java.time.LocalDate
 
@@ -41,6 +42,8 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar, touchEnable
 	val cellHighlightBackground = MaterialTheme.colorScheme.primary
 	val cellHighlightTextColor = MaterialTheme.colorScheme.onPrimary
 	val cellInactiveTextColor = MaterialTheme.colorScheme.onSurfaceVariant
+	val cellTodayBackground = cellHighlightBackground.copy(alpha = DISABLED_ALPHA)
+	val cellTodayTextColor = textColor
 
 	val eventMarker = MaterialTheme.colorScheme.secondary
 	val eventBackground = MaterialTheme.colorScheme.primaryContainer
@@ -151,6 +154,8 @@ fun CalendarPanel(modifier: Modifier = Modifier, calendar: Calendar, touchEnable
 							eventColor = eventMarker,
 							highlightBackground = cellHighlightBackground,
 							highlightTextColor = cellHighlightTextColor,
+							todayBackground = cellTodayBackground,
+							todayTextColor = cellTodayTextColor,
 							inactiveTextColor = cellInactiveTextColor,
 							isHighlighted = Pair(x, y) == selected,
 							isToday = cell == todayCell,
