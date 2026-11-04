@@ -1,5 +1,6 @@
 package com.sidephone.calendar.db
 
+import com.sidephone.calendar.Settings
 import com.sidephone.calendar.core.events.EventOccurrence
 import com.sidephone.calendar.core.events.EventRecurrence
 import com.sidephone.calendar.core.events.EventReminder
@@ -52,7 +53,7 @@ class EventStore(private val dao: EventDao) {
 			// Stop once no occurrence beyond the window could trigger earlier than the one found
 			if (
 				found != null
-				&& !found.triggerAt.toLocalDate().plusDays(EventReminder.MAX_DAYS.toLong()).isAfter(end)
+				&& !found.triggerAt.toLocalDate().plusDays(Settings.REMINDER_MAX_DAYS.toLong()).isAfter(end)
 			) break
 		}
 		return best
@@ -63,7 +64,7 @@ class EventStore(private val dao: EventDao) {
 		EventReminder
 			.of(reminderOccurrences(
 				after.toLocalDate(),
-				upTo.toLocalDate().plusDays(EventReminder.MAX_DAYS.toLong())
+				upTo.toLocalDate().plusDays(Settings.REMINDER_MAX_DAYS.toLong())
 			))
 			.filter { it.triggerAt.isAfter(after) && !it.triggerAt.isAfter(upTo) }
 			.sortedBy { it.triggerAt }

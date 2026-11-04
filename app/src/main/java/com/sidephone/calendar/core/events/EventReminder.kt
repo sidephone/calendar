@@ -22,13 +22,6 @@ data class EventReminder(
 	val triggerAt: LocalDateTime get() = start.minusMinutes(minutesBefore.toLong())
 
 	companion object {
-		/** Largest "before" offset (30 days). Keeps the look-ahead window of the scheduler bounded. */
-		const val MAX_MINUTES = Settings.REMINDER_MAX_MINUTES * 24 * 60
-		const val MAX_DAYS = MAX_MINUTES / (24 * 60)
-
-		/** Largest "after" offset: just under one day after the anchor (23:59 on the start day for all-day). */
-		const val MIN_MINUTES = -(24 * 60 - 1)
-
 		/**
 		 * One EventReminder per (occurrence, reminder). Only entries with dayIndex == 0 are used,
 		 * so a multi-day occurrence counts once, at its start.

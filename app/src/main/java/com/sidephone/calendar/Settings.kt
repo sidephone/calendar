@@ -10,7 +10,8 @@ class Settings(context: Context) {
 		val REMINDER_CATCH_UP_LIMIT: Duration = Duration.ofHours(12) // reminders older than this are not shown late
 		const val REMINDER_DEFAULT = 15 // minutes before
 		const val REMINDER_EARLY_TOLERANCE = 5L // seconds
-		const val REMINDER_MAX_MINUTES = 30 * 24 * 60 // 30 days
+		const val REMINDER_MAX_DAYS = 30
+		const val REMINDER_MAX_MINUTES = REMINDER_MAX_DAYS * 24 * 60
 
 		private const val PREFS_NAME = "SidephoneCalendarSettings"
 		private const val LAST_NOTIFIED_KEY = "last_notified"
