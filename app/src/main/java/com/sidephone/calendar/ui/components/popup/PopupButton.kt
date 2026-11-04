@@ -41,7 +41,7 @@ private val NEXT_KEYS = setOf(
 )
 
 @Composable
-fun DialogButton(
+fun PopupButton(
 	modifier: Modifier = Modifier,
 	textResId: Int = 0,
 	text: String = "",

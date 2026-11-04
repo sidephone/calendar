@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import com.sidephone.calendar.R
 import com.sidephone.calendar.Settings
 import com.sidephone.calendar.db.Event
-import com.sidephone.calendar.ui.components.popup.DialogButton
+import com.sidephone.calendar.ui.components.popup.PopupButton
 import com.sidephone.calendar.ui.screens.event.form.reminder.FormReminderField
 import com.sidephone.calendar.ui.screens.event.form.validation.PopupInvalidForm
 import com.sidephone.calendar.ui.screens.event.form.validation.SaveValidationStatus
@@ -184,7 +184,7 @@ fun EventForm(
 		}
 
 		// add reminder
-		DialogButton(
+		PopupButton(
 			text = stringResource(
 				if (event.reminders.isEmpty()) R.string.reminder_add_new else R.string.add_more
 			),
@@ -200,7 +200,7 @@ fun EventForm(
 		FormCategory()
 
 		// more options
-		DialogButton(
+		PopupButton(
 			text = stringResource(R.string.event_form_show_more_options) + (if (showMoreOptions) " ▲" else " ▼"),
 			textColor = MaterialTheme.colorScheme.onTertiary,
 			backgroundColor = MaterialTheme.colorScheme.tertiary,
@@ -236,7 +236,7 @@ fun EventForm(
 			Modifier.padding(vertical = Dimens.FORM_INPUT_SPACING),
 			horizontalArrangement = Arrangement.spacedBy(Dimens.FORM_INPUT_SPACING)
 		) {
-			DialogButton(
+			PopupButton(
 				modifier = Modifier.weight(1f),
 				textResId = R.string.event_form_cancel,
 				textColor = MaterialTheme.colorScheme.onTertiary,
@@ -246,7 +246,7 @@ fun EventForm(
 				onClick = onCancel
 			)
 
-			DialogButton(
+			PopupButton(
 				modifier = Modifier.weight(1f),
 				enabled = event.title.isNotBlank(),
 				disabledAlpha = DISABLED_ALPHA,

@@ -1,9 +1,13 @@
 package com.sidephone.calendar.ui.screens
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -13,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.sidephone.calendar.R
 import com.sidephone.calendar.input.Keypad
+import com.sidephone.calendar.ui.components.popup.PopupButton
 import com.sidephone.calendar.ui.theme.Dimens
 
 @Composable
@@ -47,7 +52,7 @@ fun ScreenHelp(modifier: Modifier, keypadTile: Keypad.Layout, onBack: () -> Unit
 	}
 
 
-	Column(modifier = modifier.fillMaxWidth()) {
+	Column(modifier = modifier.fillMaxWidth().verticalScroll(rememberScrollState())) {
 		Text(
 			modifier = Modifier.padding(Dimens.FORM_INPUT_SPACING).fillMaxWidth(),
 			text = title,
@@ -62,5 +67,18 @@ fun ScreenHelp(modifier: Modifier, keypadTile: Keypad.Layout, onBack: () -> Unit
 			style = MaterialTheme.typography.bodyMedium,
 			color = MaterialTheme.colorScheme.onBackground
 		)
+		Row(
+			modifier = Modifier.fillMaxWidth().padding(Dimens.FORM_INPUT_SPACING),
+			horizontalArrangement = Arrangement.Center
+		) {
+			PopupButton(
+				textResId = android.R.string.ok,
+				textColor = MaterialTheme.colorScheme.onPrimary,
+				backgroundColor = MaterialTheme.colorScheme.primary,
+				selectedTextColor = MaterialTheme.colorScheme.onPrimary,
+				selectedBackground = MaterialTheme.colorScheme.primary,
+				onClick = onBack
+			)
+		}
 	}
 }

@@ -35,7 +35,7 @@ fun Popup(
 		containerColor = backgroundColor,
 		confirmButton = {
 			if (onConfirm != null) {
-				DialogButton(
+				PopupButton(
 					textResId = confirmButtonResId,
 					textColor = buttonTextColor,
 					selectedTextColor = buttonSelectedTextColor,
@@ -48,7 +48,7 @@ fun Popup(
 			}
 		},
 		dismissButton = {
-			DialogButton(
+			PopupButton(
 				textResId = cancelButtonResId,
 				textColor = buttonTextColor,
 				selectedTextColor = buttonSelectedTextColor,
