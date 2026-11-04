@@ -4,9 +4,9 @@ An offline calendar app for Android phones with small screens, and physical butt
 Optimized to use on Sidephone SP-01 with all keypad tiles.
 
 ## Development Setup
-Just clone the project and import it in Android Studio. It has no extra dependencies, so you can build and run it directly in the emulator or on a real device.
+Just clone the project and import it in Android Studio. It depends on standard AndroidX components and RoomDB 3. The proper versions that work together are in `libs.versions.toml`, so Android Studio should download and use them without any extra configuration.
 
-Tested with Android Studio Rabbit 1 | 2026.2.1
+Tested with Android Studio Rabbit 2 | 2026.2.2
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE.txt) file for details.
