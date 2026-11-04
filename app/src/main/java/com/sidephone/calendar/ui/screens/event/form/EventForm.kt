@@ -256,8 +256,9 @@ fun EventForm(
 				selectedTextColor = MaterialTheme.colorScheme.primary,
 				selectedBackground = MaterialTheme.colorScheme.onPrimary,
 				onClick = {
-					validationStatus = validateEvent(event)
-					if (validationStatus.first == SaveValidationStatus.OK) onSave()
+					val result = validateEvent(event)
+					validationStatus = result
+					if (result.first == SaveValidationStatus.OK) onSave()
 				}
 			)
 		}
