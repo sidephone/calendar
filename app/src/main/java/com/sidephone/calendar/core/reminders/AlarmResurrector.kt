@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import com.sidephone.calendar.Settings
 import com.sidephone.calendar.db.AppDatabase
 import com.sidephone.calendar.db.EventStore
 import kotlinx.coroutines.CoroutineScope
@@ -24,12 +25,15 @@ class AlarmResurrector : BroadcastReceiver() {
 	override fun onReceive(context: Context, intent: Intent) {
 		// A receiver gets ~10 seconds; goAsync() lets us finish the database work on another thread.
 		val pending = goAsync()
-		val appContext = context.applicationContext
 
 		CoroutineScope(SupervisorJob() + Dispatchers.Default).launch {
 			try {
-				val store = EventStore(AppDatabase.get(appContext).eventDao())
-				AlarmScheduler(appContext).scheduleFrom(store)
+				Log.d(LOG_TAG, "Rescheduling an alarm after ${intent.action}")
+				val appContext = context.applicationContext
+				AlarmScheduler(appContext).scheduleFrom(
+					EventStore(AppDatabase.get(appContext).eventDao()),
+					Settings(appContext).lastNotified
+				)
 			} catch (e: Exception) {
 				Log.e(LOG_TAG, "Reschedule failed after ${intent.action}", e)
 			} finally {

@@ -4,6 +4,9 @@ import android.content.Context
 import androidx.core.content.edit
 import com.sidephone.calendar.input.Keypad
 import java.time.Duration
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
 
 class Settings(context: Context) {
 	companion object {
@@ -21,21 +24,27 @@ class Settings(context: Context) {
 	private val sharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
 
-	fun getTile(): Keypad.Layout {
-		return sharedPreferences.getInt(SCREEN_LAYOUT_KEY, Keypad.Layout.UNKNOWN.ordinal).let { ordinal ->
-			Keypad.Layout.entries.getOrElse(ordinal) { Keypad.Layout.UNKNOWN }
-		}
-	}
-
-
-	fun setTile(layout: Keypad.Layout) {
-		sharedPreferences.edit { putInt(SCREEN_LAYOUT_KEY, layout.ordinal) }
-	}
-
-
-	var lastNotified = sharedPreferences.getLong(LAST_NOTIFIED_KEY, 0L)
+		var lastNotified: LocalDateTime =
+		LocalDateTime
+			.ofInstant(
+				Instant.ofEpochMilli(sharedPreferences.getLong(LAST_NOTIFIED_KEY, 0L)),
+				ZoneId.systemDefault()
+			)
 		set(value) {
 			field = value
-			sharedPreferences.edit { putLong(LAST_NOTIFIED_KEY, value) }
+			sharedPreferences.edit {putLong(
+				LAST_NOTIFIED_KEY,
+				value.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+			)}
+		}
+
+
+	var tile =
+		sharedPreferences
+			.getInt(SCREEN_LAYOUT_KEY, Keypad.Layout.UNKNOWN.ordinal)
+			.let { ordinal -> Keypad.Layout.entries.getOrElse(ordinal) { Keypad.Layout.UNKNOWN } }
+		set(value) {
+			field = value
+			sharedPreferences.edit { putInt(SCREEN_LAYOUT_KEY, value.ordinal) }
 		}
 }

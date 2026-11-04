@@ -28,7 +28,7 @@ class ActionPad(private val settings: Settings, inputManager: InputManager) : Ke
 	private val keyHandled = mutableMapOf<Int, Boolean>()
 	internal var onAction: (Action) -> Boolean = { false }
 
-	private val tileOverride = MutableStateFlow(settings.getTile())
+	private val tileOverride = MutableStateFlow(settings.tile)
 	val layoutOverride: StateFlow<Layout> = tileOverride.asStateFlow()
 
 	private val tileWatcher = CoroutineScope(SupervisorJob() + Dispatchers.Default)
@@ -43,7 +43,7 @@ class ActionPad(private val settings: Settings, inputManager: InputManager) : Ke
 
 	init {
 		detect()
-		tileOverride.value = settings.getTile()
+		tileOverride.value = settings.tile
 		onChange()
 	}
 
@@ -67,7 +67,7 @@ class ActionPad(private val settings: Settings, inputManager: InputManager) : Ke
 		}
 
 		tileOverride.value = override
-		settings.setTile(override)
+		settings.tile = override
 		onChange()
 
 		return override

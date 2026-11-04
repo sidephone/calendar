@@ -10,9 +10,7 @@ import com.sidephone.calendar.R
 import com.sidephone.calendar.Settings
 import com.sidephone.calendar.core.events.EventReminder
 import com.sidephone.calendar.db.EventStore
-import java.time.Instant
 import java.time.LocalDateTime
-import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Objects
@@ -26,9 +24,6 @@ class ReminderNotifier(context: Context) {
 	private val context: Context = context.applicationContext
 	private val notificationManager: NotificationManager = this.context.getSystemService(NotificationManager::class.java)
 
-	private fun Long.toLocalDateTime(): LocalDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(this), ZoneId.systemDefault())
-	private fun LocalDateTime.toMillis(): Long = atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
-
 
 	/**
 	 * Shows a notification for every reminder that became due since the last time this ran
@@ -37,14 +32,14 @@ class ReminderNotifier(context: Context) {
 	 */
 	suspend fun deliverDue(store: EventStore, settings: Settings, upTo: LocalDateTime) {
 		val floor = upTo.minus(Settings.REMINDER_CATCH_UP_LIMIT)
-		val last = settings.lastNotified.toLocalDateTime()
+		val last = settings.lastNotified
 		val after = if (last.isAfter(floor)) last else floor
 
 		val due = store.remindersBetween(after, upTo)
 		Log.d(LOG_TAG, "${due.size} reminder(s) due in ($after, $upTo]")
 		due.forEach { show(it) }
 
-		if (upTo.isAfter(last)) settings.lastNotified = upTo.toMillis()
+		if (upTo.isAfter(last)) settings.lastNotified = upTo
 	}
 
 
