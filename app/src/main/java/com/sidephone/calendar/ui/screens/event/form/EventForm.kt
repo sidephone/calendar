@@ -151,7 +151,7 @@ fun EventForm(
 		// reminders section
 		if (event.reminders.isNotEmpty()) {
 			FormCategory(titleResId = R.string.reminder_list_title)
-			if (event.endTime == null) {
+			if (event.startTime == null) {
 				Text(
 					style = MaterialTheme.typography.bodyMedium,
 					fontStyle = FontStyle.Italic,
